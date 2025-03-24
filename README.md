@@ -15,7 +15,7 @@ FinancialTracker is a convenient financial management tool designed to help user
 |------|--------|------|
 | Ethan Segvich | 25275381 | Product Owner&Developer |
 | Hamza Hussain | 21151377 | Scrum Master&Developer |
-| Muni Jashneel Mudaliar | your id | Developer |
+| Muni Jashneel Mudaliar | 20105687 | Developer |
 | Haosen Liang | 21156002 | Developer |
 
 ## Features
