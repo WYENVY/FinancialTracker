@@ -40,4 +40,4 @@ FinancialTracker is a convenient financial management tool designed to help user
   - Stay motivated with visual progress indicators
 
 ## Coming Soon:
-HAMZA IS GREAT 
+...
