@@ -1,10 +1,12 @@
 import { View, Text, StyleSheet } from 'react-native';
+import DropdownMenu from '@/components/DropdownMenu';
 
 export default function HomeScreen() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.title}>Finova</Text>
+                <DropdownMenu />
             </View>
             <View style={styles.content}>
                 <Text style={styles.welcomeText}> Welcom to your finance app!</Text>
@@ -19,9 +21,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#000000',
     },
     header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        paddingTop: 60,
-        paddingBottom: 16,
+        padding: 16,
+        paddingTop: 50,
         backgroundColor: '#00000',
     },
     title: {
@@ -37,7 +41,7 @@ const styles = StyleSheet.create({
     },
 
     welcomeText: {
-        color: '#76c75f', // Green text
+        color: '#76c75f',
         fontSize: 16,
     },
 

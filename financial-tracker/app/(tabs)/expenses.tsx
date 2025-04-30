@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function SettingsScreen() {
+export default function GoalScreen() {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Settings Content</Text>
+            <Text style={styles.title}>Your Expenses</Text>
         </View>
     );
 }

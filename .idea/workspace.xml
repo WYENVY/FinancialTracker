@@ -4,48 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/_layout.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/explore.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/+not-found.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/_layout.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/assets/fonts/SpaceMono-Regular.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/assets/images/adaptive-icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/assets/images/favicon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/assets/images/icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/assets/images/partial-react-logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/assets/images/react-logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/assets/images/react-logo@2x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/assets/images/react-logo@3x.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/assets/images/splash-icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/components/Collapsible.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/components/ExternalLink.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/components/HapticTab.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/components/HelloWave.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/components/ParallaxScrollView.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/components/ThemedText.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/components/ThemedView.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/components/__tests__/ThemedText-test.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/components/__tests__/__snapshots__/ThemedText-test.tsx.snap" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/components/ui/IconSymbol.ios.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/components/ui/IconSymbol.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/components/ui/TabBarBackground.ios.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/components/ui/TabBarBackground.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/constants/Colors.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/hooks/useColorScheme.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/hooks/useColorScheme.web.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/hooks/useThemeColor.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/scripts/reset-project.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/tsconfig.json" beforeDir="false" />
-    </list>
+    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -78,22 +37,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "ethan-branch",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "ide.date.format",
-    "ts.external.directory.path": "/Users/ethan/Documents/GitHub/FinancialTracker/financial-tracker/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;ethan-branch&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ide.date.format&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/ethan/Documents/GitHub/FinancialTracker/financial-tracker/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -119,10 +78,26 @@
       <updated>1745897080988</updated>
       <workItem from="1745897082640" duration="564000" />
       <workItem from="1745897693972" duration="638000" />
+      <workItem from="1745898373270" duration="1857000" />
+      <workItem from="1745900260921" duration="469000" />
+      <workItem from="1745964141529" duration="4153000" />
+      <workItem from="1745985512430" duration="7270000" />
+      <workItem from="1745994011184" duration="10000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

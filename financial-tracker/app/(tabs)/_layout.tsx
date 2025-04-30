@@ -1,5 +1,4 @@
 import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
@@ -9,8 +8,7 @@ const TAB_ICONS = {
     Home: 'home',
     Transactions: 'cash',
     Budgets: 'pie-chart',
-    Goals: 'trophy',
-    Settings: 'settings',
+    Expenses: 'card',
 } as const;
 
 export default function TabLayout() {
@@ -37,8 +35,7 @@ export default function TabLayout() {
             <Tab.Screen name="Home" getComponent={() => require('./index').default} />
             <Tab.Screen name="Transactions" getComponent={() => require('./transactions').default} />
             <Tab.Screen name="Budgets" getComponent={() => require('./budgets').default} />
-            <Tab.Screen name="Goals" getComponent={() => require('./goals').default} />
-            <Tab.Screen name="Settings" getComponent={() => require('./settings').default} />
+            <Tab.Screen name="Expenses" getComponent={() => require('./expenses').default} />
         </Tab.Navigator>
     );
 }
