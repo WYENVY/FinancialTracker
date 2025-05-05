@@ -13,4 +13,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 export { auth };

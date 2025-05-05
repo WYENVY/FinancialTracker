@@ -1,11 +1,7 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { View, Text, StyleSheet } from 'react-native';
 
 export default function HomeScreen() {
+<<<<<<< Updated upstream
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -52,23 +48,49 @@ export default function HomeScreen() {
       </ThemedView>
     </ParallaxScrollView>
   );
+=======
+    return (
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <Text style={styles.title}>Finova</Text>
+            </View>
+            <View style={styles.content}>
+                <Text style={styles.welcomeText}> Welcome to your finance app!</Text>
+            </View>
+        </View>
+    );
+>>>>>>> Stashed changes
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#000000',
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 16,
+        paddingTop: 50,
+        backgroundColor: '#00000',
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        fontFamily: 'SpaceMono',
+        color: '#76c75f',
+    },
+    content: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    welcomeText: {
+        color: '#76c75f',
+        fontSize: 16,
+    },
+
+
 });
