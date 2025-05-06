@@ -5,6 +5,7 @@ import OverviewTab from '@/app/pages/index';
 import TransactionsScreen from '@/app/pages/transactions';
 import BudgetScreen from '@/app/pages/budgets';
 import ExpensesScreen from '@/app/pages/expenses';
+import GoalsScreen from '@/app/pages/goals';
 
 const Tab = createBottomTabNavigator();
 
@@ -62,6 +63,12 @@ export default function HomeScreen() {
                 component={BudgetScreen}
                 options={{ tabBarLabel: 'Budgets' }}
             />
+            <Tab.Screen
+                name={Goals}
+                component={GoalsScreen}
+                options={{ tabBarLabel: 'Goals' }}
+            />
+
             <Tab.Screen
                 name="Expenses"
                 component={ExpensesScreen}

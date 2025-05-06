@@ -1,22 +1,53 @@
-import { View, Text, StyleSheet } from 'react-native';
+// BudgetListScreen
 
-export default function BudgetScreen() {
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
+import { db, auth } from '../fireconfig';
+import { collection, onSnapshot } from 'firebase/firestore';
+
+export default function BudgetsListScreen({ navigation }) {
+    const [budgets, setBudgets] = useState([]);
+
+    useEffect(() => {
+        const user = auth.currentUser;
+        const unsub = onSnapshot(
+            collection(db, `users/${user.uid}/budgets`),
+            (snapshot) => {
+                const data = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                }));
+                setBudgets(data);
+            }
+        );
+        return unsub;
+    }, []);
+
+    const renderItem = ({ item }) => {
+        const progress = item.amountSpent / item.amount * 100;
+        return (
+            <View style={styles.budgetCard}>
+                <Text style={styles.title}>{item.budgetName}</Text>
+                <Text>Amount: ${item.amount}</Text>
+                <Text>Spent: ${item.amountSpent}</Text>
+                <Text>Progress: {progress.toFixed(1)}%</Text>
+            </View>
+        );
+    };
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Your Budgets</Text>
+        <View>
+            <Button title="Create New Budget" onPress={() => navigation.navigate('CreateBudget')} />
+            <FlatList
+                data={budgets}
+                keyExtractor={item => item.id}
+                renderItem={renderItem}
+            />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 60,
-        backgroundColor: '#000000',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#76c75f'
-    }
+    budgetCard: { padding: 16, borderBottomWidth: 1 },
+    title: { fontWeight: 'bold' },
 });
