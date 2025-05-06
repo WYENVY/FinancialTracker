@@ -1,20 +1,3 @@
-<<<<<<< Updated upstream
-import { View, Text, StyleSheet } from 'react-native';
-import DropdownMenu from '@/components/DropdownMenu';
-
-export default function HomeScreen() {
-    return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.title}>Finova</Text>
-                <DropdownMenu />
-            </View>
-            <View style={styles.content}>
-                <Text style={styles.welcomeText}> Welcom to your finance app!</Text>
-            </View>
-        </View>
-    );
-=======
 import { Image, StyleSheet, Platform } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
@@ -69,7 +52,6 @@ export default function HomeScreen() {
       </ThemedView>
     </ParallaxScrollView>
   );
->>>>>>> Stashed changes
 }
 
 const styles = StyleSheet.create({

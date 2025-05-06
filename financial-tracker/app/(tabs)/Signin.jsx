@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth } from '../fireconfig';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 const db = getFirestore();
@@ -21,12 +21,12 @@ export default function SignIn({ navigation }) {
 
       const docRef = doc(db, 'usernames', username);
       const docSnap = await getDoc(docRef);
-
+  
       if (!docSnap.exists()) {
         Alert.alert('Error', 'Username not found');
         return;
       }
-
+  
       const emailFromUsername = docSnap.data().email;
       await signInWithEmailAndPassword(auth, emailFromUsername, password);
       Alert.alert('Success', 'Logged in!');
@@ -35,7 +35,7 @@ export default function SignIn({ navigation }) {
       Alert.alert('Login Error', error.message);
     }
   };
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign In</Text>
@@ -58,7 +58,7 @@ export default function SignIn({ navigation }) {
       <Button title="Forgot Password?" onPress={() => navigation.navigate('ForgotPassword')} />
     </View>
   );
-
+  
 }
 
 const styles = StyleSheet.create({

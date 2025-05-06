@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, setDoc, doc } from 'firebase/firestore';
-import { auth } from '../firebase';
+import { auth } from '../fireconfig';
 
 const db = getFirestore();
 
@@ -23,7 +23,8 @@ export default function SignUp({ navigation }) {
       Alert.alert('Sign Up Error', error.message);
     }
   };
-
+  
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>

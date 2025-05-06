@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Alert, StyleSheet, Text } from 'react-native';
 import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from '../firebase';
+import { auth } from '../fireconfig';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 const db = getFirestore();

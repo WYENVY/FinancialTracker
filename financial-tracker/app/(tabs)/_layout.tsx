@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
-=======
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -27,7 +23,6 @@ export default function App() {
 /*import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
->>>>>>> Stashed changes
 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
@@ -36,35 +31,6 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
-<<<<<<< Updated upstream
-    return (
-        <Tab.Navigator
-            screenOptions={({ route }): BottomTabNavigationOptions => ({
-                tabBarIcon: ({ color, size }) => (
-                    <Ionicons
-                        name={TAB_ICONS[route.name as keyof typeof TAB_ICONS]}
-                        color={color}
-                        size={size}
-                    />
-                ),
-                tabBarActiveTintColor: '#76c75f', // Green
-                tabBarInactiveTintColor: '#64748b', // Grey
-                tabBarStyle: {
-                    backgroundColor: 'black',
-                    borderTopWidth: 0,
-                    paddingBottom: 4,
-                },
-                headerShown: false,
-            })}
-        >
-            <Tab.Screen name="Home" getComponent={() => require('./index').default} />
-            <Tab.Screen name="Transactions" getComponent={() => require('./transactions').default} />
-            <Tab.Screen name="Budgets" getComponent={() => require('./budgets').default} />
-            <Tab.Screen name="Expenses" getComponent={() => require('./expenses').default} />
-        </Tab.Navigator>
-    );
-}
-=======
   const colorScheme = useColorScheme();
 
   return (
@@ -100,4 +66,3 @@ export default function TabLayout() {
   );
 }
 */
->>>>>>> Stashed changes
