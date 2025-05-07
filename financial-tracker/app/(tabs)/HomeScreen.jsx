@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import OverviewTab from '@/app/pages/index';
+import HomePage from '@/app/pages/index';
 import TransactionsScreen from '@/app/pages/transactions';
 import BudgetScreen from '@/app/pages/budgets';
 import ExpensesScreen from '@/app/pages/expenses';
@@ -9,12 +9,12 @@ import GoalsScreen from '@/app/pages/goals';
 
 const Tab = createBottomTabNavigator();
 
-// Simplified icon configuration for JavaScript
 const getTabIcon = (routeName, focused) => {
     const iconMap = {
         Overview: 'home',
         Expenses: 'card',
         Transactions: 'cash',
+        Goals: 'goal', //need to look up the right icon
         Budgets: 'pie-chart'
     };
 
@@ -50,8 +50,8 @@ export default function HomeScreen() {
         >
             <Tab.Screen
                 name="Overview"
-                component={OverviewTab}
-                options={{ tabBarLabel: 'Overview' }}
+                component={HomePage}
+                options={{ tabBarLabel: 'Home' }}
             />
             <Tab.Screen
                 name="Transactions"
@@ -63,11 +63,12 @@ export default function HomeScreen() {
                 component={BudgetScreen}
                 options={{ tabBarLabel: 'Budgets' }}
             />
-            <Tab.Screen
-                name={Goals}
-                component={GoalsScreen}
-                options={{ tabBarLabel: 'Goals' }}
-            />
+            {/**/}
+            {/*<Tab.Screen*/}
+            {/*    name={Goals}*/}
+            {/*    component={GoalsScreen}*/}
+            {/*    options={{ tabBarLabel: 'Goals' }}*/}
+            {/*/>*/}
 
             <Tab.Screen
                 name="Expenses"

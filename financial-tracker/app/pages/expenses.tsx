@@ -6,6 +6,7 @@ import CategoryItem from '@/components/CategoryItem';
 import { ExpenseCategory } from '@/src/types';
 import IconPicker from '@/components/IconPicker';
 
+
 export default function ExpensesScreen() {
     const {
         categories,
