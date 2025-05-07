@@ -1,49 +1,394 @@
-// // GoalsListScreen
-//
-// import React, { useEffect, useState } from 'react';
-// import { View, Text, FlatList, StyleSheet } from 'react-native';
-// import { auth } from '../fireconfig';
-// import { collection, onSnapshot } from 'firebase/firestore';
-//
-// export default function GoalsListScreen() {
-//     const [goals, setGoals] = useState([]);
-//
-//     useEffect(() => {
-//         const user = auth.currentUser;
-//         const unsub = onSnapshot(
-//             collection(db, `users/${user.uid}/savingsGoals`),
-//             (snapshot) => {
-//                 const data = snapshot.docs.map(doc => ({
-//                     id: doc.id,
-//                     ...doc.data(),
-//                 }));
-//                 setGoals(data);
-//             }
-//         );
-//         return unsub;
-//     }, []);
-//
-//     const renderItem = ({ item }) => {
-//         const progress = item.currentAmount / item.targetAmount * 100;
-//         return (
-//             <View style={styles.goalCard}>
-//                 <Text style={styles.title}>{item.goalName}</Text>
-//                 <Text>Saved: ${item.currentAmount} / ${item.targetAmount}</Text>
-//                 <Text>Progress: {progress.toFixed(1)}%</Text>
-//             </View>
-//         );
-//     };
-//
-//     return (
-//         <FlatList
-//             data={goals}
-//             keyExtractor={item => item.id}
-//             renderItem={renderItem}
-//         />
-//     );
-// }
-//
-// const styles = StyleSheet.create({
-//     goalCard: { padding: 16, borderBottomWidth: 1 },
-//     title: { fontWeight: 'bold' },
-// });
+import React, { useState } from 'react';
+import {
+    View,
+    Text,
+    FlatList,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    Modal,
+    Alert
+} from 'react-native';
+
+type Goal = {
+    id: string;
+    goalName: string;
+    targetAmount: number;
+    currentAmount: number;
+    deadline?: string;
+};
+
+export default function GoalsScreen() {
+    const [goals, setGoals] = useState<Goal[]>([]);
+    const [showCreateModal, setShowCreateModal] = useState(false);
+
+    const [goalName, setGoalName] = useState('');
+    const [targetAmount, setTargetAmount] = useState('');
+    const [deadline, setDeadline] = useState('');
+    const [currentAmount, setCurrentAmount] = useState('');
+
+    // Create a simple ID generator
+    const generateId = () => Math.random().toString(36).substring(7);
+
+    const handleCreateGoal = () => {
+        if (!goalName.trim() || !targetAmount) {
+            Alert.alert('Error', 'Please fill in all required fields');
+            return;
+        }
+
+        const targetAmountNumber = parseFloat(targetAmount);
+        const currentAmountNumber = parseFloat(currentAmount) || 0;
+
+        if (isNaN(targetAmountNumber)) {
+            Alert.alert('Error', 'Please enter a valid target amount');
+            return;
+        }
+
+        const newGoal: Goal = {
+            id: generateId(),
+            goalName: goalName.trim(),
+            targetAmount: targetAmountNumber,
+            currentAmount: currentAmountNumber,
+            deadline: deadline.trim(),
+        };
+
+        setGoals([...goals, newGoal]);
+        Alert.alert('Success', 'Goal created successfully!');
+        resetForm();
+        setShowCreateModal(false);
+    };
+
+    const resetForm = () => {
+        setGoalName('');
+        setTargetAmount('');
+        setCurrentAmount('');
+        setDeadline('');
+    };
+
+    const renderGoalItem = ({ item }: { item: Goal }) => {
+        const progress = (item.currentAmount / item.targetAmount) * 100;
+        const progressPercentage = Math.min(progress, 100); // Cap at 100%
+        const isCompleted = progressPercentage >= 100;
+
+        return (
+            <View style={[
+                styles.goalCard,
+                isCompleted && styles.completedCard
+            ]}>
+                <View style={styles.goalHeader}>
+                    <Text style={styles.goalName}>{item.goalName}</Text>
+                    {isCompleted && (
+                        <Text style={styles.completedBadge}>COMPLETED!</Text>
+                    )}
+                </View>
+
+                <Text style={styles.amountText}>
+                    Saved: ${item.currentAmount.toFixed(2)} / ${item.targetAmount.toFixed(2)}
+                </Text>
+
+                <View style={styles.progressContainer}>
+                    <View
+                        style={[
+                            styles.progressBar,
+                            {
+                                width: `${progressPercentage}%`,
+                                backgroundColor: isCompleted ? '#76c75f' : '#4a90e2'
+                            }
+                        ]}
+                    />
+                    <Text style={styles.progressText}>{progressPercentage.toFixed(1)}%</Text>
+                </View>
+
+                {item.deadline && (
+                    <Text style={styles.deadlineText}>Target Date: {item.deadline}</Text>
+                )}
+
+                <View style={styles.goalActions}>
+                    <TouchableOpacity
+                        style={styles.addMoneyButton}
+                        onPress={() => {
+                            setGoals(goals.map(goal =>
+                                goal.id === item.id
+                                    ? { ...goal, currentAmount: goal.currentAmount + 10 }
+                                    : goal
+                            ));
+                        }}
+                    >
+                        <Text style={styles.buttonText}>Add $10</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.deleteButton}
+                        onPress={() => {
+                            setGoals(goals.filter(goal => goal.id !== item.id));
+                        }}
+                    >
+                        <Text style={styles.buttonText}>Delete</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        );
+    };
+
+    return (
+        <View style={styles.container}>
+            <TouchableOpacity
+                style={styles.createButton}
+                onPress={() => setShowCreateModal(true)}
+            >
+                <Text style={styles.createButtonText}>Create New Goal</Text>
+            </TouchableOpacity>
+
+            {goals.length === 0 ? (
+                <View style={styles.emptyContainer}>
+                    <Text style={styles.emptyText}>No goals yet. Create your first savings goal!</Text>
+                </View>
+            ) : (
+                <FlatList
+                    data={goals}
+                    keyExtractor={item => item.id}
+                    renderItem={renderGoalItem}
+                    contentContainerStyle={styles.listContainer}
+                />
+            )}
+
+            {/* Create Goal Modal */}
+            <Modal
+                visible={showCreateModal}
+                animationType="slide"
+                transparent={false}
+                onRequestClose={() => {
+                    setShowCreateModal(false);
+                    resetForm();
+                }}
+            >
+                <View style={styles.modalContainer}>
+                    <Text style={styles.modalTitle}>Create New Goal</Text>
+
+                    <Text style={styles.label}>Goal Name *</Text>
+                    <TextInput
+                        value={goalName}
+                        onChangeText={setGoalName}
+                        style={styles.input}
+                        placeholder="e.g., Vacation Fund"
+                        placeholderTextColor="#888"
+                    />
+
+                    <Text style={styles.label}>Target Amount *</Text>
+                    <TextInput
+                        value={targetAmount}
+                        onChangeText={setTargetAmount}
+                        keyboardType="numeric"
+                        style={styles.input}
+                        placeholder="$0.00"
+                        placeholderTextColor="#888"
+                    />
+
+                    <Text style={styles.label}>Current Amount (Optional)</Text>
+                    <TextInput
+                        value={currentAmount}
+                        onChangeText={setCurrentAmount}
+                        keyboardType="numeric"
+                        style={styles.input}
+                        placeholder="$0.00"
+                        placeholderTextColor="#888"
+                    />
+
+                    <Text style={styles.label}>Deadline (Optional)</Text>
+                    <TextInput
+                        value={deadline}
+                        onChangeText={setDeadline}
+                        style={styles.input}
+                        placeholder="YYYY-MM-DD"
+                        placeholderTextColor="#888"
+                    />
+
+                    <View style={styles.buttonRow}>
+                        <TouchableOpacity
+                            style={styles.cancelButton}
+                            onPress={() => {
+                                setShowCreateModal(false);
+                                resetForm();
+                            }}
+                        >
+                            <Text style={styles.buttonText}>Cancel</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={styles.saveButton}
+                            onPress={handleCreateGoal}
+                        >
+                            <Text style={styles.buttonText}>Save Goal</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: '#000',
+    },
+    createButton: {
+        backgroundColor: '#76c75f',
+        padding: 15,
+        borderRadius: 8,
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    createButtonText: {
+        color: '#000',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    emptyContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+    emptyText: {
+        color: '#fff',
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    goalCard: {
+        padding: 16,
+        marginBottom: 16,
+        borderRadius: 8,
+        backgroundColor: '#1a1a1a',
+    },
+    completedCard: {
+        borderLeftWidth: 4,
+        borderLeftColor: '#76c75f',
+    },
+    goalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    goalName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#fff',
+        flex: 1,
+    },
+    completedBadge: {
+        backgroundColor: '#76c75f',
+        color: '#000',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 12,
+        fontSize: 12,
+        fontWeight: 'bold',
+        marginLeft: 10,
+    },
+    amountText: {
+        color: '#fff',
+        marginBottom: 8,
+    },
+    progressContainer: {
+        height: 20,
+        backgroundColor: '#333',
+        borderRadius: 10,
+        marginVertical: 8,
+        overflow: 'hidden',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    progressBar: {
+        height: '100%',
+    },
+    progressText: {
+        position: 'absolute',
+        width: '100%',
+        textAlign: 'center',
+        color: '#fff',
+        fontSize: 12,
+    },
+    deadlineText: {
+        color: '#aaa',
+        fontSize: 14,
+        marginTop: 4,
+    },
+    goalActions: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 12,
+    },
+    addMoneyButton: {
+        backgroundColor: '#4a90e2',
+        padding: 8,
+        borderRadius: 6,
+        flex: 1,
+        marginRight: 8,
+        alignItems: 'center',
+    },
+    deleteButton: {
+        backgroundColor: '#e74c3c',
+        padding: 8,
+        borderRadius: 6,
+        flex: 1,
+        marginLeft: 8,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+    },
+    listContainer: {
+        paddingBottom: 20,
+    },
+    modalContainer: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: '#000',
+    },
+    modalTitle: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: '#76c75f',
+        marginBottom: 20,
+        textAlign: 'center',
+    },
+    label: {
+        color: '#fff',
+        marginBottom: 8,
+        fontWeight: '500',
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#333',
+        borderRadius: 6,
+        padding: 12,
+        marginBottom: 16,
+        color: '#fff',
+        backgroundColor: '#1a1a1a',
+    },
+    buttonRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+    },
+    cancelButton: {
+        backgroundColor: '#333',
+        padding: 12,
+        borderRadius: 6,
+        flex: 1,
+        marginRight: 10,
+        alignItems: 'center',
+    },
+    saveButton: {
+        backgroundColor: '#76c75f',
+        padding: 12,
+        borderRadius: 6,
+        flex: 1,
+        marginLeft: 10,
+        alignItems: 'center',
+    },
+});

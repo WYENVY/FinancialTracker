@@ -97,7 +97,7 @@ export default function BudgetScreen() {
 
             {budgets.length === 0 ? (
                 <View style={styles.emptyContainer}>
-                    <Text>No budgets found. Create your first budget!</Text>
+                    <Text style={styles.budgetCardText}>No budgets found. Create your first budget!</Text>
                 </View>
             ) : (
                 <FlatList

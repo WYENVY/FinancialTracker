@@ -4,16 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Added Budget and Goals page with Jash's code to be fixed.">
+    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Integrated Jash's budget pages to work with the main nav page and updated the styling to match.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/HomeScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/HomeScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/CreateBudgetScreen.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/CreateGoalsScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/CreateGoalsScreen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/budgets.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/budgets.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/expenses.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/expenses.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/_layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/_layout.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/goals.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/goals.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/useBudgetMonitor.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/components/DropdownMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/components/DropdownMenu.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +33,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -104,7 +101,7 @@
       <workItem from="1746493786478" duration="30000" />
       <workItem from="1746494340082" duration="1152000" />
       <workItem from="1746568922797" duration="8306000" />
-      <workItem from="1746581083482" duration="6874000" />
+      <workItem from="1746581083482" duration="11201000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed the file system">
       <option name="closed" value="true" />
@@ -138,7 +135,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746571957359</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Integrated Jash's budget pages to work with the main nav page and updated the styling to match.">
+      <option name="closed" value="true" />
+      <created>1746588236384</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1746588236384</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -158,6 +163,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Fixed the file system" />
     <MESSAGE value="Added Budget and Goals page with Jash's code to be fixed." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Budget and Goals page with Jash's code to be fixed." />
+    <MESSAGE value="Integrated Jash's budget pages to work with the main nav page and updated the styling to match." />
+    <option name="LAST_COMMIT_MESSAGE" value="Integrated Jash's budget pages to work with the main nav page and updated the styling to match." />
   </component>
 </project>

@@ -14,7 +14,7 @@ const getTabIcon = (routeName, focused) => {
         Overview: 'home',
         Expenses: 'card',
         Transactions: 'cash',
-        Goals: 'goal', //need to look up the right icon
+        Goals: 'trophy', //I need to look up the right icon
         Budgets: 'pie-chart'
     };
 
@@ -63,12 +63,12 @@ export default function HomeScreen() {
                 component={BudgetScreen}
                 options={{ tabBarLabel: 'Budgets' }}
             />
-            {/**/}
-            {/*<Tab.Screen*/}
-            {/*    name={Goals}*/}
-            {/*    component={GoalsScreen}*/}
-            {/*    options={{ tabBarLabel: 'Goals' }}*/}
-            {/*/>*/}
+
+            <Tab.Screen
+                name={"Goals"}
+                component={GoalsScreen}
+                options={{ tabBarLabel: 'Goals' }}
+            />
 
             <Tab.Screen
                 name="Expenses"
