@@ -2,6 +2,33 @@
 
 A comprehensive personal finance tracking application to help users manage income, expenses, and achieve financial goals.
 
+## How to Run our Program
+
+To be able to run our project you first need to install the dependencies
+
+1. Install dependencies
+
+   ```bash
+   npm install
+   ```
+
+2. Install Firebase
+
+   ```bash
+    npx expo install firebase
+   ```
+
+
+3. Start the app
+
+   ```bash
+    npx expo start
+   ```
+
+In the output you will find an option to open the app on the web.
+
+
+
 ## Project Overview
 
 FinancialTracker is a convenient financial management tool designed to help users:
@@ -18,26 +45,3 @@ FinancialTracker is a convenient financial management tool designed to help user
 | Muni Jashneel Mudaliar | 20105687 | Developer |
 | Haosen Liang | 21156002 | Developer |
 
-## Features
-
-- **User Account Management**
-  - Create an account to save financial data
-  - Log in to the app to protect and access personal information
-
-- **Expense Tracking**
-  - Quickly record daily spending
-  - Track expenses over time
-  - Add notes or tags to transactions for easy categorization
-  - Create custom expense categories for better organization
-
-- **Budget Management**
-  - Set up multiple budgets (weekly, monthly, annually)
-  - Flexible financial planning options
-
-- **Savings Goals**
-  - Set savings goals
-  - Track progress toward goals
-  - Stay motivated with visual progress indicators
-
-## Coming Soon:
-...
