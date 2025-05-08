@@ -6,7 +6,6 @@ import CategoryItem from '@/components/CategoryItem';
 import { ExpenseCategory } from '@/src/types';
 import IconPicker from '@/components/IconPicker';
 
-
 export default function ExpensesScreen() {
     const {
         categories,
@@ -31,7 +30,18 @@ export default function ExpensesScreen() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Expense Categories</Text>
+            <View style={styles.headerContainer}>
+                <Text style={styles.title}>Expense Categories</Text>
+                <TouchableOpacity
+                    style={styles.addButton}
+                    onPress={() => addCategory({
+                        name: 'New Category',
+                        icon: 'add'
+                    })}
+                >
+                    <Text style={styles.addButtonText}>+ Add Category</Text>
+                </TouchableOpacity>
+            </View>
 
             <FlatList
                 data={categories}
@@ -69,16 +79,6 @@ export default function ExpensesScreen() {
                     )
                 )}
             />
-
-            <TouchableOpacity
-                style={styles.addButton}
-                onPress={() => addCategory({
-                    name: 'New Category',
-                    icon: 'add'
-                })}
-            >
-                <Text style={styles.addButtonText}>+ Add Category</Text>
-            </TouchableOpacity>
         </View>
     );
 }
@@ -88,13 +88,16 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 45,
         backgroundColor: '#000000',
-
+    },
+    headerContainer: {
+        marginBottom: 20,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 20,
-        color: '#76c75f'
+        color: '#76c75f',
+        marginBottom: 10,
+        textAlign: 'center'
     },
     editContainer: {
         flexDirection: 'column',
@@ -116,7 +119,6 @@ const styles = StyleSheet.create({
         gap: 15,
     },
     addButton: {
-        marginTop: 20,
         padding: 15,
         backgroundColor: '#76c75f',
         borderRadius: 8,

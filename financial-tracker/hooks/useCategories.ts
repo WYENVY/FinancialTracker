@@ -1,15 +1,14 @@
 // hooks/useCategories.ts
-import { useState, useEffect } from 'react';
-import {getFirestore, collection, doc, deleteDoc, updateDoc, onSnapshot, setDoc, getDoc} from 'firebase/firestore';
-import { auth } from '@/app/fireconfig';
+// hooks/useCategories.ts
+
+import { useEffect, useState } from 'react';
 import { ExpenseCategory, Expense } from '@/src/types';
+import {getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, setDoc, updateDoc} from 'firebase/firestore';
+import { auth } from '../app/fireconfig';
 
 const COLOR_PALETTE = [
-    '#FF6B6B',
-    '#48D1CC',
-    '#FFA500',
-    '#1E90FF',
-    '#FF69B4'
+    '#FF6B6B', '#48D1CC', '#76C75F', '#FFA500',
+    '#9370DB', '#FFD700', '#1E90FF', '#FF69B4'
 ];
 
 const getRandomColor = () => {
@@ -18,148 +17,81 @@ const getRandomColor = () => {
 
 export default function useCategories() {
     const [categories, setCategories] = useState<ExpenseCategory[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<Error | null>(null);
-
-    // Get current user ID
-    const userId = auth.currentUser?.uid;
-    // Initialize Firestore once
     const db = getFirestore();
+    const user = auth.currentUser;
 
     useEffect(() => {
-        if (!userId) {
-            setLoading(false);
-            return;
-        }
+        if (!user) return;
 
-        setLoading(true);
-        // Corrected path: user-specific categories subcollection
-        const categoriesRef = collection(db, 'usernames', userId, 'categories');
+        const categoriesRef = collection(db, 'usernames', user.uid, 'categories');
 
-        try {
-            // Real-time listener for categories
-            const unsubscribe = onSnapshot(
-                categoriesRef,
-                (snapshot) => {
-                    const categoriesData: ExpenseCategory[] = [];
-                    snapshot.forEach((doc) => {
-                        const data = doc.data();
-                        categoriesData.push({
-                            id: doc.id,
-                            name: data.name,
-                            icon: data.icon,
-                            color: data.color || getRandomColor(),
-                            expenses: data.expenses || []
-                        });
-                    });
-                    setCategories(categoriesData);
-                    setLoading(false);
-                    setError(null);
-                },
-                (err) => {
-                    setError(err);
-                    setLoading(false);
-                }
-            );
+        const unsubscribe = onSnapshot(categoriesRef, (snapshot) => {
+            const data: ExpenseCategory[] = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            })) as ExpenseCategory[];
+            setCategories(data);
+        });
 
-            // Cleanup subscription on unmount
-            return () => unsubscribe();
-        } catch (err) {
-            setError(err as Error);
-            setLoading(false);
-        }
-    }, [userId, db]);
+        return () => unsubscribe();
+    }, [user]);
 
     const addCategory = async (category: Omit<ExpenseCategory, 'id' | 'expenses'>) => {
-        if (!userId) return;
+        if (!user) return;
 
-        try {
-            // Corrected path: user-specific categories subcollection
-            const newCategoryRef = doc(collection(db, 'usernames', userId, 'categories'));
-            await setDoc(newCategoryRef, {
-                name: category.name,
-                icon: category.icon,
-                color: category.color || getRandomColor(),
-                expenses: []
-            });
-        } catch (err) {
-            setError(err as Error);
-            throw err;
-        }
+        const categoriesRef = collection(db, 'usernames', user.uid, 'categories');
+        await addDoc(categoriesRef, {
+            ...category,
+            color: category.color || getRandomColor(),
+            expenses: []
+        });
     };
 
     const deleteCategory = async (id: string) => {
-        if (!userId) return;
+        if (!user) return;
 
-        try {
-            await deleteDoc(doc(db, 'users', userId, 'categories', id));
-        } catch (err) {
-            setError(err as Error);
-            throw err;
-        }
+        const categoryRef = doc(db, 'usernames', user.uid, 'categories', id);
+        await deleteDoc(categoryRef);
     };
 
     const updateCategory = async (id: string, updates: Partial<Omit<ExpenseCategory, 'id'>>) => {
-        if (!userId) return;
+        if (!user) return;
 
-        try {
-            await updateDoc(doc(db, 'usernames', userId, 'categories', id), updates);
-        } catch (err) {
-            setError(err as Error);
-            throw err;
-        }
+        const categoryRef = doc(db, 'usernames', user.uid, 'categories', id);
+        await updateDoc(categoryRef, updates);
     };
 
     const addExpense = async (categoryId: string, expense: Omit<Expense, 'id'>) => {
-        if (!userId) return;
+        if (!user) return;
 
-        try {
-            const categoryRef = doc(db, 'usernames', userId, 'categories', categoryId);
-            const categoryDoc = await getDoc(categoryRef);
+        const categoryRef = doc(db, 'usernames', user.uid, 'categories', categoryId);
+        const category = categories.find(cat => cat.id === categoryId);
+        if (!category) return;
 
-            if (categoryDoc.exists()) {
-                const currentExpenses = categoryDoc.data().expenses || [];
-                const newExpense = {
-                    ...expense,
-                    id: Date.now().toString(),
-                    date: expense.date || new Date().toISOString()
-                };
+        const newExpense: Expense = {
+            ...expense,
+            id: Date.now().toString(),
+            date: expense.date || new Date().toISOString()
+        };
 
-                await updateDoc(categoryRef, {
-                    expenses: [...currentExpenses, newExpense]
-                });
-            }
-        } catch (err) {
-            setError(err as Error);
-            throw err;
-        }
+        await updateDoc(categoryRef, {
+            expenses: [...(category.expenses || []), newExpense]
+        });
     };
 
     const deleteExpense = async (categoryId: string, expenseId: string) => {
-        if (!userId) return;
+        if (!user) return;
 
-        try {
-            const categoryRef = doc(db, 'users', userId, 'categories', categoryId);
-            const categoryDoc = await getDoc(categoryRef);
+        const categoryRef = doc(db, 'usernames', user.uid, 'categories', categoryId);
+        const category = categories.find(cat => cat.id === categoryId);
+        if (!category) return;
 
-            if (categoryDoc.exists()) {
-                const currentExpenses = categoryDoc.data().expenses || [];
-                const updatedExpenses = currentExpenses.filter((exp: Expense) => exp.id !== expenseId);
-
-                await updateDoc(categoryRef, {
-                    expenses: updatedExpenses
-                });
-            }
-        } catch (err) {
-            setError(err as Error);
-            throw err;
-        }
+        const updatedExpenses = category.expenses.filter(exp => exp.id !== expenseId);
+        await updateDoc(categoryRef, { expenses: updatedExpenses });
     };
 
     return {
         categories,
-        loading,
-        error,
         addCategory,
         deleteCategory,
         updateCategory,

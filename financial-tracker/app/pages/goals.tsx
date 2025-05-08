@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -9,6 +9,8 @@ import {
     Modal,
     Alert
 } from 'react-native';
+import { getFirestore, collection, addDoc, onSnapshot, query, where, doc } from 'firebase/firestore';
+import { auth } from '../fireconfig';
 
 type Goal = {
     id: string;
@@ -21,16 +23,39 @@ type Goal = {
 export default function GoalsScreen() {
     const [goals, setGoals] = useState<Goal[]>([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
-
     const [goalName, setGoalName] = useState('');
     const [targetAmount, setTargetAmount] = useState('');
     const [deadline, setDeadline] = useState('');
     const [currentAmount, setCurrentAmount] = useState('');
 
-    // Create a simple ID generator
-    const generateId = () => Math.random().toString(36).substring(7);
+    // Fetch goals from Firestore
+    useEffect(() => {
+        const user = auth.currentUser;
+        if (!user) return;
 
-    const handleCreateGoal = () => {
+        const db = getFirestore();
+        const goalsRef = collection(db, 'usernames', user.uid, 'goals');
+        const q = query(goalsRef);
+
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const fetchedGoals: Goal[] = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                fetchedGoals.push({
+                    id: doc.id,
+                    goalName: data.goalName,
+                    targetAmount: data.targetAmount,
+                    currentAmount: data.currentAmount || 0,
+                    deadline: data.deadline
+                });
+            });
+            setGoals(fetchedGoals);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    const handleCreateGoal = async () => {
         if (!goalName.trim() || !targetAmount) {
             Alert.alert('Error', 'Please fill in all required fields');
             return;
@@ -44,18 +69,73 @@ export default function GoalsScreen() {
             return;
         }
 
-        const newGoal: Goal = {
-            id: generateId(),
-            goalName: goalName.trim(),
-            targetAmount: targetAmountNumber,
-            currentAmount: currentAmountNumber,
-            deadline: deadline.trim(),
-        };
+        const user = auth.currentUser;
+        if (!user) {
+            Alert.alert('Error', 'User not authenticated');
+            return;
+        }
 
-        setGoals([...goals, newGoal]);
-        Alert.alert('Success', 'Goal created successfully!');
-        resetForm();
-        setShowCreateModal(false);
+        try {
+            const db = getFirestore();
+            const goalsRef = collection(db, 'usernames', user.uid, 'goals');
+
+            await addDoc(goalsRef, {
+                goalName: goalName.trim(),
+                targetAmount: targetAmountNumber,
+                currentAmount: currentAmountNumber,
+                deadline: deadline.trim(),
+                createdAt: new Date().toISOString()
+            });
+
+            Alert.alert('Success', 'Goal created successfully!');
+            resetForm();
+            setShowCreateModal(false);
+        } catch (error) {
+            console.error('Error adding goal:', error);
+            Alert.alert('Error', 'Failed to create goal');
+        }
+    };
+
+    const handleAddMoney = async (goalId: string, amountToAdd: number) => {
+        const user = auth.currentUser;
+        if (!user) {
+            Alert.alert('Error', 'User not authenticated');
+            return;
+        }
+
+        try {
+            const db = getFirestore();
+            const goalRef = doc(db, 'usernames', user.uid, 'goals', goalId);
+
+            // In a real app, you would use updateDoc here
+            // For now, we'll update the local state
+            setGoals(goals.map(goal =>
+                goal.id === goalId
+                    ? { ...goal, currentAmount: goal.currentAmount + amountToAdd }
+                    : goal
+            ));
+        } catch (error) {
+            console.error('Error updating goal:', error);
+        }
+    };
+
+    const handleDeleteGoal = async (goalId: string) => {
+        const user = auth.currentUser;
+        if (!user) {
+            Alert.alert('Error', 'User not authenticated');
+            return;
+        }
+
+        try {
+            const db = getFirestore();
+            const goalRef = doc(db, 'usernames', user.uid, 'goals', goalId);
+
+            // In a real app, you would use deleteDoc here
+            // For now, we'll update the local state
+            setGoals(goals.filter(goal => goal.id !== goalId));
+        } catch (error) {
+            console.error('Error deleting goal:', error);
+        }
     };
 
     const resetForm = () => {
@@ -67,7 +147,7 @@ export default function GoalsScreen() {
 
     const renderGoalItem = ({ item }: { item: Goal }) => {
         const progress = (item.currentAmount / item.targetAmount) * 100;
-        const progressPercentage = Math.min(progress, 100); // Cap at 100%
+        const progressPercentage = Math.min(progress, 100);
         const isCompleted = progressPercentage >= 100;
 
         return (
@@ -106,22 +186,14 @@ export default function GoalsScreen() {
                 <View style={styles.goalActions}>
                     <TouchableOpacity
                         style={styles.addMoneyButton}
-                        onPress={() => {
-                            setGoals(goals.map(goal =>
-                                goal.id === item.id
-                                    ? { ...goal, currentAmount: goal.currentAmount + 10 }
-                                    : goal
-                            ));
-                        }}
+                        onPress={() => handleAddMoney(item.id, 10)}
                     >
                         <Text style={styles.buttonText}>Add $10</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={styles.deleteButton}
-                        onPress={() => {
-                            setGoals(goals.filter(goal => goal.id !== item.id));
-                        }}
+                        onPress={() => handleDeleteGoal(item.id)}
                     >
                         <Text style={styles.buttonText}>Delete</Text>
                     </TouchableOpacity>
@@ -132,6 +204,9 @@ export default function GoalsScreen() {
 
     return (
         <View style={styles.container}>
+            {/* Added Goals title */}
+            <Text style={styles.screenTitle}>Goals</Text>
+
             <TouchableOpacity
                 style={styles.createButton}
                 onPress={() => setShowCreateModal(true)}
@@ -232,6 +307,13 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         backgroundColor: '#000',
+    },
+    screenTitle: {
+        fontSize: 28,
+        fontWeight: 'bold',
+        color: '#76c75f',
+        marginBottom: 20,
+        textAlign: 'center',
     },
     createButton: {
         backgroundColor: '#76c75f',

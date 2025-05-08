@@ -12,17 +12,19 @@ export default function SignUp({ navigation }) {
   const [password, setPassword] = useState('');
 
   const handleSignUp = async () => {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await setDoc(doc(db, 'usernames', username), {
-        email,
-      });
-      Alert.alert('Success', 'Account created!');
-      navigation.navigate('Home');
-    } catch (error) {
-      Alert.alert('Sign Up Error', error.message);
-    }
-  };
+      try {
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          const uid = userCredential.user.uid; //edit
+          await setDoc(doc(db, 'usernames', uid), {  //edit
+              email, //edit
+              username, //edit
+          }); //edit
+          Alert.alert('Success', 'Account created!');
+          navigation.navigate('Home');
+      } catch (error) {
+          Alert.alert('Sign Up Error', error.message);
+      }
+  }
   
   
   return (
