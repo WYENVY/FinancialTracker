@@ -26,6 +26,24 @@ To be able to run our project you first need to install the dependencies
    ```
 
 In the output you will find an option to open the app on the web.
+If you wish, you can emulate the app using android studio.
+
+
+## Testing our Project
+
+- To test our project you will first want to create an account.
+- To do this you will want to press Sign Up on our login page. Then enter your credentials. (Note the password must be six characters)
+- Then click Sing Up
+
+
+- You will then be taken to our home page where you can view all of our pages.
+- We first recommend testing out the budget feature: make sure you add a budget category for testing! 
+
+- Next, you can add a transaction and in the category section, use the same name that you called the budget so that it can deduct that amount from your budget.
+- After that, you can test out the goals and expenses page.
+
+
+- If you log out and log back in, you will notice that your information was saved successfully in the app.
 
 
 
