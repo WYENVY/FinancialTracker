@@ -203,7 +203,7 @@ export default function BudgetScreen() {
                         value={category}
                         onChangeText={setCategory}
                         style={styles.input}
-                        placeholder="e.g., Food, Transportation"
+                        placeholder="e.g., Food, Transportation, Subscriptions"
                     />
 
                     <View style={styles.buttonRow}>
