@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../fireconfig';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDocs, collection, query, where } from 'firebase/firestore';
 
 const db = getFirestore();
 
@@ -19,46 +19,49 @@ export default function SignIn({ navigation }) {
         return;
       }
 
-      const docRef = doc(db, 'usernames', username);
-      const docSnap = await getDoc(docRef);
-  
-      if (!docSnap.exists()) {
+      const q = query(collection(db, 'usernames'), where('username', '==', username));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
         Alert.alert('Error', 'Username not found');
         return;
       }
-  
-      const emailFromUsername = docSnap.data().email;
+
+      const userDoc = querySnapshot.docs[0];
+      const emailFromUsername = userDoc.data().email;
+
       await signInWithEmailAndPassword(auth, emailFromUsername, password);
       Alert.alert('Success', 'Logged in!');
       navigation.navigate('Home');
     } catch (error) {
+      console.error("Login Error", error);
       Alert.alert('Login Error', error.message);
     }
   };
-  
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign In</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        onChangeText={setUsername}
-        autoCapitalize="none"
-        value={username}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        onChangeText={setPassword}
-        secureTextEntry
-        value={password}
-      />
-      <Button title="Sign In" onPress={handleSignIn} />
-      <Button title="Don't have an account? Sign Up" onPress={() => navigation.navigate('SignUp')} />
-      <Button title="Forgot Password?" onPress={() => navigation.navigate('ForgotPassword')} />
-    </View>
+      <View style={styles.container}>
+        <Text style={styles.title}>Sign In</Text>
+        <TextInput
+            style={styles.input}
+            placeholder="Username"
+            onChangeText={setUsername}
+            autoCapitalize="none"
+            value={username}
+        />
+        <TextInput
+            style={styles.input}
+            placeholder="Password"
+            onChangeText={setPassword}
+            secureTextEntry
+            value={password}
+        />
+        <Button title="Sign In" onPress={handleSignIn} />
+        <Button title="Don't have an account? Sign Up" onPress={() => navigation.navigate('SignUp')} />
+        <Button title="Forgot Password?" onPress={() => navigation.navigate('ForgotPassword')} />
+      </View>
   );
-  
+
 }
 
 const styles = StyleSheet.create({

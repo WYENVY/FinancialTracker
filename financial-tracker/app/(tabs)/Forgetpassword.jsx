@@ -2,25 +2,20 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, Alert, StyleSheet, Text } from 'react-native';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../fireconfig';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { collection, query, getFirestore, doc, getDocs, where } from 'firebase/firestore';
 
 const db = getFirestore();
 
 export default function ForgotPassword({ navigation }) {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
 
   const handleReset = async () => {
-    try {
-      const docRef = doc(db, 'usernames', username);
-      const docSnap = await getDoc(docRef);
-       
-      // debug
-      if (!docSnap.exists()) {
-        Alert.alert('Error', 'Username not found');
-        return;
-      }
+    if (!email|| !email.includes('@')) {
+      Alert.alert('Error', 'Please enter a valid email address');
+      return;
+    }
 
-      const email = docSnap.data().email;
+    try {
       await sendPasswordResetEmail(auth, email);
       Alert.alert('Check your inbox', 'A password reset email has been sent.');
     } catch (error) {
@@ -29,16 +24,16 @@ export default function ForgotPassword({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Forgot Password</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        onChangeText={setUsername}
-      />
-      <Button title="Reset Password" onPress={handleReset} />
-      <Button title="Back to Sign In" onPress={() => navigation.navigate('SignIn')} />
-    </View>
+      <View style={styles.container}>
+        <Text style={styles.title}>Forgot Password</Text>
+        <TextInput
+            style={styles.input}
+            placeholder="Email"
+            onChangeText={setEmail}
+        />
+        <Button title="Reset Password" onPress={handleReset} />
+        <Button title="Back to Sign In" onPress={() => navigation.navigate('SignIn')} />
+      </View>
   );
 }
 

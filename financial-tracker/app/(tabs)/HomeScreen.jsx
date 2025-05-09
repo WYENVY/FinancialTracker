@@ -1,11 +1,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import HomePage from '@/app/pages/index';
-import TransactionsScreen from '@/app/pages/transactions';
-import BudgetScreen from '@/app/pages/budgets';
-import ExpensesScreen from '@/app/pages/expenses';
-import GoalsScreen from '@/app/pages/goals';
+import HomePage from '@/app/pages/Home';
+import TransactionsScreen from '@/app/pages/Transactions';
+import BudgetScreen from '@/app/pages/Budgets';
+import ExpensesScreen from '@/app/pages/Expenses';
+import GoalsScreen from '@/app/pages/Goals';
 
 const Tab = createBottomTabNavigator();
 
