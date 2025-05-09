@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Created a style page for budgets.">
+    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Hamza fixed the Singin and Forgetpassword pages. I renamed the pages files for better naming convention.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/HomeScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/HomeScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/budgets.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Budgets.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/expenses.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Expenses.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/goals.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Goals.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Home.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/transactions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Transactions.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/scripts/reset-project.js" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/scripts/reset-project.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/README.md" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +103,8 @@
       <workItem from="1746684516374" duration="9195000" />
       <workItem from="1746701647765" duration="130000" />
       <workItem from="1746701822084" duration="553000" />
-      <workItem from="1746750730993" duration="999000" />
+      <workItem from="1746750730993" duration="1308000" />
+      <workItem from="1746752384779" duration="157000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed the file system">
       <option name="closed" value="true" />
@@ -183,7 +178,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746701053988</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Hamza fixed the Singin and Forgetpassword pages. I renamed the pages files for better naming convention.">
+      <option name="closed" value="true" />
+      <created>1746751960149</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1746751960150</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -208,6 +211,7 @@
     <MESSAGE value="Made it so that Users inputted categories are saved in the database (is not set up perfectly yet)" />
     <MESSAGE value="Connected all of the pages to the database" />
     <MESSAGE value="Created a style page for budgets." />
-    <option name="LAST_COMMIT_MESSAGE" value="Created a style page for budgets." />
+    <MESSAGE value="Hamza fixed the Singin and Forgetpassword pages. I renamed the pages files for better naming convention." />
+    <option name="LAST_COMMIT_MESSAGE" value="Hamza fixed the Singin and Forgetpassword pages. I renamed the pages files for better naming convention." />
   </component>
 </project>
