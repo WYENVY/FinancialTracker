@@ -4,7 +4,7 @@ export type ExpenseCategory = {
     id: string;
     name: string;
     icon: ValidIconName;
-    color?: string;  // Made optional with ?
+    color?: string;
     budget?: number;
     expenses: Expense[];
 };
@@ -13,7 +13,7 @@ export type Expense = {
     id: string;
     amount: number;
     description: string;
-    date: string;         // ISO date string
+    date: string;
 };
 
 export type ValidIconName =

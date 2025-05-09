@@ -1,6 +1,3 @@
-// hooks/useCategories.ts
-// hooks/useCategories.ts
-
 import { useEffect, useState } from 'react';
 import { ExpenseCategory, Expense } from '@/src/types';
 import {getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, setDoc, updateDoc} from 'firebase/firestore';

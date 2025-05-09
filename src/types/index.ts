@@ -1,4 +1,3 @@
-import { IoniconsName } from './ionicons';
 
 export type ExpenseCategory = {
     id: string;

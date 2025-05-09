@@ -23,7 +23,7 @@ export default function BudgetScreen() {
     const [frequency, setFrequency] = useState<'weekly' | 'monthly' | 'annually'>('monthly');
     const [category, setCategory] = useState('');
 
-    // Fetch budgets from Firestore
+    // This fetches budgets from Firestore
     useEffect(() => {
         const user = auth.currentUser;
         if (!user) return;
@@ -98,6 +98,7 @@ export default function BudgetScreen() {
         setCategory('');
     };
 
+    // This code was supposed to be for Liang to use for notifications
     const checkBudgetStatus = (budget: Budget): BudgetStatus => {
         if (budget.amount <= 0) return 'normal';
         const percentage = (budget.amountSpent / budget.amount) * 100;
@@ -203,7 +204,7 @@ export default function BudgetScreen() {
                         value={category}
                         onChangeText={setCategory}
                         style={styles.input}
-                        placeholder="e.g., Food, Transportation"
+                        placeholder="e.g., Food, Transportation, Subscriptions"
                     />
 
                     <View style={styles.buttonRow}>

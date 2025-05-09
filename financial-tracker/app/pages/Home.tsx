@@ -33,7 +33,7 @@ export default function HomeScreen() {
                     date: new Date(data.date)
                 });
             });
-            // Sort by date (newest first) and take first 3
+            // Adds the first three transactions to the homepage
             const sortedTransactions = fetchedTransactions.sort((a, b) => b.date.getTime() - a.date.getTime());
             setRecentTransactions(sortedTransactions.slice(0, 3));
         });
@@ -41,7 +41,6 @@ export default function HomeScreen() {
         return () => unsubscribe();
     }, []);
 
-    // Render each transaction item
     const renderTransactionItem = ({ item }: { item: Transaction }) => (
         <View style={styles.transactionItem}>
             <View style={styles.transactionRow}>

@@ -107,8 +107,7 @@ export default function GoalsScreen() {
             const db = getFirestore();
             const goalRef = doc(db, 'usernames', user.uid, 'goals', goalId);
 
-            // In a real app, you would use updateDoc here
-            // For now, we'll update the local state
+
             setGoals(goals.map(goal =>
                 goal.id === goalId
                     ? { ...goal, currentAmount: goal.currentAmount + amountToAdd }
@@ -130,8 +129,7 @@ export default function GoalsScreen() {
             const db = getFirestore();
             const goalRef = doc(db, 'usernames', user.uid, 'goals', goalId);
 
-            // In a real app, you would use deleteDoc here
-            // For now, we'll update the local state
+
             setGoals(goals.filter(goal => goal.id !== goalId));
         } catch (error) {
             console.error('Error deleting goal:', error);

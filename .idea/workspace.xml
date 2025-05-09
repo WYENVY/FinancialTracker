@@ -4,9 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Hamza fixed the Singin and Forgetpassword pages. I renamed the pages files for better naming convention.">
+    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Added the updated Transactions page that incorporated the update of the Budgets page when you added a transaction for a category in Budgets.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Budgets.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Budgets.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Goals.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Goals.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Transactions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Transactions.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/hooks/useCategories.ts" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/hooks/useCategories.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/src/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/src/types/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +34,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -105,6 +110,11 @@
       <workItem from="1746701822084" duration="553000" />
       <workItem from="1746750730993" duration="1308000" />
       <workItem from="1746752384779" duration="157000" />
+      <workItem from="1746753143878" duration="645000" />
+      <workItem from="1746754141134" duration="238000" />
+      <workItem from="1746754590409" duration="133000" />
+      <workItem from="1746755159046" duration="783000" />
+      <workItem from="1746776078237" duration="390000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed the file system">
       <option name="closed" value="true" />
@@ -186,7 +196,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746751960150</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Added the updated Transactions page that incorporated the update of the Budgets page when you added a transaction for a category in Budgets.">
+      <option name="closed" value="true" />
+      <created>1746753327542</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1746753327542</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -212,6 +230,7 @@
     <MESSAGE value="Connected all of the pages to the database" />
     <MESSAGE value="Created a style page for budgets." />
     <MESSAGE value="Hamza fixed the Singin and Forgetpassword pages. I renamed the pages files for better naming convention." />
-    <option name="LAST_COMMIT_MESSAGE" value="Hamza fixed the Singin and Forgetpassword pages. I renamed the pages files for better naming convention." />
+    <MESSAGE value="Added the updated Transactions page that incorporated the update of the Budgets page when you added a transaction for a category in Budgets." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added the updated Transactions page that incorporated the update of the Budgets page when you added a transaction for a category in Budgets." />
   </component>
 </project>

@@ -8,7 +8,7 @@ type Transaction = {
     amount: number;
     description: string;
     date: Date;
-    category?: string; // Added category to match with budget
+    category?: string;
 };
 
 type Budget = {
@@ -25,15 +25,14 @@ export default function AddTransactionScreen() {
     const [budgets, setBudgets] = useState<Budget[]>([]);
     const [amount, setAmount] = useState('');
     const [description, setDescription] = useState('');
-    const [category, setCategory] = useState(''); // Added category input
+    const [category, setCategory] = useState('');
     const [message, setMessage] = useState('');
 
-    // Clear message after timeout
     useEffect(() => {
         if (message) {
             const timer = setTimeout(() => {
                 setMessage('');
-            }, 3000); // Display message for 3 seconds
+            }, 3000);
 
             return () => clearTimeout(timer);
         }
@@ -45,7 +44,6 @@ export default function AddTransactionScreen() {
 
         const db = getFirestore();
 
-        // Fetch transactions
         const transactionsRef = collection(db, 'usernames', user.uid, 'transactions');
         const transactionsQuery = query(transactionsRef);
 
@@ -61,12 +59,10 @@ export default function AddTransactionScreen() {
                     category: data.category
                 });
             });
-            // Sort by date (newest first)
             fetchedTransactions.sort((a, b) => b.date.getTime() - a.date.getTime());
             setTransactions(fetchedTransactions);
         });
 
-        // Fetch budgets
         const budgetsRef = collection(db, 'usernames', user.uid, 'budgets');
         const budgetsQuery = query(budgetsRef);
 
@@ -99,15 +95,13 @@ export default function AddTransactionScreen() {
             return [];
         }
 
-        // Find budgets that match the transaction category
-        // Case-insensitive matching for better user experience
+
         return budgets.filter(budget =>
             budget.category &&
             budget.category.toLowerCase() === transactionCategory.toLowerCase()
         );
     };
 
-    // Update budget's amountSpent value
     const updateBudgetAmount = async (budgetId: string, newAmountSpent: number) => {
         const user = auth.currentUser;
         if (!user) return false;
@@ -125,7 +119,6 @@ export default function AddTransactionScreen() {
         }
     };
 
-    // Handle transaction submission
     const handleAddTransaction = async () => {
         if (!amount || isNaN(Number(amount))) {
             setMessage('Error: Please enter a valid amount');
@@ -230,7 +223,6 @@ export default function AddTransactionScreen() {
             <View style={styles.container}>
                 <Text style={styles.title}>Add New Transaction</Text>
 
-                {/* Display message for web (error or success) */}
                 {message ? (
                     <Text style={[
                         styles.message,
@@ -240,7 +232,6 @@ export default function AddTransactionScreen() {
                     </Text>
                 ) : null}
 
-                {/* Amount input */}
                 <Text style={styles.label}>Amount</Text>
                 <TextInput
                     style={styles.input}
@@ -251,7 +242,6 @@ export default function AddTransactionScreen() {
                     keyboardType="numeric"
                 />
 
-                {/* Description input */}
                 <Text style={styles.label}>Description</Text>
                 <TextInput
                     style={styles.input}
@@ -261,7 +251,6 @@ export default function AddTransactionScreen() {
                     onChangeText={setDescription}
                 />
 
-                {/* Category input */}
                 <Text style={styles.label}>Category (for budget tracking)</Text>
                 <TextInput
                     style={styles.input}
@@ -271,7 +260,6 @@ export default function AddTransactionScreen() {
                     onChangeText={setCategory}
                 />
 
-                {/* Add button */}
                 <TouchableOpacity
                     style={styles.addButton}
                     onPress={handleAddTransaction}
@@ -280,7 +268,6 @@ export default function AddTransactionScreen() {
                     <Text style={styles.buttonText}>Add Transaction</Text>
                 </TouchableOpacity>
 
-                {/* Budget status summary */}
                 {budgets.length > 0 && (
                     <View style={styles.budgetSummary}>
                         <Text style={styles.sectionTitle}>Budget Categories</Text>
