@@ -6,11 +6,27 @@
   <component name="ChangeListManager">
     <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Fixed some small errors and did one last check over the code.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/HomeScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/HomeScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signin.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signup.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/_layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/components/DropdownMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/components/DropdownMenu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript JSX File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -28,7 +44,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -109,6 +125,10 @@
       <workItem from="1746754590409" duration="133000" />
       <workItem from="1746755159046" duration="783000" />
       <workItem from="1746776078237" duration="718000" />
+      <workItem from="1747198587589" duration="15888000" />
+      <workItem from="1747483411291" duration="4461000" />
+      <workItem from="1747783944740" duration="159000" />
+      <workItem from="1747913131069" duration="2238000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed the file system">
       <option name="closed" value="true" />

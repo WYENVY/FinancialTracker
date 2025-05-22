@@ -3,12 +3,13 @@ import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../fireconfig';
 import { getFirestore, doc, getDocs, collection, query, where } from 'firebase/firestore';
+import { useRouter } from 'expo-router';
 
 const db = getFirestore();
 
-export default function SignIn({ navigation }) {
+export default function SignIn() {
+  const router = useRouter();
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSignIn = async () => {
@@ -32,7 +33,7 @@ export default function SignIn({ navigation }) {
 
       await signInWithEmailAndPassword(auth, emailFromUsername, password);
       Alert.alert('Success', 'Logged in!');
-      navigation.navigate('Home');
+      router.replace('/HomeScreen'); // ✅ Navigate to homescreen after login
     } catch (error) {
       console.error("Login Error", error);
       Alert.alert('Login Error', error.message);
@@ -57,11 +58,10 @@ export default function SignIn({ navigation }) {
             value={password}
         />
         <Button title="Sign In" onPress={handleSignIn} />
-        <Button title="Don't have an account? Sign Up" onPress={() => navigation.navigate('SignUp')} />
-        <Button title="Forgot Password?" onPress={() => navigation.navigate('ForgotPassword')} />
+        <Button title="Don't have an account? Sign Up" onPress={() => router.push('/tabs/signup')} />
+        <Button title="Forgot Password?" onPress={() => router.push('/tabs/forgotpassword')} />
       </View>
   );
-
 }
 
 const styles = StyleSheet.create({
