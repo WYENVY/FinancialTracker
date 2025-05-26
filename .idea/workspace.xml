@@ -6,15 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Fixed some small errors and did one last check over the code.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/HomeScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/HomeScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signin.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signup.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/_layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Home.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/components/DropdownMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/components/DropdownMenu.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Expenses.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Expenses.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/components/CategoryItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/components/CategoryItem.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/hooks/useCategories.ts" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/hooks/useCategories.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/src/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/src/types/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,23 +50,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;ethan-branch&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/ethan/WebstormProjects/FinancialTracker-Ethan&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/ethan/WebstormProjects/FinancialTracker-Ethan/financial-tracker/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "categories",
+    "last_opened_file_path": "/Users/ethan/WebstormProjects/FinancialTracker-Ethan",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.general",
+    "ts.external.directory.path": "/Users/ethan/WebstormProjects/FinancialTracker-Ethan/financial-tracker/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>

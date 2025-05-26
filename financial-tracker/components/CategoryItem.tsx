@@ -1,119 +1,81 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { ExpenseCategory, Expense } from '@/src/types'; // Make sure to import Expense type
-import ExpenseEntry from './ExpenseEntry';
+import { ExpenseCategory } from '@/src/types'; // Ensure this path is correct
 
 interface CategoryItemProps {
     category: ExpenseCategory;
-    onDelete: (id: string) => void;
     onPress: () => void;
-    onAddExpense?: (categoryId: string, expense: Omit<Expense, 'id'>) => void;
-    onDeleteExpense?: (categoryId: string, expenseId: string) => void;
+    itemSize: number; // To maintain square shape
+    // onDelete?: (id: string) => void; // No longer a direct button on the grid item
+    // onAddExpense, onDeleteExpense are removed as expenses are not shown directly
 }
+
+const GRID_ITEM_BACKGROUND_COLOR = '#D6EAF8'; // Light blue color from the image
 
 export default function CategoryItem({
                                          category,
-                                         onDelete,
                                          onPress,
-                                         onAddExpense,
-                                         onDeleteExpense
+                                         itemSize,
                                      }: CategoryItemProps) {
+    // Determine icon color based on preset status or other logic if needed
+    // For simplicity, using a fixed color that works on the light blue background.
+    const iconColor = category.isPreset ? '#052224' : '#2980B9'; // Example: darker for preset
+
     return (
-        <View style={[styles.container, { backgroundColor: category.color }]}>
-            <View style={styles.mainContent}>
-                <TouchableOpacity
-                    style={styles.leftContent}
-                    onPress={onPress}
-                >
-                    <Ionicons
-                        name={category.icon as keyof typeof Ionicons.glyphMap}
-                        size={20}
-                        color="white"
-                    />
-                    <Text style={styles.name}>{category.name}</Text>
-                </TouchableOpacity>
+        <TouchableOpacity
+            style={[styles.container, { width: itemSize, height: itemSize, backgroundColor: GRID_ITEM_BACKGROUND_COLOR }]}
+            onPress={onPress}
+            // Presets are not editable by default, but onPress can still lead to a detail view.
+            // The handleEditPress in ExpensesScreen already checks for !isPreset.
+        >
+            <Ionicons
+                name={category.icon as keyof typeof Ionicons.glyphMap || 'help-circle-outline'}
+                size={itemSize * 0.35} // Adjust icon size relative to itemSize
+                color={iconColor} // Icon color
+                style={styles.icon}
+            />
+            <Text style={styles.name} numberOfLines={2} ellipsizeMode="tail">{category.name}</Text>
 
-                <View style={styles.buttons}>
-                    <TouchableOpacity
-                        onPress={onPress}
-                        style={styles.button}
-                    >
-                        <Ionicons name="create" size={16} color="white" />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => onDelete(category.id)}
-                        style={styles.button}
-                    >
-                        <Ionicons name="trash" size={16} color="white" />
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-            <View style={styles.expensesContainer}>
-                {category.expenses?.map(expense => (
-                    <View key={expense.id} style={styles.expenseItem}>
-                        <Text style={styles.expenseAmount}>${expense.amount.toFixed(2)}</Text>
-                        <Text style={styles.expenseDescription}>{expense.description}</Text>
-                        <TouchableOpacity onPress={() => onDeleteExpense?.(category.id, expense.id)}>
-                            <Ionicons name="trash" size={16} color="white" />
-                        </TouchableOpacity>
-                    </View>
-                ))}
-                <ExpenseEntry
-                    onAdd={(amount: number, description: string) =>
-                        onAddExpense?.(category.id, { amount, description, date: new Date().toISOString() })
-                    }
-                />
-            </View>
-        </View>
+            {/*
+                Removed direct edit/delete buttons and expense list for grid view to match image.
+                If !category.isPreset, onPress in ExpensesScreen triggers editing.
+                Deletion would typically be part of the editing UI or a context menu.
+            */}
+            {/* Example: A small visual cue for custom categories if desired */}
+            {/* {!category.isPreset && <View style={styles.customIndicator} />} */}
+        </TouchableOpacity>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        padding: 16,
-        marginBottom: 8,
-        borderRadius: 8,
-    },
-    mainContent: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
+        borderRadius: 15, // Rounded corners like image
+        padding: 8, // Internal padding
+        // shadowColor: '#000', // Optional shadow, image items look flat
+        // shadowOffset: { width: 0, height: 1 },
+        // shadowOpacity: 0.1,
+        // shadowRadius: 2,
+        // elevation: 2,
     },
-    leftContent: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1,
+    icon: {
+        marginBottom: 8, // Space between icon and text
     },
     name: {
-        color: 'white',
-        marginLeft: 12,
-        fontSize: 16,
+        color: '#052224', // Darker text for readability on light blue
+        fontSize: 13, // Adjust as needed
+        fontWeight: '500',
+        textAlign: 'center',
     },
-    buttons: {
-        flexDirection: 'row',
-        gap: 8,
-    },
-    button: {
-        padding: 4,
-    },
-    expensesContainer: {
-        marginTop: 10,
-    },
-    expenseItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingVertical: 5,
-        borderBottomWidth: 1,
-        borderBottomColor: 'rgba(255,255,255,0.2)',
-    },
-    expenseAmount: {
-        color: 'white',
-        fontWeight: 'bold',
-        width: 80,
-    },
-    expenseDescription: {
-        color: 'white',
-        flex: 1,
-    },
+    // Example for a custom indicator
+    // customIndicator: {
+    //     position: 'absolute',
+    //     top: 5,
+    //     right: 5,
+    //     width: 8,
+    //     height: 8,
+    //     borderRadius: 4,
+    //     backgroundColor: '#3498DB', // A blue to indicate 'custom'
+    // }
 });

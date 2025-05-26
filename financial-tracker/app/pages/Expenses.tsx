@@ -1,142 +1,210 @@
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import useCategories from '@/hooks/useCategories';
-import { useState } from 'react';
-import CategoryItem from '@/components/CategoryItem';
-import { ExpenseCategory } from '@/src/types';
+import { useEffect, useState } from 'react';
 import IconPicker from '@/components/IconPicker';
+import CategoryItem from '@/components/CategoryItem';
+import useCategories from '@/hooks/useCategories';
+import { ExpenseCategory, ValidIconName } from '@/src/types';
 
-export default function ExpensesScreen() {
+const { width } = Dimensions.get('window');
+const itemSize = (width - 25 * 2 - 20 * 2) / 3;
+
+const PRESET_CATEGORIES: ExpenseCategory[] = [
+    { id: '1', name: 'Food', icon: 'fast-food' as ValidIconName, color: '#FF6B6B', isPreset: true, expenses: [] },
+    { id: '2', name: 'Transport', icon: 'bus' as ValidIconName, color: '#4ECDC4', isPreset: true, expenses: [] },
+    { id: '3', name: 'Entertainment', icon: 'musical-notes' as ValidIconName, color: '#FF9F43', isPreset: true, expenses: [] },
+    { id: '4', name: 'Groceries', icon: 'basket' as ValidIconName, color: '#6C5CE7', isPreset: true, expenses: [] },
+    { id: '5', name: 'Rent', icon: 'key' as ValidIconName, color: '#00B894', isPreset: true, expenses: [] },
+    { id: '6', name: 'Gifts', icon: 'gift' as ValidIconName, color: '#E84393', isPreset: true, expenses: [] },
+    { id: '7', name: 'Income', icon: 'cash' as ValidIconName, color: '#00D09E', isPreset: true, expenses: [] },
+    { id: '8', name: 'Goals', icon: 'trending-up' as ValidIconName, color: '#0984E3', isPreset: true, expenses: [] },
+];
+
+export default function CategoriesScreen() {
     const {
-        categories,
+        categories: firebaseCategories,
         addCategory,
-        deleteCategory,
-        updateCategory,
-        addExpense,
-        deleteExpense
-    } = useCategories();
+        updateCategory
+    } = useCategories(PRESET_CATEGORIES);
+
     const [editingId, setEditingId] = useState<string | null>(null);
     const [editName, setEditName] = useState('');
 
+    // Only display custom (non-preset) categories from Firestore
+    const customCategories = firebaseCategories.filter(cat => !cat.isPreset);
+
     const handleEditPress = (category: ExpenseCategory) => {
-        setEditingId(category.id);
-        setEditName(category.name);
+        if (!category.isPreset) {
+            setEditingId(category.id);
+            setEditName(category.name);
+        }
     };
 
-    const handleSave = (id: string) => {
-        updateCategory(id, { name: editName });
+    const handleAddCategory = () => {
+        addCategory({
+            name: 'New Category',
+            icon: 'apps',
+            color: '#76c75f',
+            isPreset: false,
+        });
+    };
+
+    const handleSave = (id: string, updatedIcon?: ValidIconName) => {
+        updateCategory(id, {
+            name: editName,
+            icon: updatedIcon ?? undefined,
+        });
         setEditingId(null);
     };
 
+    const allCategories: ExpenseCategory[] = [
+        ...PRESET_CATEGORIES,
+        ...customCategories,
+        {
+            id: 'add-button',
+            name: 'Add',
+            icon: 'add-outline' as ValidIconName,
+            color: '#AED6F1',
+            isPreset: false,
+            expenses: [],
+        }
+    ];
+
     return (
         <View style={styles.container}>
-            <View style={styles.headerContainer}>
-                <Text style={styles.title}>Expense Categories</Text>
-                <TouchableOpacity
-                    style={styles.addButton}
-                    onPress={() => addCategory({
-                        name: 'New Category',
-                        icon: 'add'
-                    })}
-                >
-                    <Text style={styles.addButtonText}>+ Add Category</Text>
-                </TouchableOpacity>
+            <View style={styles.header}>
+                <Text style={styles.title}>Categories</Text>
             </View>
+            <View style={styles.contentSheet}>
+                <FlatList
+                    data={allCategories}
+                    keyExtractor={(item) => item.id}
+                    numColumns={3}
+                    contentContainerStyle={styles.listContent}
+                    columnWrapperStyle={styles.columnWrapper}
+                    renderItem={({ item }) => {
+                        if (item.id === 'add-button') {
+                            return (
+                                <TouchableOpacity
+                                    style={[styles.itemContainer, styles.addButton]}
+                                    onPress={handleAddCategory}
+                                >
+                                    <Ionicons name="add-outline" size={30} color="#052224" />
+                                    <Text style={styles.moreButtonText}>Add Category</Text>
+                                </TouchableOpacity>
+                            );
+                        }
 
-            <FlatList
-                data={categories}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) => (
-                    editingId === item.id ? (
-                        <View style={[styles.editContainer, { backgroundColor: item.color }]}>
-                            <TextInput
-                                style={styles.editInput}
-                                value={editName}
-                                onChangeText={setEditName}
-                                autoFocus
+                        if (editingId === item.id && !item.isPreset) {
+                            return (
+                                <View style={[styles.editContainer, { backgroundColor: item.color || '#76c75f', width: itemSize, height: itemSize }]}>
+                                    <TextInput
+                                        style={styles.editInput}
+                                        value={editName}
+                                        onChangeText={setEditName}
+                                        autoFocus
+                                        placeholderTextColor="rgba(255,255,255,0.7)"
+                                        placeholder={item.name}
+                                    />
+                                    <IconPicker
+                                        selectedIcon={item.icon}
+                                        onSelect={(icon) => handleSave(item.id, icon as ValidIconName)}
+                                    />
+                                    <View style={styles.editButtons}>
+                                        <TouchableOpacity onPress={() => handleSave(item.id)}>
+                                            <Ionicons name="checkmark-outline" size={24} color="white" />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => setEditingId(null)}>
+                                            <Ionicons name="close-outline" size={24} color="white" />
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            );
+                        }
+
+                        return (
+                            <CategoryItem
+                                category={item}
+                                onPress={() => handleEditPress(item)}
+                                itemSize={itemSize}
                             />
-                            <IconPicker
-                                selectedIcon={item.icon}
-                                onSelect={(icon) => updateCategory(item.id, { icon })}
-                            />
-                            <View style={styles.editButtons}>
-                                <TouchableOpacity onPress={() => handleSave(item.id)}>
-                                    <Ionicons name="checkmark" size={20} color="white" />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => setEditingId(null)}>
-                                    <Ionicons name="close" size={20} color="white" />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    ) : (
-                        <CategoryItem
-                            category={item}
-                            onDelete={deleteCategory}
-                            onPress={() => handleEditPress(item)}
-                            onAddExpense={addExpense}
-                            onDeleteExpense={deleteExpense}
-                        />
-                    )
-                )}
-            />
+                        );
+                    }}
+                />
+            </View>
         </View>
     );
+
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 45,
-        backgroundColor: '#000000',
+        backgroundColor: '#00D09E',
     },
-    headerContainer: {
-        marginBottom: 20,
+    header: {
+        paddingHorizontal: 20,
+        paddingTop: 50,
+        paddingBottom: 20,
+        alignItems: 'center',
     },
     title: {
-        fontSize: 24,
+        fontSize: 22,
         fontWeight: 'bold',
-        color: '#76c75f',
-        marginBottom: 10,
-        textAlign: 'center'
+        color: '#FFFFFF',
+    },
+    contentSheet: {
+        flex: 1,
+        backgroundColor: '#F0FAF8',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        paddingHorizontal: 20,
+        paddingTop: 20,
+    },
+    listContent: {
+        paddingBottom: 100,
+    },
+    columnWrapper: {
+        justifyContent: 'space-between',
+        marginBottom: 20,
+    },
+    itemContainer: {
+        width: itemSize,
+        height: itemSize,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 15,
+        backgroundColor: '#D6EAF8',
+        padding: 10,
+    },
+    addButton: {
+        backgroundColor: '#AED6F1',
+    },
+    moreButtonText: {
+        marginTop: 8,
+        fontSize: 14,
+        fontWeight: '500',
+        color: '#052224',
     },
     editContainer: {
-        flexDirection: 'column',
+        padding: 10,
+        borderRadius: 15,
+        justifyContent: 'space-around',
         alignItems: 'center',
-        padding: 15,
-        marginBottom: 10,
-        borderRadius: 8,
     },
     editInput: {
-        flex: 1,
         color: 'white',
-        fontSize: 16,
+        fontSize: 14,
         borderBottomWidth: 1,
-        borderBottomColor: 'white',
-        marginRight: 10,
+        borderBottomColor: 'rgba(255,255,255,0.7)',
+        textAlign: 'center',
+        marginBottom: 8,
+        width: '90%',
     },
     editButtons: {
         flexDirection: 'row',
-        gap: 15,
-    },
-    addButton: {
-        padding: 15,
-        backgroundColor: '#76c75f',
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    addButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
-    iconPickerContainer: {
-        marginVertical: 10,
-        backgroundColor: 'rgba(255,255,255,0.2)',
-        borderRadius: 8,
-        padding: 10,
-    },
-    editInputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
+        justifyContent: 'space-around',
+        width: '60%',
+        marginTop: 8,
     },
 });
