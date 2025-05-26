@@ -6,11 +6,17 @@ import HomePage from '@/app/pages/Home';
 import TransactionsScreen from '@/app/pages/Transactions';
 import BudgetScreen from '@/app/pages/Budgets';
 import ExpensesScreen from '@/app/pages/Expenses';
-import GoalsScreen from '@/app/pages/Goals';
+// import GoalsScreen from '@/app/pages/Goals';
 import AnalysisScreen from '@/app/pages/Analysis';
 import FoodScreen from '@/app/pages/categories/Food';
+import TransportScreen from '@/app/pages/categories/Transport';
+import GroceriesScreen from '@/app/pages/categories/Groceries';
+import EntertainmentScreen from '@/app/pages/categories/Entertainment';
+import RentScreen from '@/app/pages/categories/Rent';
+import GiftScreen from '@/app/pages/categories/Gifts';
+import IncomeScreen from '@/app/pages/categories/Income';
+import GoalScreen from '@/app/pages/categories/Goals';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 
 const ExpensesStackNav = createNativeStackNavigator();
 
@@ -25,6 +31,41 @@ function ExpensesStack() {
             <ExpensesStackNav.Screen
                 name="Food"
                 component={FoodScreen}
+                options={{ headerShown: false }}
+            />
+            <ExpensesStackNav.Screen
+                name="Transport"
+                component={TransportScreen}
+                options={{ headerShown: false }}
+            />
+            <ExpensesStackNav.Screen
+                name="Entertainment"
+                component={EntertainmentScreen}
+                options={{ headerShown: false }}
+            />
+            <ExpensesStackNav.Screen
+                name="Groceries"
+                component={GroceriesScreen}
+                options={{ headerShown: false }}
+            />
+            <ExpensesStackNav.Screen
+                name="Rent"
+                component={RentScreen}
+                options={{ headerShown: false }}
+            />
+            <ExpensesStackNav.Screen
+                name="Gifts"
+                component={GiftScreen}
+                options={{ headerShown: false }}
+            />
+            <ExpensesStackNav.Screen
+                name="Income"
+                component={IncomeScreen}
+                options={{ headerShown: false }}
+            />
+            <ExpensesStackNav.Screen
+                name="Goals"
+                component={GoalScreen}
                 options={{ headerShown: false }}
             />
         </ExpensesStackNav.Navigator>
@@ -106,11 +147,11 @@ export default function HomeScreen() {
                     component={BudgetScreen}
                     options={{ tabBarLabel: '' }}
                 />
-                <Tab.Screen
-                    name="Goals"
-                    component={GoalsScreen}
-                    options={{ tabBarLabel: '' }}
-                />
+                {/*<Tab.Screen*/}
+                {/*    name="Goals"*/}
+                {/*    component={GoalsScreen}*/}
+                {/*    options={{ tabBarLabel: '' }}*/}
+                {/*/>*/}
 
                 <Tab.Screen
                     name="Expenses"

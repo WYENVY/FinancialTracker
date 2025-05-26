@@ -11,6 +11,15 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 type ExpensesStackParamList = {
     ExpensesMain: undefined;
     Food: undefined;
+    Transport: undefined;
+    Entertainment: undefined;
+    Groceries: undefined;
+    Rent: undefined;
+    Gifts: undefined;
+    Income: undefined;
+    Goals: undefined;
+    Budget: undefined;
+    Settings: undefined;
 };
 
 type NavigationProp = NativeStackNavigationProp<ExpensesStackParamList>;
@@ -149,6 +158,20 @@ export default function CategoriesScreen() {
                                 onPress={() => {
                                     if (item.isPreset && item.name === 'Food') {
                                         navigation.navigate('Food');
+                                    } else if (item.isPreset && item.name === 'Transport') {
+                                        navigation.navigate('Transport');
+                                    } else if (item.isPreset && item.name === 'Entertainment') {
+                                        navigation.navigate('Entertainment');
+                                    } else if (item.isPreset && item.name === 'Groceries') {
+                                        navigation.navigate('Groceries');
+                                    } else if (item.isPreset && item.name === 'Rent') {
+                                        navigation.navigate('Rent');
+                                    } else if (item.isPreset && item.name === 'Gifts') {
+                                        navigation.navigate('Gifts');
+                                    } else if (item.isPreset && item.name === 'Income') {
+                                        navigation.navigate('Income');
+                                    } else if (item.isPreset && item.name === 'Goals') {
+                                        navigation.navigate('Goals');
                                     } else {
                                         handleEditPress(item);
                                     }
