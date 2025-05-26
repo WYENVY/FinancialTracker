@@ -5,6 +5,17 @@ import IconPicker from '@/components/IconPicker';
 import CategoryItem from '@/components/CategoryItem';
 import useCategories from '@/hooks/useCategories';
 import { ExpenseCategory, ValidIconName } from '@/src/types';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type ExpensesStackParamList = {
+    ExpensesMain: undefined;
+    Food: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<ExpensesStackParamList>;
+
+
 
 const { width } = Dimensions.get('window');
 const itemSize = (width - 25 * 2 - 20 * 2) / 3;
@@ -21,10 +32,12 @@ const PRESET_CATEGORIES: ExpenseCategory[] = [
 ];
 
 export default function CategoriesScreen() {
+    const navigation = useNavigation<NavigationProp>()
     const {
         categories: firebaseCategories,
         addCategory,
-        updateCategory
+        updateCategory,
+        deleteCategory,
     } = useCategories(PRESET_CATEGORIES);
 
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -42,7 +55,7 @@ export default function CategoriesScreen() {
 
     const handleAddCategory = () => {
         addCategory({
-            name: 'New Category',
+            name: '',
             icon: 'apps',
             color: '#76c75f',
             isPreset: false,
@@ -50,10 +63,15 @@ export default function CategoriesScreen() {
     };
 
     const handleSave = (id: string, updatedIcon?: ValidIconName) => {
-        updateCategory(id, {
+        const update: Partial<ExpenseCategory> = {
             name: editName,
-            icon: updatedIcon ?? undefined,
-        });
+        };
+
+        if (updatedIcon) {
+            update.icon = updatedIcon;
+        }
+
+        updateCategory(id, update);
         setEditingId(null);
     };
 
@@ -103,8 +121,8 @@ export default function CategoriesScreen() {
                                         value={editName}
                                         onChangeText={setEditName}
                                         autoFocus
-                                        placeholderTextColor="rgba(255,255,255,0.7)"
-                                        placeholder={item.name}
+                                        placeholder="Enter Category Name"
+                                    placeholderTextColor="rgba(255,255,255,0.7)"
                                     />
                                     <IconPicker
                                         selectedIcon={item.icon}
@@ -117,6 +135,9 @@ export default function CategoriesScreen() {
                                         <TouchableOpacity onPress={() => setEditingId(null)}>
                                             <Ionicons name="close-outline" size={24} color="white" />
                                         </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => deleteCategory(item.id)}>
+                                            <Ionicons name="trash-outline" size={24} color="white" />
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             );
@@ -125,9 +146,16 @@ export default function CategoriesScreen() {
                         return (
                             <CategoryItem
                                 category={item}
-                                onPress={() => handleEditPress(item)}
+                                onPress={() => {
+                                    if (item.isPreset && item.name === 'Food') {
+                                        navigation.navigate('Food');
+                                    } else {
+                                        handleEditPress(item);
+                                    }
+                                }}
                                 itemSize={itemSize}
                             />
+
                         );
                     }}
                 />
