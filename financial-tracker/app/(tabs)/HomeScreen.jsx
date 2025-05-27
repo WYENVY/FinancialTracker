@@ -16,6 +16,8 @@ import RentScreen from '@/app/pages/categories/Rent';
 import GiftScreen from '@/app/pages/categories/Gifts';
 import IncomeScreen from '@/app/pages/categories/Income';
 import GoalScreen from '@/app/pages/categories/Goals';
+import AddExpense from '@/app/pages/AddExpense';
+import ViewExpenses from '@/app/pages/ViewExpenses';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const ExpensesStackNav = createNativeStackNavigator();
@@ -81,7 +83,9 @@ const getTabIcon = (routeName, focused) => {
         Expenses: 'card',
         Transactions: 'cash',
         Goals: 'trophy',
-        Budgets: 'pie-chart'
+        Budgets: 'pie-chart',
+        AddExpense: 'trophy',
+        ViewExpenses: 'card'
     };
 
     return (
@@ -156,6 +160,16 @@ export default function HomeScreen() {
                 <Tab.Screen
                     name="Expenses"
                     component={ExpensesStack}
+                />
+                <Tab.Screen
+                    name="AddExpense"
+                    component={AddExpense}
+                    options={{ tabBarLabel: '' }}
+                />
+                <Tab.Screen
+                    name="ViewExpenses"
+                    component={ViewExpenses}
+                    options={{ tabBarLabel: '' }}
                 />
             </Tab.Navigator>
         </View>

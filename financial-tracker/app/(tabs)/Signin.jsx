@@ -58,8 +58,8 @@ export default function SignIn() {
             value={password}
         />
         <Button title="Sign In" onPress={handleSignIn} />
-        <Button title="Don't have an account? Sign Up" onPress={() => router.push('/tabs/signup')} />
-        <Button title="Forgot Password?" onPress={() => router.push('/tabs/forgotpassword')} />
+        <Button title="Don't have an account? Sign Up" onPress={() => router.push('/Signup')} />
+        <Button title="Forgot Password?" onPress={() => router.push('/tabs/ForgotPassword')} />
       </View>
   );
 }

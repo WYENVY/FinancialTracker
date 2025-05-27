@@ -73,7 +73,7 @@
 //   },
 // });
 
-import { useEffect } from 'react';
+/*import { useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { auth } from '../fireconfig';  // Your Firebase auth or other auth service
 
@@ -98,6 +98,30 @@ export default function Index() {
     }, []);
 
     return null;
+}*/
+
+import { useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useRouter } from 'expo-router';
+import { auth } from '../fireconfig';
+
+export default function Index() {
+    const router = useRouter();
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                router.replace('../HomeScreen');
+            } else {
+                router.replace('../Signin');
+            }
+        });
+
+        return unsubscribe; // Clean up the listener
+    }, []);
+
+    return null;
 }
+
 
 

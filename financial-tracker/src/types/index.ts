@@ -10,6 +10,19 @@ export type ExpenseCategory = {
     isPreset?: boolean;
 };
 
+export type ExpensesStackParamList = {
+  ExpensesMain: undefined;
+  Food: undefined;
+  Transport: undefined;
+  Entertainment: undefined;
+  Groceries: undefined;
+  Rent: undefined;
+  Gifts: undefined;
+  Income: undefined;
+  Goals: undefined;
+  AddExpense: { category: string };
+};
+
 export type Expense = {
     id: string;
     amount: number;

@@ -20,6 +20,7 @@ type ExpensesStackParamList = {
     Goals: undefined;
     Budget: undefined;
     Settings: undefined;
+    AddExpense: { category: string };
 };
 
 type NavigationProp = NativeStackNavigationProp<ExpensesStackParamList>;
@@ -96,6 +97,7 @@ export default function CategoriesScreen() {
             expenses: [],
         }
     ];
+
 
     return (
         <View style={styles.container}>
