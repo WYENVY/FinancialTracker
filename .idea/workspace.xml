@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Fixed two errors in ExternalLink.tsx and IconSymbol.tsx">
+    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Created routes for all of the preset categories (Food, Transport, Entertainment, Groceries, Rent, Gifts, Income, Goals).">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/HomeScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/HomeScreen.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Expenses.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Expenses.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Forgetpassword.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Forgetpassword.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signin.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signup.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Goals.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Goals.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +124,7 @@
       <workItem from="1747483411291" duration="4461000" />
       <workItem from="1747783944740" duration="159000" />
       <workItem from="1747913131069" duration="2238000" />
-      <workItem from="1748295053839" duration="6060000" />
+      <workItem from="1748295053839" duration="16191000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed the file system">
       <option name="closed" value="true" />
@@ -244,7 +246,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748301553866</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Created routes for all of the preset categories (Food, Transport, Entertainment, Groceries, Rent, Gifts, Income, Goals).">
+      <option name="closed" value="true" />
+      <created>1748303781723</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1748303781723</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -275,6 +285,7 @@
     <MESSAGE value="Changed the category page to match the UI of the rest of the app. I also added different preset categories for the user. Right now the categories are not linked to anything so no expesnes can be added." />
     <MESSAGE value="Fixed error when adding a new category and got a new navigation stack for one of the preset categories." />
     <MESSAGE value="Fixed two errors in ExternalLink.tsx and IconSymbol.tsx" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed two errors in ExternalLink.tsx and IconSymbol.tsx" />
+    <MESSAGE value="Created routes for all of the preset categories (Food, Transport, Entertainment, Groceries, Rent, Gifts, Income, Goals)." />
+    <option name="LAST_COMMIT_MESSAGE" value="Created routes for all of the preset categories (Food, Transport, Entertainment, Groceries, Rent, Gifts, Income, Goals)." />
   </component>
 </project>
