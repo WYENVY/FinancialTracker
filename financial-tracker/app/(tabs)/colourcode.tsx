@@ -1,4 +1,5 @@
 import React from 'react';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
 
 type Transaction = {
   id: number;
@@ -12,37 +13,70 @@ type Props = {
 };
 
 const RecentTransactions: React.FC<Props> = ({ transactions }) => {
-  return (
-    <div>
-      <h2>Recent Transactions</h2>
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {transactions.map(({ id, description, amount, date }) => {
-          const isIncome = amount > 0;
-          const color = isIncome ? 'green' : 'red';
-          const formattedAmount = `${isIncome ? '+' : '-'}$${Math.abs(amount).toFixed(2)}`;
-          const formattedDate = new Date(date).toLocaleDateString();
+  const renderItem = ({ item }: { item: Transaction }) => {
+    const isIncome = item.amount > 0;
+    const color = isIncome ? 'green' : 'red';
+    const formattedAmount = `${isIncome ? '+' : '-'}$${Math.abs(item.amount).toFixed(2)}`;
+    const formattedDate = new Date(item.date).toLocaleDateString();
 
-          return (
-            <li
-              key={id}
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                padding: '8px 12px',
-                borderBottom: '1px solid #ddd',
-                color,
-                fontWeight: '600',
-              }}
-            >
-              <span>{description}</span>
-              <span>{formattedAmount}</span>
-              <span style={{ color: '#666', fontWeight: '400' }}>{formattedDate}</span>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+    return (
+      <View style={styles.transactionRow}>
+        <Text style={[styles.description]}>{item.description}</Text>
+        <Text style={[styles.amount, { color }]}>{formattedAmount}</Text>
+        <Text style={styles.date}>{formattedDate}</Text>
+      </View>
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Recent Transactions</Text>
+      <FlatList
+        data={transactions}
+        keyExtractor={item => item.id.toString()}
+        renderItem={renderItem}
+      />
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginVertical: 16,
+    paddingHorizontal: 8,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 12,
+    color: '#76c75f',
+  },
+  transactionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    alignItems: 'center',
+  },
+  description: {
+    flex: 2,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  amount: {
+    flex: 1,
+    fontWeight: '600',
+    textAlign: 'right',
+  },
+  date: {
+    flex: 1,
+    color: '#666',
+    fontWeight: '400',
+    textAlign: 'right',
+    fontSize: 12,
+    marginLeft: 8,
+  },
+});
 
 export default RecentTransactions;
