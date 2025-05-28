@@ -1,21 +1,32 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../fireconfig';
-import { getFirestore, doc, getDocs, collection, query, where } from 'firebase/firestore';
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { useRouter } from 'expo-router';
 
+const { height } = Dimensions.get('window');
 const db = getFirestore();
 
-export default function SignIn({ navigation }) {
+export default function SignIn() {
+  const router = useRouter();
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSignIn = async () => {
     try {
-      console.log('DEBUG: username value is:', username);
-      if (!username) {
-        Alert.alert('Error', 'Username is empty');
+      setIsLoading(true);
+      setError('');
+
+      if (!username.trim()) {
+        setError('Username is required');
+        return;
+      }
+
+      if (!password) {
+        setError('Password is required');
         return;
       }
 
@@ -23,7 +34,7 @@ export default function SignIn({ navigation }) {
       const querySnapshot = await getDocs(q);
 
       if (querySnapshot.empty) {
-        Alert.alert('Error', 'Username not found');
+        setError('Username not found');
         return;
       }
 
@@ -31,54 +42,186 @@ export default function SignIn({ navigation }) {
       const emailFromUsername = userDoc.data().email;
 
       await signInWithEmailAndPassword(auth, emailFromUsername, password);
-      Alert.alert('Success', 'Logged in!');
-      navigation.navigate('Home');
+      router.replace('/HomeScreen');
     } catch (error) {
       console.error("Login Error", error);
-      Alert.alert('Login Error', error.message);
+      if (error.code === 'auth/wrong-password') {
+        setError('Incorrect password');
+      } else if (error.code === 'auth/invalid-email') {
+        setError('Invalid email format');
+      } else if (error.code === 'auth/user-not-found') {
+        setError('User not found');
+      } else if (error.code === 'auth/too-many-requests') {
+        setError('Too many attempts. Try again later.');
+      } else {
+        setError('Login failed. Please try again.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Sign In</Text>
-        <TextInput
-            style={styles.input}
-            placeholder="Username"
-            onChangeText={setUsername}
-            autoCapitalize="none"
-            value={username}
-        />
-        <TextInput
-            style={styles.input}
-            placeholder="Password"
-            onChangeText={setPassword}
-            secureTextEntry
-            value={password}
-        />
-        <Button title="Sign In" onPress={handleSignIn} />
-        <Button title="Don't have an account? Sign Up" onPress={() => navigation.navigate('SignUp')} />
-        <Button title="Forgot Password?" onPress={() => navigation.navigate('ForgotPassword')} />
-      </View>
-  );
+      <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.container}
+      >
+        {/* Header with green background */}
+        <View style={styles.header}>
+          <Text style={styles.title}>Finova</Text>
+          <Text style={styles.welcomeText}>Welcome Back</Text>
+        </View>
 
+        {/* White form container */}
+        <View style={styles.whiteSheet}>
+          <View style={styles.formContainer}>
+            <Text style={styles.loginTitle}>Sign In</Text>
+
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+            <TextInput
+                style={styles.input}
+                placeholder="Username"
+                placeholderTextColor="#999"
+                onChangeText={setUsername}
+                autoCapitalize="none"
+                value={username}
+            />
+
+            <TextInput
+                style={styles.input}
+                placeholder="Password"
+                placeholderTextColor="#999"
+                onChangeText={setPassword}
+                secureTextEntry
+                value={password}
+            />
+
+            <TouchableOpacity
+                style={styles.signInButton}
+                onPress={handleSignIn}
+                disabled={isLoading}
+            >
+              <Text style={styles.buttonText}>
+                {isLoading ? 'Signing In...' : 'Sign In'}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                style={styles.linkButton}
+                onPress={() => router.push('/Forgetpassword')}
+            >
+              <Text style={styles.linkText}>Forgot Password?</Text>
+            </TouchableOpacity>
+
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>Don't have an account?</Text>
+              <TouchableOpacity onPress={() => router.push('/Signup')}>
+                <Text style={[styles.footerText, styles.footerLink]}> Sign Up</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    marginTop: 100,
+    flex: 1,
+    backgroundColor: '#00D09E',
   },
-  input: {
-    height: 40,
-    borderColor: '#aaa',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
+  header: {
+    padding: 20,
+    paddingTop: 60,
+    paddingBottom: 30,
+  },
+  whiteSheet: {
+    position: 'absolute',
+    top: height * 0.35,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#F1FFF3',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    paddingTop: 30,
+  },
+  formContainer: {
+    paddingHorizontal: 30,
   },
   title: {
-    fontSize: 22,
-    marginBottom: 20,
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#052224',
+  },
+  welcomeText: {
+    fontSize: 18,
+    color: '#052224',
+    marginTop: 10,
+  },
+  loginTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#052224',
+    marginBottom: 30,
     textAlign: 'center',
+  },
+  input: {
+    height: 50,
+    backgroundColor: 'white',
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 10,
+    marginBottom: 15,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    color: '#052224',
+  },
+  signInButton: {
+    backgroundColor: '#00D09E',
+    height: 50,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  linkButton: {
+    alignSelf: 'center',
+    marginTop: 10,
+  },
+  linkText: {
+    color: '#0068FF',
+    fontSize: 14,
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 30,
+  },
+  footerText: {
+    color: '#666',
+    fontSize: 14,
+  },
+  footerLink: {
+    color: '#0068FF',
+    fontWeight: '600',
+  },
+  errorText: {
+    color: '#FF3B30',
+    textAlign: 'center',
+    marginBottom: 15,
+    fontSize: 14,
   },
 });
