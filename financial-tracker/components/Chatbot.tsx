@@ -76,6 +76,11 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
         }
     };
 
+    const isBudgetingQuery = (message: string): boolean => {
+        const budgetKeywords = ['budget', 'expense', 'saving', 'spending', 'income', 'financial'];
+        return budgetKeywords.some(keyword => message.toLowerCase().includes(keyword));
+    };
+
     // Replace this function with your actual AI API call
     const callAIAPI = async (message: string): Promise<string> => {
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -86,7 +91,16 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
             },
             body: JSON.stringify({
                 model: 'gpt-3.5-turbo',
-                messages: [{ role: 'user', content: message }],
+                messages: [
+                    {
+                        role: 'system',
+                        content: 'You are a helpful budget and financial assistant. Keep responses focused on budgeting, saving, and financial planning.'
+                    },
+                    {
+                        role: 'user',
+                        content: message
+                    }
+                ],
                 max_tokens: 150,
             }),
         });

@@ -6,7 +6,7 @@ import {
     StyleSheet,
     Modal,
 } from 'react-native';
-import Chatbot from '@/components/Chatbot'; // Adjust the import path as needed
+import Chatbot from '@/components/Chatbot';
 
 const Budgets: React.FC = () => {
     const [showChatbot, setShowChatbot] = useState(false);
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     },
     chatButton: {
         position: 'absolute',
-        bottom: 30,
+        bottom: 80,
         right: 30,
         width: 60,
         height: 60,
