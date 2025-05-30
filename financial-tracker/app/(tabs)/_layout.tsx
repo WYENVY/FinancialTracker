@@ -21,10 +21,5 @@
 //   );
 // }
 //
+// app/_layout.tsx — THIS is the right place!
 
-
-import { Stack } from 'expo-router';
-
-export default function Layout() {
-    return <Stack screenOptions={{ headerShown: false }} />;
-}

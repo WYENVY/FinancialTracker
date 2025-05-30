@@ -9,6 +9,12 @@ dist/
 web-build/
 expo-env.d.ts
 
+# Firebase functions (custom backend)
+functions/node_modules/
+functions/.env
+functions/lib/
+
+
 # Native
 *.orig.*
 *.jks
@@ -30,7 +36,8 @@ yarn-error.*
 *.pem
 
 # local env files
-.env*.local
+.env
+.env.*
 
 # typescript
 *.tsbuildinfo
