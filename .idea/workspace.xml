@@ -4,14 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Created routes for all of the preset categories (Food, Transport, Entertainment, Groceries, Rent, Gifts, Income, Goals).">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/_layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/_layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/fireconfig.js" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/fireconfig.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Budgets.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Budgets.tsx" afterDir="false" />
+    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Edited the chat bot so that its responses are more tailored to budgets and finances.">
+      <change beforePath="$PROJECT_DIR$/financial-tracker/components/Chatbot.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/components/Chatbot.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/financial-tracker/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/financial-tracker/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/package.json" afterDir="false" />
     </list>
@@ -134,7 +128,7 @@
       <workItem from="1747783944740" duration="159000" />
       <workItem from="1747913131069" duration="2238000" />
       <workItem from="1748295053839" duration="16191000" />
-      <workItem from="1748493506181" duration="20428000" />
+      <workItem from="1748493506181" duration="25284000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed the file system">
       <option name="closed" value="true" />
@@ -264,7 +258,23 @@
       <option name="project" value="LOCAL" />
       <updated>1748303781723</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Created AI Chat-bot for the budgets app. Right now it is really robust and the UI is not great. The chat-bot works but is not tailored to answering questiong about budgets and does not yet take data from firebase.">
+      <option name="closed" value="true" />
+      <created>1748580134916</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1748580134916</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Edited the chat bot so that its responses are more tailored to budgets and finances.">
+      <option name="closed" value="true" />
+      <created>1748586113370</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1748586113370</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -296,6 +306,8 @@
     <MESSAGE value="Fixed error when adding a new category and got a new navigation stack for one of the preset categories." />
     <MESSAGE value="Fixed two errors in ExternalLink.tsx and IconSymbol.tsx" />
     <MESSAGE value="Created routes for all of the preset categories (Food, Transport, Entertainment, Groceries, Rent, Gifts, Income, Goals)." />
-    <option name="LAST_COMMIT_MESSAGE" value="Created routes for all of the preset categories (Food, Transport, Entertainment, Groceries, Rent, Gifts, Income, Goals)." />
+    <MESSAGE value="Created AI Chat-bot for the budgets app. Right now it is really robust and the UI is not great. The chat-bot works but is not tailored to answering questiong about budgets and does not yet take data from firebase." />
+    <MESSAGE value="Edited the chat bot so that its responses are more tailored to budgets and finances." />
+    <option name="LAST_COMMIT_MESSAGE" value="Edited the chat bot so that its responses are more tailored to budgets and finances." />
   </component>
 </project>

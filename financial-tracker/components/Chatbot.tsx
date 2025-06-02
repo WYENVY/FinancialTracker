@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
     View,
     Text,
@@ -9,9 +9,16 @@ import {
     Alert,
     KeyboardAvoidingView,
     Platform,
+    Share,
+    UIManager,
+    findNodeHandle,
+    ActionSheetIOS
 } from 'react-native';
 import Constants from 'expo-constants';
-
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
+import * as Print from 'expo-print';
+import { MaterialIcons } from '@expo/vector-icons';
 
 interface Message {
     id: string;
@@ -35,6 +42,8 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
     ]);
     const [inputText, setInputText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const scrollViewRef = useRef<ScrollView>(null);
+    const viewRef = useRef<View>(null);
 
     const sendMessage = async () => {
         if (!inputText.trim()) return;
@@ -73,12 +82,10 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
             setMessages(prev => [...prev, errorMessage]);
         } finally {
             setIsLoading(false);
+            setTimeout(() => {
+                scrollViewRef.current?.scrollToEnd({ animated: true });
+            }, 100);
         }
-    };
-
-    const isBudgetingQuery = (message: string): boolean => {
-        const budgetKeywords = ['budget', 'expense', 'saving', 'spending', 'income', 'financial'];
-        return budgetKeywords.some(keyword => message.toLowerCase().includes(keyword));
     };
 
     // Replace this function with your actual AI API call
@@ -107,6 +114,109 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
 
         const data = await response.json();
         return data.choices[0].message.content;
+    };
+
+    const exportConversation = async (format: 'pdf' | 'csv' | 'text') => {
+        try {
+            let content = '';
+            let fileName = '';
+            let fileUri = '';
+
+            if (format === 'csv') {
+                content = 'Time,Sender,Message\n';
+                messages.forEach(msg => {
+                    content += `"${msg.timestamp.toLocaleString()}","${msg.isUser ? 'You' : 'Assistant'}","${msg.text.replace(/"/g, '""')}"\n`;
+                });
+                fileName = `BudgetChat_${new Date().toISOString().slice(0, 10)}.csv`;
+                fileUri = `${FileSystem.documentDirectory}${fileName}`;
+                await FileSystem.writeAsStringAsync(fileUri, content, { encoding: FileSystem.EncodingType.UTF8 });
+            }
+            else if (format === 'text') {
+                messages.forEach(msg => {
+                    content += `${msg.isUser ? 'You' : 'Assistant'} (${msg.timestamp.toLocaleTimeString()}): ${msg.text}\n\n`;
+                });
+                fileName = `BudgetChat_${new Date().toISOString().slice(0, 10)}.txt`;
+                fileUri = `${FileSystem.documentDirectory}${fileName}`;
+                await FileSystem.writeAsStringAsync(fileUri, content, { encoding: FileSystem.EncodingType.UTF8 });
+            }
+            else if (format === 'pdf') {
+                let htmlContent = `
+                    <html>
+                    <head>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 20px; }
+                            .header { text-align: center; margin-bottom: 20px; }
+                            .message { margin-bottom: 15px; padding: 10px; border-radius: 5px; }
+                            .user { background-color: #e3f2fd; margin-left: 20%; margin-right: 5%; }
+                            .bot { background-color: #f5f5f5; margin-left: 5%; margin-right: 20%; }
+                            .timestamp { font-size: 0.8em; color: #666; }
+                            .sender { font-weight: bold; margin-bottom: 5px; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="header">
+                            <h1>Budget Assistant Conversation</h1>
+                            <p>Generated on ${new Date().toLocaleString()}</p>
+                        </div>
+                `;
+
+                messages.forEach(msg => {
+                    htmlContent += `
+                        <div class="message ${msg.isUser ? 'user' : 'bot'}">
+                            <div class="sender">${msg.isUser ? 'You' : 'Budget Assistant'}</div>
+                            <div class="timestamp">${msg.timestamp.toLocaleString()}</div>
+                            <div class="text">${msg.text.replace(/\n/g, '<br>')}</div>
+                        </div>
+                    `;
+                });
+
+                htmlContent += `</body></html>`;
+
+                const { uri } = await Print.printToFileAsync({ html: htmlContent });
+                fileUri = uri;
+                fileName = `BudgetChat_${new Date().toISOString().slice(0, 10)}.pdf`;
+            }
+
+            await Sharing.shareAsync(fileUri, {
+                dialogTitle: 'Share Conversation',
+                mimeType: format === 'pdf' ? 'application/pdf' :
+                    format === 'csv' ? 'text/csv' : 'text/plain',
+                UTI: format === 'pdf' ? 'com.adobe.pdf' :
+                    format === 'csv' ? 'public.comma-separated-values-text' : 'public.plain-text'
+            });
+
+        } catch (error) {
+            console.error('Error exporting conversation:', error);
+            Alert.alert('Error', 'Failed to export conversation. Please try again.');
+        }
+    };
+
+    const showExportOptions = () => {
+        if (Platform.OS === 'ios') {
+            ActionSheetIOS.showActionSheetWithOptions(
+                {
+                    options: ['Cancel', 'Export as PDF', 'Export as CSV', 'Export as Text'],
+                    cancelButtonIndex: 0,
+                },
+                (buttonIndex) => {
+                    if (buttonIndex === 1) exportConversation('pdf');
+                    if (buttonIndex === 2) exportConversation('csv');
+                    if (buttonIndex === 3) exportConversation('text');
+                }
+            );
+        } else {
+            // For Android, we'll use a simple Alert for now
+            Alert.alert(
+                'Export Conversation',
+                'Choose export format',
+                [
+                    { text: 'Cancel', style: 'cancel' },
+                    { text: 'PDF', onPress: () => exportConversation('pdf') },
+                    { text: 'CSV', onPress: () => exportConversation('csv') },
+                    { text: 'Text', onPress: () => exportConversation('text') },
+                ]
+            );
+        }
     };
 
     const renderMessage = (message: Message) => (
@@ -139,23 +249,33 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
         >
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>Budget Assistant</Text>
-                {onClose && (
-                    <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                        <Text style={styles.closeButtonText}>×</Text>
+                <View style={styles.headerButtons}>
+                    <TouchableOpacity onPress={showExportOptions} style={styles.exportButton}>
+                        <MaterialIcons name="file-download" size={24} color="white" />
                     </TouchableOpacity>
-                )}
+                    {onClose && (
+                        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                            <Text style={styles.closeButtonText}>×</Text>
+                        </TouchableOpacity>
+                    )}
+                </View>
             </View>
 
             <ScrollView
+                ref={scrollViewRef}
                 style={styles.messagesContainer}
+                contentContainerStyle={styles.messagesContentContainer}
                 showsVerticalScrollIndicator={false}
+                onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
             >
-                {messages.map(renderMessage)}
-                {isLoading && (
-                    <View style={[styles.messageContainer, styles.botMessage]}>
-                        <Text style={styles.loadingText}>Typing...</Text>
-                    </View>
-                )}
+                <View ref={viewRef}>
+                    {messages.map(renderMessage)}
+                    {isLoading && (
+                        <View style={[styles.messageContainer, styles.botMessage]}>
+                            <Text style={styles.loadingText}>Typing...</Text>
+                        </View>
+                    )}
+                </View>
             </ScrollView>
 
             <View style={styles.inputContainer}>
@@ -167,9 +287,11 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
                     multiline
                     maxLength={500}
                     editable={!isLoading}
+                    onSubmitEditing={sendMessage}
+                    returnKeyType="send"
                 />
                 <TouchableOpacity
-                    style={[styles.sendButton, isLoading && styles.sendButtonDisabled]}
+                    style={[styles.sendButton, (isLoading || !inputText.trim()) && styles.sendButtonDisabled]}
                     onPress={sendMessage}
                     disabled={isLoading || !inputText.trim()}
                 >
@@ -198,6 +320,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white',
     },
+    headerButtons: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    exportButton: {
+        marginRight: 15,
+    },
     closeButton: {
         width: 30,
         height: 30,
@@ -211,6 +340,8 @@ const styles = StyleSheet.create({
     },
     messagesContainer: {
         flex: 1,
+    },
+    messagesContentContainer: {
         padding: 16,
     },
     messageContainer: {
