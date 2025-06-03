@@ -5,7 +5,12 @@ import { auth } from '../fireconfig';
 
 const db = getFirestore();
 
-const GoalForm = ({ userId, onGoalAdded }) => {
+type GoalFormProps = {
+  userId: string;
+  onGoalAdded?: () => void;
+};
+
+const GoalForm = ({ userId, onGoalAdded }: GoalFormProps) => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [targetAmount, setTargetAmount] = useState('');
@@ -64,23 +69,45 @@ const GoalForm = ({ userId, onGoalAdded }) => {
   );
 };
 
-const GoalList = ({ userId }) => {
-  const [goals, setGoals] = useState([]);
+type GoalListProps = {
+  userId: string;
+};
+
+type Goal = {
+  id: string;
+  title: string;
+  category: string;
+  targetAmount: number;
+  currentAmount: number;
+  createdAt?: any;
+  userId: string;
+};
+
+const GoalList = ({ userId }: GoalListProps) => {
+  const [goals, setGoals] = useState<Goal[]>([]);
 
   useEffect(() => {
     const q = query(collection(db, 'financialGoals'), where('userId', '==', userId));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const goalData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const goalData: Goal[] = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          title: data.title,
+          category: data.category,
+          targetAmount: data.targetAmount,
+          currentAmount: data.currentAmount,
+          userId: data.userId,
+          createdAt: data.createdAt,
+        };
+      });
       setGoals(goalData);
     });
     return () => unsubscribe();
   }, [userId]);
 
   // Group goals by category
-  const groupedGoals = goals.reduce((acc, goal) => {
+  const groupedGoals = goals.reduce<Record<string, Goal[]>>((acc, goal) => {
     acc[goal.category] = acc[goal.category] || [];
     acc[goal.category].push(goal);
     return acc;
@@ -101,7 +128,7 @@ const GoalList = ({ userId }) => {
   );
 };
 
-const GoalProgress = ({ goal }) => {
+const GoalProgress = ({ goal }: { goal: Goal }) => {
   const progressPercentage = goal.targetAmount
     ? (goal.currentAmount / goal.targetAmount) * 100
     : 0;
