@@ -17,6 +17,10 @@ import GiftScreen from '@/app/pages/categories/Gifts';
 import IncomeScreen from '@/app/pages/categories/Income';
 import GoalScreen from '@/app/pages/categories/Goals';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import RecentTransactions from './colourcode';
+
+// Inside your page/component:
+<RecentTransactions transactions={recentTransactions} />
 
 const ExpensesStackNav = createNativeStackNavigator();
 
