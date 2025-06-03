@@ -1,11 +1,12 @@
-import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
-import HomePage from '@/app/pages/index';
-import TransactionsScreen from '@/app/pages/transactions';
 import BudgetScreen from '@/app/pages/budgets';
 import ExpensesScreen from '@/app/pages/expenses';
 import GoalsScreen from '@/app/pages/goals';
+import HomePage from '@/app/pages/index';
+import TransactionsScreen from '@/app/pages/transactions';
+import viewTrancsactions from '@/app/pages/viewTransactions';
+import { Ionicons } from '@expo/vector-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React from 'react';
 
 const Tab = createBottomTabNavigator();
 
@@ -74,6 +75,11 @@ export default function HomeScreen() {
                 name="Expenses"
                 component={ExpensesScreen}
                 options={{ tabBarLabel: 'Expenses' }}
+            />
+            <Tab.Screen
+                name="viewTrancsactions"
+                component={viewTrancsactions}
+                options={{ tabBarLabel: 'Transaction History' }}
             />
         </Tab.Navigator>
     );
