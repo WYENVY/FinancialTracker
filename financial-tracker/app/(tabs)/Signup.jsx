@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, TextInput, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, Dimensions } from 'react-native';
+import { View, TextInput, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, Dimensions, Alert } from 'react-native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, setDoc, doc } from 'firebase/firestore';
+import { getFirestore, setDoc, doc, collection, query, where, getDocs } from 'firebase/firestore'; // ✅ Added imports
 import { auth } from '../fireconfig';
 import { useRouter } from 'expo-router';
 
@@ -42,16 +42,27 @@ export default function SignUp() {
                 return;
             }
 
-            // Create user with Firebase Authentication
+
+            // 🔍 Check if username is already taken
+            const q = query(collection(db, 'usernames'), where('username', '==', username));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                Alert.alert('Error', 'Username already taken');
+                return;
+            }
+
+            // ✅ Create user
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const uid = userCredential.user.uid;
 
-            // Save username and email in Firestore
+            // ✅ Save to Firestore
             await setDoc(doc(db, 'usernames', uid), {
                 email,
                 username,
             });
 
+            Alert.alert('Success', 'Account created successfully!');
             router.replace('/HomeScreen');
         } catch (error) {
             console.error("Sign Up Error:", error);

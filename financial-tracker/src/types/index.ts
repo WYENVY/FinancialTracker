@@ -1,4 +1,4 @@
-import { IoniconsName } from './ionicons';
+import type {IoniconsName} from './ionicons';
 
 export type ExpenseCategory = {
     id: string;
@@ -7,6 +7,7 @@ export type ExpenseCategory = {
     color?: string;
     budget?: number;
     expenses: Expense[];
+    isPreset?: boolean;
 };
 
 export type Expense = {
@@ -25,5 +26,13 @@ export type ValidIconName =
     | 'airplane'
     | 'game-controller'
     | 'cart'
-    | 'add';
-
+    | 'add'
+    | 'apps'
+    | 'bus'
+    | 'receipt'
+    | 'basket'
+    | 'key'
+    | 'gift'
+    | 'trending-up'
+    | 'musical-notes'
+    | 'cash';

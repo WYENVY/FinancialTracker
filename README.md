@@ -33,7 +33,7 @@ If you wish, you can emulate the app using android studio.
 
 - To test our project you will first want to create an account.
 - To do this you will want to press Sign Up on our login page. Then enter your credentials. (Note the password must be six characters)
-- Then click Sing Up
+- Then click Sign Up
 
 
 - You will then be taken to our home page where you can view all of our pages.
