@@ -1,10 +1,13 @@
+// npx expo install @react-native-community/datetimepicker
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function AddExpense({ presetCategory }: { presetCategory?: string }) {
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState<Date | null>(null);
+    const [showPicker, setShowPicker] = useState(false);
     const [category, setCategory] = useState('');
     const [amount, setAmount] = useState('');
     const [title, setTitle] = useState('');
@@ -13,6 +16,12 @@ export default function AddExpense({ presetCategory }: { presetCategory?: string
     useEffect(() => {
         if (presetCategory) setCategory(presetCategory);
     }, [presetCategory]);
+
+    const formattedDate = date
+        ? `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1)
+            .toString()
+            .padStart(2, '0')}/${date.getFullYear()}`
+        : '';
 
     const handleAddExpense = async () => {
         const auth = getAuth();
@@ -34,8 +43,8 @@ export default function AddExpense({ presetCategory }: { presetCategory?: string
                 title,
                 description,
                 amount: parseFloat(amount),
-                date,
-                createdAt: new Date().toISOString()
+                date: date.toISOString(),
+                createdAt: new Date().toISOString(),
             };
 
             await addDoc(
@@ -44,7 +53,7 @@ export default function AddExpense({ presetCategory }: { presetCategory?: string
             );
 
             Alert.alert('Success', 'Expense added!');
-            setDate('');
+            setDate(null);
             if (!presetCategory) setCategory('');
             setAmount('');
             setTitle('');
@@ -59,12 +68,23 @@ export default function AddExpense({ presetCategory }: { presetCategory?: string
         <View style={styles.container}>
             <Text style={styles.heading}>Add Expense</Text>
 
-            <TextInput
-                placeholder="Date (any format)"
-                style={styles.input}
-                value={date}
-                onChangeText={setDate}
-            />
+            <TouchableOpacity onPress={() => setShowPicker(true)} style={styles.input}>
+                <Text style={{ color: date ? '#000' : '#888' }}>
+                    {formattedDate || 'Select Date'}
+                </Text>
+            </TouchableOpacity>
+
+            {showPicker && (
+                <DateTimePicker
+                    value={date || new Date()}
+                    mode="date"
+                    display="default"
+                    onChange={(event, selectedDate) => {
+                        setShowPicker(false);
+                        if (selectedDate) setDate(selectedDate);
+                    }}
+                />
+            )}
 
             {!presetCategory && (
                 <TextInput

@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, onSnapshot } from 'firebase/firestore';
-import AddExpense from './AddExpense'; // Adjust if needed
+import AddExpense from './AddExpense';
 
 type Expense = {
     id: string;
