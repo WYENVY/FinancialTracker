@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Fixed UI issus on home page and Created Analysis page.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Forgetpassword.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Forgetpassword.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signin.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/Signup.jsx" afterDir="false" />
-    </list>
+    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Fixed UI issus on home page and Created Analysis page." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
