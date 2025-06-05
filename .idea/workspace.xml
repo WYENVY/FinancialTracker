@@ -7,10 +7,11 @@
     <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Created routes for all of the preset categories (Food, Transport, Entertainment, Groceries, Rent, Gifts, Income, Goals).">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Analysis.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Analysis.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddExpense.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddExpense.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Food.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Food.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Budgets.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Budgets.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/financial-tracker/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/financial-tracker/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +26,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="budgets" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -53,6 +59,18 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Jest.HomeScreen - Account Balance Calculation.should calculate correct total balance from mixed transactions.executor": "Run",
+    "Jest.HomeScreen - Test Case 1 & 2: Basic Financial Summary Display.executor": "Run",
+    "Jest.HomeScreen - Test Case 1 & 2: Basic Financial Summary Display.should display Account Balance section.executor": "Run",
+    "Jest.HomeScreen - Test Case 1: Basic Financial Summary Display.executor": "Run",
+    "Jest.HomeScreen - Test Case 1: Basic Financial Summary Display.should display Account Balance section.executor": "Run",
+    "Jest.HomeScreen - Test Case 3: Monthly Expenses Calculation.should calculate current month expenses only.executor": "Run",
+    "Jest.HomeScreen Financial Summary.Account Balance Calculation.should calculate and display correct total balance from transactions.executor": "Run",
+    "Jest.HomeScreen Financial Summary.Account Balance Calculation.should display zero balance when no transactions exist.executor": "Run",
+    "Jest.HomeScreen Financial Summary.Financial Summary Display.should display total account balance section.executor": "Run",
+    "Jest.HomeScreen Financial Summary.Monthly Expenses Calculation.should calculate current month expenses correctly.executor": "Run",
+    "Jest.displays total account balance (1).executor": "Run",
+    "Jest.displays total account balance.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -62,9 +80,10 @@
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs.jest.jest_package": "/Users/ethan/WebstormProjects/FinancialTracker-Ethan/financial-tracker/node_modules/jest",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.general",
-    "ts.external.directory.path": "/Users/ethan/WebstormProjects/FinancialTracker-Ethan/financial-tracker/node_modules/typescript/lib",
+    "ts.external.directory.path": "/Users/ethan/WebstormProjects/FinancialTracker-Ethan/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -83,6 +102,80 @@
       <recent name="$PROJECT_DIR$/financial-tracker" />
       <recent name="$PROJECT_DIR$/financial-tracker/hooks" />
     </key>
+  </component>
+  <component name="RunManager" selected="Jest.HomeScreen - Test Case 3: Monthly Expenses Calculation.should calculate current month expenses only">
+    <configuration name="HomeScreen - Account Balance Calculation.should calculate correct total balance from mixed transactions" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/financial-tracker/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$/financial-tracker" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/financial-tracker/app/pages/Home.test.tsx" />
+      <test-names>
+        <test-name value="HomeScreen - Account Balance Calculation" />
+        <test-name value="should calculate correct total balance from mixed transactions" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="HomeScreen - Test Case 1 &amp; 2: Basic Financial Summary Display" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/financial-tracker/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$/financial-tracker" />
+      <envs />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/financial-tracker/app/pages/Home.test.tsx" />
+      <test-names>
+        <test-name value="HomeScreen - Test Case 1 &amp; 2: Basic Financial Summary Display" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="HomeScreen - Test Case 1 &amp; 2: Basic Financial Summary Display.should display Account Balance section" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/financial-tracker/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$/financial-tracker" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/financial-tracker/app/pages/Home.test.tsx" />
+      <test-names>
+        <test-name value="HomeScreen - Test Case 1 &amp; 2: Basic Financial Summary Display" />
+        <test-name value="should display Account Balance section" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="HomeScreen - Test Case 1: Basic Financial Summary Display" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/financial-tracker/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$/financial-tracker" />
+      <envs />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/financial-tracker/app/pages/Home.test.tsx" />
+      <test-names>
+        <test-name value="HomeScreen - Test Case 1: Basic Financial Summary Display" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="HomeScreen - Test Case 3: Monthly Expenses Calculation.should calculate current month expenses only" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <jest-package value="$PROJECT_DIR$/financial-tracker/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$/financial-tracker" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/financial-tracker/app/pages/Home.test.tsx" />
+      <test-names>
+        <test-name value="HomeScreen - Test Case 3: Monthly Expenses Calculation" />
+        <test-name value="should calculate current month expenses only" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Jest.HomeScreen - Test Case 3: Monthly Expenses Calculation.should calculate current month expenses only" />
+        <item itemvalue="Jest.HomeScreen - Account Balance Calculation.should calculate correct total balance from mixed transactions" />
+        <item itemvalue="Jest.HomeScreen - Test Case 1 &amp; 2: Basic Financial Summary Display.should display Account Balance section" />
+        <item itemvalue="Jest.HomeScreen - Test Case 1 &amp; 2: Basic Financial Summary Display" />
+        <item itemvalue="Jest.HomeScreen - Test Case 1: Basic Financial Summary Display" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
