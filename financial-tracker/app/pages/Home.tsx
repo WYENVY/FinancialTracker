@@ -17,6 +17,8 @@ export default function HomeScreen() {
     const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([]);
     const [greeting, setGreeting] = useState('');
     const navigation = useNavigation();
+    const [monthlyExpenseTotal, setMonthlyExpenseTotal] = useState(0);
+    const fixedAccountBalance = 5000; // created placeholder for income for now until income user story is done
 
     useEffect(() => {
         const hour = new Date().getHours();
@@ -37,6 +39,38 @@ export default function HomeScreen() {
 
         return () => clearInterval(interval);
     }, []);
+
+    useEffect(() => {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const db = getFirestore();
+        const expensesRef = collection(db, 'usernames', user.uid, 'categories', 'Food', 'expenses');
+
+        const unsubscribe = onSnapshot(expensesRef, (querySnapshot) => {
+            const now = new Date();
+            let total = 0;
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const amount = parseFloat(data.amount);
+                const expenseDate = new Date(data.date);
+
+                if (!isNaN(amount) && !isNaN(expenseDate.getTime())) {
+                    const sameMonth = now.getMonth() === expenseDate.getMonth();
+                    const sameYear = now.getFullYear() === expenseDate.getFullYear();
+                    if (sameMonth && sameYear) {
+                        total += amount;
+                    }
+                }
+            });
+
+            setMonthlyExpenseTotal(total);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
 
     // Fetch recent transactions from Firestore
     useEffect(() => {
@@ -97,6 +131,16 @@ export default function HomeScreen() {
             <View style={styles.whiteSheet}>
                 {/* Content starts a bit lower */}
                 <View style={styles.contentPadding}>
+                    <View style={styles.summaryWidget}>
+                        <View style={styles.summaryItem}>
+                            <Text style={styles.summaryLabel}>Account Balance</Text>
+                            <Text style={styles.summaryValue}>${fixedAccountBalance.toFixed(2)}</Text>
+                        </View>
+                        <View style={styles.summaryItem}>
+                            <Text style={styles.summaryLabel}>Monthly Expenses</Text>
+                            <Text style={styles.summaryValue}>${monthlyExpenseTotal.toFixed(2)}</Text>
+                        </View>
+                    </View>
                     <Text style={styles.sectionTitle}>Recent Transactions</Text>
                     {recentTransactions.length === 0 ? (
                         <Text style={styles.emptyText}>No recent transactions</Text>
@@ -203,4 +247,28 @@ const styles = StyleSheet.create({
         shadowRadius: 6,
         elevation: 3,
     },
+    summaryWidget: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 16,
+        marginBottom: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+    summaryItem: {
+        marginBottom: 10,
+    },
+    summaryLabel: {
+        fontSize: 14,
+        color: '#777',
+    },
+    summaryValue: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#052224',
+    },
+
 });

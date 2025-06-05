@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Created routes for all of the preset categories (Food, Transport, Entertainment, Groceries, Rent, Gifts, Income, Goals).">
+    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Added the Budgets page and chatbot from budgets branch to see if it would work outside the budgets branch.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Analysis.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Analysis.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Budgets.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Budgets.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/tsconfig.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Home.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +23,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="budgets" />
+        <entry key="$PROJECT_DIR$" value="analysis-page" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -74,7 +69,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "analysis-page",
+    "git-widget-placeholder": "homepage-widget",
     "last_opened_file_path": "/Users/ethan/WebstormProjects/FinancialTracker-Ethan",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -103,7 +98,7 @@
       <recent name="$PROJECT_DIR$/financial-tracker/hooks" />
     </key>
   </component>
-  <component name="RunManager" selected="Jest.HomeScreen - Test Case 3: Monthly Expenses Calculation.should calculate current month expenses only">
+  <component name="RunManager">
     <configuration name="HomeScreen - Account Balance Calculation.should calculate correct total balance from mixed transactions" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <jest-package value="$PROJECT_DIR$/financial-tracker/node_modules/jest" />
@@ -348,7 +343,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748303781723</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Added the Budgets page and chatbot from budgets branch to see if it would work outside the budgets branch.">
+      <option name="closed" value="true" />
+      <created>1749083032688</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1749083032688</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -380,6 +383,7 @@
     <MESSAGE value="Fixed error when adding a new category and got a new navigation stack for one of the preset categories." />
     <MESSAGE value="Fixed two errors in ExternalLink.tsx and IconSymbol.tsx" />
     <MESSAGE value="Created routes for all of the preset categories (Food, Transport, Entertainment, Groceries, Rent, Gifts, Income, Goals)." />
-    <option name="LAST_COMMIT_MESSAGE" value="Created routes for all of the preset categories (Food, Transport, Entertainment, Groceries, Rent, Gifts, Income, Goals)." />
+    <MESSAGE value="Added the Budgets page and chatbot from budgets branch to see if it would work outside the budgets branch." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added the Budgets page and chatbot from budgets branch to see if it would work outside the budgets branch." />
   </component>
 </project>
