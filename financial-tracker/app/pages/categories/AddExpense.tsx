@@ -5,7 +5,7 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function AddExpense({ presetCategory }: { presetCategory?: string }) {
+export default function AddExpense({ categoryId }: { categoryId: string }) {
     const [date, setDate] = useState<Date | null>(null);
     const [showPicker, setShowPicker] = useState(false);
     const [category, setCategory] = useState('');
@@ -14,8 +14,8 @@ export default function AddExpense({ presetCategory }: { presetCategory?: string
     const [description, setDescription] = useState('');
 
     useEffect(() => {
-        if (presetCategory) setCategory(presetCategory);
-    }, [presetCategory]);
+        if (categoryId) setCategory(categoryId);
+    }, [categoryId]);
 
     const formattedDate = date
         ? `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1)
@@ -54,7 +54,6 @@ export default function AddExpense({ presetCategory }: { presetCategory?: string
 
             Alert.alert('Success', 'Expense added!');
             setDate(null);
-            if (!presetCategory) setCategory('');
             setAmount('');
             setTitle('');
             setDescription('');
@@ -83,15 +82,6 @@ export default function AddExpense({ presetCategory }: { presetCategory?: string
                         setShowPicker(false);
                         if (selectedDate) setDate(selectedDate);
                     }}
-                />
-            )}
-
-            {!presetCategory && (
-                <TextInput
-                    placeholder="Category (e.g., Entertainment)"
-                    style={styles.input}
-                    value={category}
-                    onChangeText={setCategory}
                 />
             )}
 

@@ -16,6 +16,7 @@ import RentScreen from '@/app/pages/categories/Rent';
 import GiftScreen from '@/app/pages/categories/Gifts';
 import IncomeScreen from '@/app/pages/categories/Income';
 import GoalScreen from '@/app/pages/categories/Goals';
+import AddCategoryScreen from '@/app/pages/categories/AddCategoryScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const ExpensesStackNav = createNativeStackNavigator();
@@ -68,6 +69,29 @@ function ExpensesStack() {
                 component={GoalScreen}
                 options={{ headerShown: false }}
             />
+            <ExpensesStackNav.Screen
+                name="AddCategory"
+                component={AddCategoryScreen}
+                options={{
+                    title: 'Add Category',
+                    headerStyle: { backgroundColor: '#00D09E' },
+                    headerTintColor: '#fff'
+                }}
+            />
+            <ExpensesStackNav.Screen
+                name="CustomCategory"
+                component={require('@/app/pages/categories/CustomCategoryExpensesScreen').default}
+                options={({ route }) => {
+                    const categoryName = route?.params?.categoryName;
+                    return {
+                        title: categoryName ?? 'Category',
+                        headerStyle: { backgroundColor: '#00D09E' },
+                        headerTintColor: '#fff',
+                    };
+                }}
+            />
+
+
         </ExpensesStackNav.Navigator>
     );
 }

@@ -20,11 +20,11 @@ type ExpensesStackParamList = {
     Goals: undefined;
     Budget: undefined;
     Settings: undefined;
+    AddCategory: undefined;
+    CustomCategory: { categoryId: string; categoryName: string };
 };
 
 type NavigationProp = NativeStackNavigationProp<ExpensesStackParamList>;
-
-
 
 const { width } = Dimensions.get('window');
 const itemSize = (width - 25 * 2 - 20 * 2) / 3;
@@ -63,12 +63,8 @@ export default function CategoriesScreen() {
     };
 
     const handleAddCategory = () => {
-        addCategory({
-            name: '',
-            icon: 'apps',
-            color: '#76c75f',
-            isPreset: false,
-        });
+        // Navigate to AddCategoryScreen instead of adding directly
+        navigation.navigate('AddCategory');
     };
 
     const handleSave = (id: string, updatedIcon?: ValidIconName) => {
@@ -131,7 +127,7 @@ export default function CategoriesScreen() {
                                         onChangeText={setEditName}
                                         autoFocus
                                         placeholder="Enter Category Name"
-                                    placeholderTextColor="rgba(255,255,255,0.7)"
+                                        placeholderTextColor="rgba(255,255,255,0.7)"
                                     />
                                     <IconPicker
                                         selectedIcon={item.icon}
@@ -172,8 +168,10 @@ export default function CategoriesScreen() {
                                         navigation.navigate('Income');
                                     } else if (item.isPreset && item.name === 'Goals') {
                                         navigation.navigate('Goals');
-                                    } else {
-                                        handleEditPress(item);
+                                    } else { navigation.navigate('CustomCategory', {
+                                            categoryId: item.id,
+                                            categoryName: item.name,
+                                        });
                                     }
                                 }}
                                 itemSize={itemSize}
@@ -185,7 +183,6 @@ export default function CategoriesScreen() {
             </View>
         </View>
     );
-
 }
 
 const styles = StyleSheet.create({

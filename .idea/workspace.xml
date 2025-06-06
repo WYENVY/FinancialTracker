@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="changed the UI of budgets page and Chatbot page to fit withe the rest of the app and made it so I could use my .env file for the API key intead of having to hard code it in.">
+    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Added a few minor changes to the Goals page so that it was more user friendly.">
+      <change afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddCategoryScreen.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/CustomCategoryExpensesScreen.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Goals.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Goals.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/(tabs)/HomeScreen.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/(tabs)/HomeScreen.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Expenses.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Expenses.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddExpense.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddExpense.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -367,7 +371,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749182983893</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Added a few minor changes to the Goals page so that it was more user friendly.">
+      <option name="closed" value="true" />
+      <created>1749191409514</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1749191409515</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -402,6 +414,7 @@
     <MESSAGE value="Added the Budgets page and chatbot from budgets branch to see if it would work outside the budgets branch." />
     <MESSAGE value="Imported Jash's goals page and Steve's transactions page" />
     <MESSAGE value="changed the UI of budgets page and Chatbot page to fit withe the rest of the app and made it so I could use my .env file for the API key intead of having to hard code it in." />
-    <option name="LAST_COMMIT_MESSAGE" value="changed the UI of budgets page and Chatbot page to fit withe the rest of the app and made it so I could use my .env file for the API key intead of having to hard code it in." />
+    <MESSAGE value="Added a few minor changes to the Goals page so that it was more user friendly." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a few minor changes to the Goals page so that it was more user friendly." />
   </component>
 </project>
