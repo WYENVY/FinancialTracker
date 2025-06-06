@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Alert } from 'react-native';
+import { View, Text, ScrollView, TextInput, TouchableOpacity, FlatList, StyleSheet, Alert } from 'react-native';
 import { getFirestore, collection, addDoc, onSnapshot, query, where, serverTimestamp } from 'firebase/firestore';
 import { auth } from '../../fireconfig';
+import { useNavigation } from '@react-navigation/native';
+import { Modal } from 'react-native';
+import {Ionicons} from "@expo/vector-icons";
+import { doc, updateDoc } from 'firebase/firestore';
 
 const db = getFirestore();
 
@@ -14,6 +18,7 @@ const GoalForm = ({ userId, onGoalAdded }: GoalFormProps) => {
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
     const [targetAmount, setTargetAmount] = useState('');
+    const navigation = useNavigation();
 
     const handleSubmit = async () => {
         if (!title.trim() || !category.trim() || !targetAmount) {
@@ -42,6 +47,10 @@ const GoalForm = ({ userId, onGoalAdded }: GoalFormProps) => {
 
     return (
         <View style={styles.formContainer}>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+                <Ionicons name="arrow-back" size={24} color="#052224" />
+                <Text style={styles.backText}>Back</Text>
+            </TouchableOpacity>
             <Text style={styles.formTitle}>Create Financial Goal</Text>
             <TextInput
                 style={styles.input}
@@ -85,6 +94,33 @@ type Goal = {
 
 const GoalList = ({ userId }: GoalListProps) => {
     const [goals, setGoals] = useState<Goal[]>([]);
+    const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
+    const [editedTitle, setEditedTitle] = useState('');
+    const [editedTargetAmount, setEditedTargetAmount] = useState('');
+    const [addedAmount, setAddedAmount] = useState('');
+
+    const handleUpdateGoal = async () => {
+        if (!editingGoal) return;
+
+        try {
+            const newAmount = editingGoal.currentAmount + parseFloat(addedAmount || '0');
+            const goalDocRef = doc(db, 'financialGoals', editingGoal.id);
+            await updateDoc(goalDocRef, {
+                title: editedTitle,
+                targetAmount: parseFloat(editedTargetAmount),
+                currentAmount: newAmount,
+            });
+
+            setEditingGoal(null);
+            setEditedTitle('');
+            setEditedTargetAmount('');
+            setAddedAmount('');
+            Alert.alert('Success', 'Goal updated!');
+        } catch (error) {
+            console.error('Error updating goal:', error);
+            Alert.alert('Error', 'Failed to update goal');
+        }
+    };
 
     useEffect(() => {
         const q = query(collection(db, 'financialGoals'), where('userId', '==', userId));
@@ -106,7 +142,6 @@ const GoalList = ({ userId }: GoalListProps) => {
         return () => unsubscribe();
     }, [userId]);
 
-    // Group goals by category
     const groupedGoals = goals.reduce<Record<string, Goal[]>>((acc, goal) => {
         acc[goal.category] = acc[goal.category] || [];
         acc[goal.category].push(goal);
@@ -120,15 +155,65 @@ const GoalList = ({ userId }: GoalListProps) => {
                 <View key={category} style={styles.categorySection}>
                     <Text style={styles.categoryTitle}>{category}</Text>
                     {goals.map((goal) => (
-                        <GoalProgress key={goal.id} goal={goal} />
+                        <View key={goal.id}>
+                            <GoalProgress
+                                goal={goal}
+                                onEdit={() => {
+                                    setEditingGoal(goal);
+                                    setEditedTitle(goal.title);
+                                    setEditedTargetAmount(goal.targetAmount.toString());
+                                    setAddedAmount('');
+                                }}
+                            />
+                        </View>
                     ))}
                 </View>
             ))}
+
+            <Modal visible={!!editingGoal} animationType="slide" transparent>
+                <View style={{
+                    flex: 1,
+                    backgroundColor: 'rgba(0,0,0,0.4)',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: 20
+                }}>
+                    <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, width: '100%' }}>
+                        <Text style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 10 }}>Edit Goal</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Title"
+                            value={editedTitle}
+                            onChangeText={setEditedTitle}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Target Amount"
+                            value={editedTargetAmount}
+                            onChangeText={setEditedTargetAmount}
+                            keyboardType="numeric"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Add to Saved Amount"
+                            value={addedAmount}
+                            onChangeText={setAddedAmount}
+                            keyboardType="numeric"
+                        />
+                        <TouchableOpacity style={styles.button} onPress={handleUpdateGoal}>
+                            <Text style={styles.buttonText}>Save Changes</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => setEditingGoal(null)} style={{ marginTop: 10 }}>
+                            <Text style={{ color: 'red', textAlign: 'center' }}>Cancel</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };
 
-const GoalProgress = ({ goal }: { goal: Goal }) => {
+const GoalProgress = ({ goal, onEdit }: { goal: Goal; onEdit: () => void }) => {
     const progressPercentage = goal.targetAmount
         ? (goal.currentAmount / goal.targetAmount) * 100
         : 0;
@@ -141,6 +226,9 @@ const GoalProgress = ({ goal }: { goal: Goal }) => {
             <Text style={styles.progressText}>
                 ${goal.currentAmount} of ${goal.targetAmount} saved ({progressPercentage.toFixed(1)}%)
             </Text>
+            <TouchableOpacity onPress={onEdit} style={{ marginTop: 8 }}>
+                <Text style={{ color: '#0068FF' }}>Edit</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -158,15 +246,15 @@ export default function GoalsPage() {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <GoalForm userId={userId} />
             <GoalList userId={userId} />
-        </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#F0FAF8', padding: 16 },
+    container: { backgroundColor: '#F0FAF8', padding: 16, paddingBottom: 60, },
     formContainer: {
         backgroundColor: '#fff',
         borderRadius: 10,
@@ -219,4 +307,7 @@ const styles = StyleSheet.create({
     progressText: { fontSize: 13, color: '#333' },
     centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
     errorText: { color: 'red', fontSize: 16 },
+    backButton: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
+    backText: { marginLeft: 8, fontSize: 16, color: '#052224' },
+
 });

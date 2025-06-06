@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Imported Jash's goals page and Steve's transactions page">
+    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="changed the UI of budgets page and Chatbot page to fit withe the rest of the app and made it so I could use my .env file for the API key intead of having to hard code it in.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Budgets.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Budgets.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/components/Chatbot.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/components/Chatbot.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Goals.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Goals.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -361,7 +359,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749176287008</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="changed the UI of budgets page and Chatbot page to fit withe the rest of the app and made it so I could use my .env file for the API key intead of having to hard code it in.">
+      <option name="closed" value="true" />
+      <created>1749182983893</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1749182983893</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -395,6 +401,7 @@
     <MESSAGE value="Created routes for all of the preset categories (Food, Transport, Entertainment, Groceries, Rent, Gifts, Income, Goals)." />
     <MESSAGE value="Added the Budgets page and chatbot from budgets branch to see if it would work outside the budgets branch." />
     <MESSAGE value="Imported Jash's goals page and Steve's transactions page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Imported Jash's goals page and Steve's transactions page" />
+    <MESSAGE value="changed the UI of budgets page and Chatbot page to fit withe the rest of the app and made it so I could use my .env file for the API key intead of having to hard code it in." />
+    <option name="LAST_COMMIT_MESSAGE" value="changed the UI of budgets page and Chatbot page to fit withe the rest of the app and made it so I could use my .env file for the API key intead of having to hard code it in." />
   </component>
 </project>
