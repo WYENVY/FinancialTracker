@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Added the Budgets page and chatbot from budgets branch to see if it would work outside the budgets branch.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Analysis.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Analysis.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Transactions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Transactions.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +98,7 @@
       <recent name="$PROJECT_DIR$/financial-tracker/hooks" />
     </key>
   </component>
-  <component name="RunManager" selected="Jest.HomeScreen - Account Balance Calculation.should calculate correct total balance from mixed transactions">
+  <component name="RunManager">
     <configuration name="HomeScreen - Account Balance Calculation.should calculate correct total balance from mixed transactions" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <jest-package value="$PROJECT_DIR$/financial-tracker/node_modules/jest" />
@@ -166,10 +165,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Jest.HomeScreen - Test Case 3: Monthly Expenses Calculation.should calculate current month expenses only" />
-        <item itemvalue="Jest.HomeScreen - Account Balance Calculation.should calculate correct total balance from mixed transactions" />
+        <item itemvalue="Jest.HomeScreen - Test Case 1: Basic Financial Summary Display" />
         <item itemvalue="Jest.HomeScreen - Test Case 1 &amp; 2: Basic Financial Summary Display.should display Account Balance section" />
         <item itemvalue="Jest.HomeScreen - Test Case 1 &amp; 2: Basic Financial Summary Display" />
-        <item itemvalue="Jest.HomeScreen - Test Case 1: Basic Financial Summary Display" />
+        <item itemvalue="Jest.HomeScreen - Account Balance Calculation.should calculate correct total balance from mixed transactions" />
       </list>
     </recent_temporary>
   </component>
