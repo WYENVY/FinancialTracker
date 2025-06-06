@@ -17,6 +17,7 @@ import GiftScreen from '@/app/pages/categories/Gifts';
 import IncomeScreen from '@/app/pages/categories/Income';
 import GoalScreen from '@/app/pages/categories/Goals';
 import AddCategoryScreen from '@/app/pages/categories/AddCategoryScreen';
+import CustomCategoryExpensesScreen from '@/app/pages/categories/CustomCategoryExpensesScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const ExpensesStackNav = createNativeStackNavigator();
@@ -80,7 +81,7 @@ function ExpensesStack() {
             />
             <ExpensesStackNav.Screen
                 name="CustomCategory"
-                component={require('@/app/pages/categories/CustomCategoryExpensesScreen').default}
+                component={CustomCategoryExpensesScreen}
                 options={({ route }) => {
                     const categoryName = route?.params?.categoryName;
                     return {

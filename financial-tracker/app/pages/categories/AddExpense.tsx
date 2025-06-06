@@ -5,7 +5,7 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function AddExpense({ categoryId }: { categoryId: string }) {
+export default function AddExpense({ categoryId }: { categoryId?: string }) {
     const [date, setDate] = useState<Date | null>(null);
     const [showPicker, setShowPicker] = useState(false);
     const [category, setCategory] = useState('');
@@ -33,7 +33,7 @@ export default function AddExpense({ categoryId }: { categoryId: string }) {
             return;
         }
 
-        if (!category || !amount || !title || !date) {
+        if (!categoryId || !amount || !title || !date) {
             Alert.alert('Validation', 'Please fill in all required fields.');
             return;
         }
@@ -48,7 +48,7 @@ export default function AddExpense({ categoryId }: { categoryId: string }) {
             };
 
             await addDoc(
-                collection(db, 'usernames', user.uid, 'categories', category, 'expenses'),
+                collection(db, 'usernames', user.uid, 'categories', categoryId, 'expenses'),
                 expenseData
             );
 

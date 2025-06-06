@@ -1,6 +1,6 @@
 // app/pages/categories/CustomCategoryExpensesScreen.tsx
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { getFirestore, collection, onSnapshot, query } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import AddExpense from './AddExpense';
@@ -40,25 +40,20 @@ export default function CustomCategoryExpensesScreen() {
         return () => unsubscribe();
     }, [categoryId]);
 
+
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={{ padding: 16, paddingTop: 50, paddingBottom: 70, backgroundColor: '#F0FAF8' }}>
             <Text style={styles.title}>{categoryName} Expenses</Text>
             <AddExpense categoryId={categoryId} />
-            <View style={{ paddingHorizontal: 12, paddingBottom: 20 }}>
-            <FlatList
-                data={expenses}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                    <View style={styles.card}>
-                        <Text style={styles.expenseTitle}>{item.title}</Text>
-                        <Text>${item.amount.toFixed(2)}</Text>
-                        <Text style={styles.description}>{item.description}</Text>
-                        <Text style={styles.date}>{new Date(item.date).toLocaleDateString()}</Text>
-                    </View>
-                )}
-            />
-            </View>
-        </View>
+            {expenses.map((item) => (
+                <View key={item.id} style={styles.card}>
+                    <Text style={styles.expenseTitle}>{item.title}</Text>
+                    <Text>${item.amount.toFixed(2)}</Text>
+                    <Text style={styles.description}>{item.description}</Text>
+                    <Text style={styles.date}>{new Date(item.date).toLocaleDateString()}</Text>
+                </View>
+            ))}
+        </ScrollView>
     );
 }
 
