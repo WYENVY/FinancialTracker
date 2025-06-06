@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, doc, setDoc, getDoc, getDocs } from 'firebase/firestore';
 
 export default function AddExpense({ presetCategory }: { presetCategory?: string }) {
     const [date, setDate] = useState('');
@@ -13,6 +13,97 @@ export default function AddExpense({ presetCategory }: { presetCategory?: string
     useEffect(() => {
         if (presetCategory) setCategory(presetCategory);
     }, [presetCategory]);
+
+    /*const updateIncomeTotal = async (db: any, user: any) => {
+        try {
+            // Get all income expenses
+            const incomeExpensesRef = collection(db, 'usernames', user.uid, 'categories', 'Income', 'expenses');
+            const snapshot = await getDocs(incomeExpensesRef);
+            
+            let totalIncome = 0;
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                totalIncome += data.amount || 0;
+            });
+
+            // Update the income total in the Income category
+            const incomeDocRef = doc(db, 'usernames', user.uid, 'categories', 'Income');
+            await setDoc(incomeDocRef, { income: totalIncome }, { merge: true });
+
+        } catch (error) {
+            console.error('Error updating income total:', error);
+        }
+    };*/
+
+    /*const updateIncomeTotal = async (db: any, user: any) => {
+        try {
+            // Get all income amounts
+            const incomeExpensesRef = collection(db, 'usernames', user.uid, 'categories', 'Income', 'expenses');
+            const incomeSnapshot = await getDocs(incomeExpensesRef);
+            let totalIncome = 0;
+            incomeSnapshot.forEach((doc) => {
+                const data = doc.data();
+                totalIncome += data.amount || 0;
+            });
+            
+            // Get all other expense categories (excluding "Income")
+            const categoriesRef = collection(db, 'usernames', user.uid, 'categories');
+            const categoriesSnapshot = await getDocs(categoriesRef);
+            
+            let totalExpenses = 0;
+            for (const categoryDoc of categoriesSnapshot.docs) {
+                const categoryName = categoryDoc.id;
+                if (categoryName === 'Income') continue;
+                
+                const expensesRef = collection(db, 'usernames', user.uid, 'categories', categoryName, 'expenses');
+                const expensesSnapshot = await getDocs(expensesRef);
+                expensesSnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    totalExpenses += data.amount || 0;
+                });
+            }
+            
+            // Final total = income - expenses
+            const finalTotal = totalIncome - totalExpenses;
+            const incomeDocRef = doc(db, 'usernames', user.uid, 'categories', 'Income');
+            await setDoc(incomeDocRef, { income: finalTotal }, { merge: true });
+        } catch (error) {
+            console.error('Error updating income total:', error);
+        }
+    };*/
+
+    const updateIncomeTotal = async (db: any, user: any) => {
+    try {
+        // 1. Get all income entries
+        const incomeExpensesRef = collection(db, 'usernames', user.uid, 'categories', 'Income', 'expenses');
+        const incomeSnapshot = await getDocs(incomeExpensesRef);
+        let totalIncome = 0;
+        incomeSnapshot.forEach((doc) => {
+            totalIncome += doc.data().amount || 0;
+        });
+
+        // 2. Manually define expense categories (unless you're storing category names)
+        const expenseCategories = ['Food', 'Bills', 'Shopping', 'Transport']; // add your own
+
+        let totalExpenses = 0;
+        for (const category of expenseCategories) {
+            const expensesRef = collection(db, 'usernames', user.uid, 'categories', category, 'expenses');
+            const expensesSnapshot = await getDocs(expensesRef);
+            expensesSnapshot.forEach((doc) => {
+                totalExpenses += doc.data().amount || 0;
+            });
+        }
+
+        // 3. Save the result
+        const finalTotal = totalIncome - totalExpenses;
+        const incomeDocRef = doc(db, 'usernames', user.uid, 'categories', 'Income');
+        await setDoc(incomeDocRef, { income: finalTotal }, { merge: true });
+
+    } catch (error) {
+        console.error('Error updating income total:', error);
+    }
+};
+
 
     const handleAddExpense = async () => {
         const auth = getAuth();
@@ -42,6 +133,11 @@ export default function AddExpense({ presetCategory }: { presetCategory?: string
                 collection(db, 'usernames', user.uid, 'categories', category, 'expenses'),
                 expenseData
             );
+
+            // If this is an income entry, update the total income
+            //if (category === 'Income') {
+                await updateIncomeTotal(db, user);
+            //}
 
             Alert.alert('Success', 'Expense added!');
             setDate('');

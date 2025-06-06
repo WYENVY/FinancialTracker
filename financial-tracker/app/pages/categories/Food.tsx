@@ -1,21 +1,129 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, onSnapshot } from 'firebase/firestore';
-import AddExpense from './AddExpense'; // Adjust if needed
+import { doc, getDoc, getFirestore, collection, onSnapshot, addDoc, setDoc } from 'firebase/firestore';
 
 type Expense = {
     id: string;
     title: string;
     amount: number;
     date: string;
+    description?: string;
 };
+
+// Custom AddExpense component for Food that handles income subtraction
+function AddFoodExpense() {
+    const [date, setDate] = useState('');
+    const [amount, setAmount] = useState('');
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+
+    const handleAddExpense = async () => {
+        const auth = getAuth();
+        const db = getFirestore();
+        const user = auth.currentUser;
+
+        if (!user) {
+            Alert.alert('Error', 'User not logged in.');
+            return;
+        }
+
+        if (!amount || !title || !date) {
+            Alert.alert('Validation', 'Please fill in all required fields.');
+            return;
+        }
+
+        const expenseAmount = parseFloat(amount);
+        if (isNaN(expenseAmount) || expenseAmount <= 0) {
+            Alert.alert('Validation', 'Please enter a valid amount.');
+            return;
+        }
+
+        try {
+            // Add the food expense
+            const expenseData = {
+                title,
+                description,
+                amount: expenseAmount,
+                date,
+                createdAt: new Date().toISOString()
+            };
+
+            await addDoc(
+                collection(db, 'usernames', user.uid, 'categories', 'Food', 'expenses'),
+                expenseData
+            );
+
+            // Get current income total and subtract the food expense
+            const incomeDocRef = doc(db, 'usernames', user.uid, 'categories', 'Income');
+            const incomeDoc = await getDoc(incomeDocRef);
+            
+            if (incomeDoc.exists()) {
+                const currentIncome = incomeDoc.data()?.income || 0;
+                const newIncome = currentIncome - expenseAmount;
+                
+                // Update the income total
+                await setDoc(incomeDocRef, { income: newIncome }, { merge: true });
+            } else {
+                // If no income document exists, create one with negative amount
+                await setDoc(incomeDocRef, { income: -expenseAmount }, { merge: true });
+            }
+
+            Alert.alert('Success', 'Food expense added and deducted from income!');
+            setDate('');
+            setAmount('');
+            setTitle('');
+            setDescription('');
+        } catch (error) {
+            console.error('Error adding food expense: ', error);
+            Alert.alert('Error', 'Failed to add food expense.');
+        }
+    };
+
+    return (
+        <View style={styles.addExpenseContainer}>
+            <Text style={styles.addExpenseHeading}>Add Food Expense</Text>
+
+            <TextInput
+                placeholder="Date (any format)"
+                style={styles.input}
+                value={date}
+                onChangeText={setDate}
+            />
+
+            <TextInput
+                placeholder="Amount"
+                keyboardType="numeric"
+                style={styles.input}
+                value={amount}
+                onChangeText={setAmount}
+            />
+            <TextInput
+                placeholder="Title"
+                style={styles.input}
+                value={title}
+                onChangeText={setTitle}
+            />
+            <TextInput
+                placeholder="Description"
+                style={styles.input}
+                value={description}
+                onChangeText={setDescription}
+            />
+
+            <TouchableOpacity style={styles.button} onPress={handleAddExpense}>
+                <Text style={styles.buttonText}>Save Food Expense</Text>
+            </TouchableOpacity>
+        </View>
+    );
+}
 
 export default function FoodScreen() {
     const navigation = useNavigation();
     const [expenses, setExpenses] = useState<Expense[]>([]);
+    const [remainingIncome, setRemainingIncome] = useState(0);
 
     useEffect(() => {
         const auth = getAuth();
@@ -23,9 +131,9 @@ export default function FoodScreen() {
         const user = auth.currentUser;
         if (!user) return;
 
+        // Listen to food expenses
         const foodExpensesRef = collection(db, 'usernames', user.uid, 'categories', 'Food', 'expenses');
-
-        const unsubscribe = onSnapshot(foodExpensesRef, (snapshot) => {
+        const unsubscribeExpenses = onSnapshot(foodExpensesRef, (snapshot) => {
             const expenseList: Expense[] = snapshot.docs.map((doc) => ({
                 id: doc.id,
                 ...(doc.data() as Omit<Expense, 'id'>),
@@ -33,7 +141,20 @@ export default function FoodScreen() {
             setExpenses(expenseList);
         });
 
-        return () => unsubscribe();
+        // Listen to income total (remaining after expenses)
+        const incomeDocRef = doc(db, 'usernames', user.uid, 'categories', 'Income');
+        const unsubscribeIncome = onSnapshot(incomeDocRef, (snapshot) => {
+            if (snapshot.exists()) {
+                setRemainingIncome(snapshot.data()?.income || 0);
+            } else {
+                setRemainingIncome(0);
+            }
+        });
+
+        return () => {
+            unsubscribeExpenses();
+            unsubscribeIncome();
+        };
     }, []);
 
     return (
@@ -49,7 +170,19 @@ export default function FoodScreen() {
                         </TouchableOpacity>
 
                         <Text style={styles.title}>Food Category Details</Text>
-                        <AddExpense presetCategory="Food" />
+
+                        {/* Show remaining income */}
+                        <View style={styles.incomeContainer}>
+                            <Text style={styles.incomeLabel}>Remaining Income:</Text>
+                            <Text style={[
+                                styles.incomeAmount,
+                                remainingIncome < 0 ? styles.negative : styles.positive
+                            ]}>
+                                ${remainingIncome.toFixed(2)}
+                            </Text>
+                        </View>
+
+                        <AddFoodExpense />
                         <Text style={styles.sectionTitle}>Food Transactions</Text>
                     </>
                 }
@@ -58,6 +191,7 @@ export default function FoodScreen() {
                         <Text style={styles.expenseTitle}>{item.title}</Text>
                         <Text style={styles.expenseAmount}>${item.amount.toFixed(2)}</Text>
                         <Text style={styles.expenseDate}>{item.date}</Text>
+                        {item.description && <Text style={styles.expenseDescription}>{item.description}</Text>}
                     </View>
                 )}
                 ListEmptyComponent={<Text style={styles.emptyText}>No food expenses yet.</Text>}
@@ -73,7 +207,68 @@ const styles = StyleSheet.create({
     backButton: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
     backText: { marginLeft: 8, fontSize: 16, color: '#052224' },
     title: { fontSize: 24, fontWeight: 'bold', color: '#052224', marginBottom: 20 },
-    sectionTitle: { fontSize: 20, fontWeight: 'bold', marginTop: 30, marginBottom: 10, color: '#052224' },
+    incomeContainer: {
+        backgroundColor: '#fff',
+        padding: 15,
+        borderRadius: 10,
+        marginBottom: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderColor: '#ddd',
+        borderWidth: 1,
+    },
+    incomeLabel: {
+        fontSize: 16,
+        color: '#052224',
+        fontWeight: '500',
+    },
+    incomeAmount: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    positive: {
+        color: '#00D09E',
+    },
+    negative: {
+        color: '#FF6B6B',
+    },
+    addExpenseContainer: {
+        backgroundColor: '#fff',
+        padding: 15,
+        borderRadius: 10,
+        marginBottom: 20,
+        borderColor: '#ddd',
+        borderWidth: 1,
+    },
+    addExpenseHeading: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 15,
+        color: '#052224',
+        textAlign: 'center',
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#aaa',
+        padding: 12,
+        borderRadius: 10,
+        marginBottom: 12,
+        backgroundColor: '#F9F9F9',
+    },
+    button: {
+        backgroundColor: '#00D09E',
+        padding: 15,
+        borderRadius: 12,
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    buttonText: {
+        color: '#052224',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    sectionTitle: { fontSize: 20, fontWeight: 'bold', marginTop: 10, marginBottom: 10, color: '#052224' },
     expenseItem: {
         backgroundColor: '#fff',
         padding: 12,
@@ -85,5 +280,6 @@ const styles = StyleSheet.create({
     expenseTitle: { fontSize: 16, fontWeight: 'bold', color: '#052224' },
     expenseAmount: { fontSize: 14, color: '#00D09E' },
     expenseDate: { fontSize: 12, color: '#555' },
+    expenseDescription: { fontSize: 12, color: '#777', marginTop: 4 },
     emptyText: { textAlign: 'center', marginTop: 10, color: '#888' },
 });
