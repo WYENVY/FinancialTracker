@@ -9,9 +9,7 @@ import {
     Alert,
     KeyboardAvoidingView,
     Platform,
-    Share,
-    UIManager,
-    findNodeHandle,
+    Dimensions,
     ActionSheetIOS
 } from 'react-native';
 import Constants from 'expo-constants';
@@ -19,6 +17,9 @@ import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import * as Print from 'expo-print';
 import { MaterialIcons } from '@expo/vector-icons';
+
+const apiKey = Constants.expoConfig?.extra?.OPENAI_API_KEY;
+const { height } = Dimensions.get('window');
 
 interface Message {
     id: string;
@@ -60,7 +61,6 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
         setIsLoading(true);
 
         try {
-            // Replace this with your actual API call
             const response = await callAIAPI(inputText.trim());
 
             const botMessage: Message = {
@@ -88,15 +88,15 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
         }
     };
 
-    // Replace this function with your actual AI API call
     const callAIAPI = async (message: string): Promise<string> => {
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
+                'Authorization': `Bearer ${apiKey}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                model: 'gpt-3.5-turbo',
+                model: 'gpt-4o',
                 messages: [
                     {
                         role: 'system',
@@ -107,115 +107,12 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
                         content: message
                     }
                 ],
-                max_tokens: 150,
+                max_tokens: 500,
             }),
         });
 
         const data = await response.json();
         return data.choices[0].message.content;
-    };
-
-    const exportConversation = async (format: 'pdf' | 'csv' | 'text') => {
-        try {
-            let content = '';
-            let fileName = '';
-            let fileUri = '';
-
-            if (format === 'csv') {
-                content = 'Time,Sender,Message\n';
-                messages.forEach(msg => {
-                    content += `"${msg.timestamp.toLocaleString()}","${msg.isUser ? 'You' : 'Assistant'}","${msg.text.replace(/"/g, '""')}"\n`;
-                });
-                fileName = `BudgetChat_${new Date().toISOString().slice(0, 10)}.csv`;
-                fileUri = `${FileSystem.documentDirectory}${fileName}`;
-                await FileSystem.writeAsStringAsync(fileUri, content, { encoding: FileSystem.EncodingType.UTF8 });
-            }
-            else if (format === 'text') {
-                messages.forEach(msg => {
-                    content += `${msg.isUser ? 'You' : 'Assistant'} (${msg.timestamp.toLocaleTimeString()}): ${msg.text}\n\n`;
-                });
-                fileName = `BudgetChat_${new Date().toISOString().slice(0, 10)}.txt`;
-                fileUri = `${FileSystem.documentDirectory}${fileName}`;
-                await FileSystem.writeAsStringAsync(fileUri, content, { encoding: FileSystem.EncodingType.UTF8 });
-            }
-            else if (format === 'pdf') {
-                let htmlContent = `
-                    <html>
-                    <head>
-                        <style>
-                            body { font-family: Arial, sans-serif; padding: 20px; }
-                            .header { text-align: center; margin-bottom: 20px; }
-                            .message { margin-bottom: 15px; padding: 10px; border-radius: 5px; }
-                            .user { background-color: #e3f2fd; margin-left: 20%; margin-right: 5%; }
-                            .bot { background-color: #f5f5f5; margin-left: 5%; margin-right: 20%; }
-                            .timestamp { font-size: 0.8em; color: #666; }
-                            .sender { font-weight: bold; margin-bottom: 5px; }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="header">
-                            <h1>Budget Assistant Conversation</h1>
-                            <p>Generated on ${new Date().toLocaleString()}</p>
-                        </div>
-                `;
-
-                messages.forEach(msg => {
-                    htmlContent += `
-                        <div class="message ${msg.isUser ? 'user' : 'bot'}">
-                            <div class="sender">${msg.isUser ? 'You' : 'Budget Assistant'}</div>
-                            <div class="timestamp">${msg.timestamp.toLocaleString()}</div>
-                            <div class="text">${msg.text.replace(/\n/g, '<br>')}</div>
-                        </div>
-                    `;
-                });
-
-                htmlContent += `</body></html>`;
-
-                const { uri } = await Print.printToFileAsync({ html: htmlContent });
-                fileUri = uri;
-                fileName = `BudgetChat_${new Date().toISOString().slice(0, 10)}.pdf`;
-            }
-
-            await Sharing.shareAsync(fileUri, {
-                dialogTitle: 'Share Conversation',
-                mimeType: format === 'pdf' ? 'application/pdf' :
-                    format === 'csv' ? 'text/csv' : 'text/plain',
-                UTI: format === 'pdf' ? 'com.adobe.pdf' :
-                    format === 'csv' ? 'public.comma-separated-values-text' : 'public.plain-text'
-            });
-
-        } catch (error) {
-            console.error('Error exporting conversation:', error);
-            Alert.alert('Error', 'Failed to export conversation. Please try again.');
-        }
-    };
-
-    const showExportOptions = () => {
-        if (Platform.OS === 'ios') {
-            ActionSheetIOS.showActionSheetWithOptions(
-                {
-                    options: ['Cancel', 'Export as PDF', 'Export as CSV', 'Export as Text'],
-                    cancelButtonIndex: 0,
-                },
-                (buttonIndex) => {
-                    if (buttonIndex === 1) exportConversation('pdf');
-                    if (buttonIndex === 2) exportConversation('csv');
-                    if (buttonIndex === 3) exportConversation('text');
-                }
-            );
-        } else {
-            // For Android, we'll use a simple Alert for now
-            Alert.alert(
-                'Export Conversation',
-                'Choose export format',
-                [
-                    { text: 'Cancel', style: 'cancel' },
-                    { text: 'PDF', onPress: () => exportConversation('pdf') },
-                    { text: 'CSV', onPress: () => exportConversation('csv') },
-                    { text: 'Text', onPress: () => exportConversation('text') },
-                ]
-            );
-        }
     };
 
     const renderMessage = (message: Message) => (
@@ -226,10 +123,12 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
                 message.isUser ? styles.userMessage : styles.botMessage,
             ]}
         >
-            <Text style={[
-                styles.messageText,
-                message.isUser ? styles.userMessageText : styles.botMessageText,
-            ]}>
+            <Text
+                style={[
+                    styles.messageText,
+                    message.isUser ? styles.userMessageText : styles.botMessageText,
+                ]}
+            >
                 {message.text}
             </Text>
             <Text style={styles.timestamp}>
@@ -242,82 +141,89 @@ const Chatbot: React.FC<ChatbotProps> = ({ onClose }) => {
     );
 
     return (
-        <KeyboardAvoidingView
-            style={styles.container}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
-            <View style={styles.header}>
-                <Text style={styles.headerTitle}>Budget Assistant</Text>
-                <View style={styles.headerButtons}>
-                    <TouchableOpacity onPress={showExportOptions} style={styles.exportButton}>
-                        <MaterialIcons name="file-download" size={24} color="white" />
-                    </TouchableOpacity>
-                    {onClose && (
-                        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                            <Text style={styles.closeButtonText}>×</Text>
-                        </TouchableOpacity>
-                    )}
-                </View>
-            </View>
-
-            <ScrollView
-                ref={scrollViewRef}
-                style={styles.messagesContainer}
-                contentContainerStyle={styles.messagesContentContainer}
-                showsVerticalScrollIndicator={false}
-                onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
+        <View style={styles.container}>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             >
-                <View ref={viewRef}>
-                    {messages.map(renderMessage)}
-                    {isLoading && (
-                        <View style={[styles.messageContainer, styles.botMessage]}>
-                            <Text style={styles.loadingText}>Typing...</Text>
-                        </View>
-                    )}
+                <View style={styles.header}>
+                    <Text style={styles.headerTitle}>Budget Bot</Text>
+                    <View style={styles.headerButtons}>
+                        <TouchableOpacity onPress={() => {}} style={styles.exportButton}>
+                            <MaterialIcons name="file-download" size={24} color="white" />
+                        </TouchableOpacity>
+                        {onClose && (
+                            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                                <Text style={styles.closeButtonText}>×</Text>
+                            </TouchableOpacity>
+                        )}
+                    </View>
                 </View>
-            </ScrollView>
 
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.textInput}
-                    value={inputText}
-                    onChangeText={setInputText}
-                    placeholder="Ask me about budgeting..."
-                    multiline
-                    maxLength={500}
-                    editable={!isLoading}
-                    onSubmitEditing={sendMessage}
-                    returnKeyType="send"
-                />
-                <TouchableOpacity
-                    style={[styles.sendButton, (isLoading || !inputText.trim()) && styles.sendButtonDisabled]}
-                    onPress={sendMessage}
-                    disabled={isLoading || !inputText.trim()}
-                >
-                    <Text style={styles.sendButtonText}>Send</Text>
-                </TouchableOpacity>
-            </View>
-        </KeyboardAvoidingView>
+                <View style={styles.whiteSheet}>
+                    <ScrollView
+                        ref={scrollViewRef}
+                        style={styles.messagesContainer}
+                        contentContainerStyle={styles.messagesContentContainer}
+                        onContentSizeChange={() =>
+                            scrollViewRef.current?.scrollToEnd({ animated: true })
+                        }
+                    >
+                        <View ref={viewRef}>
+                            {messages.map(renderMessage)}
+                            {isLoading && (
+                                <View style={[styles.messageContainer, styles.botMessage]}>
+                                    <Text style={styles.loadingText}>Typing...</Text>
+                                </View>
+                            )}
+                        </View>
+                    </ScrollView>
+
+                    <View style={styles.inputContainerWrapper}>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                style={styles.textInput}
+                                value={inputText}
+                                onChangeText={setInputText}
+                                placeholder="Ask me about budgeting..."
+                                multiline
+                            />
+                            <TouchableOpacity
+                                style={[styles.sendButton, inputText.trim() !== '' && styles.sendButtonActive]}
+                                onPress={sendMessage}
+                                disabled={!inputText.trim()}
+                            >
+                                <Text
+                                    style={[styles.sendButtonText, inputText.trim() !== '' && styles.sendButtonTextActive]}
+                                >
+                                    Send
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </KeyboardAvoidingView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#00D09E',
     },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 16,
-        backgroundColor: '#2196F3',
-        paddingTop: Platform.OS === 'ios' ? 50 : 16,
+        paddingTop: Platform.OS === 'ios' ? 50 : 30,
+        backgroundColor: '#00D09E',
     },
     headerTitle: {
-        fontSize: 18,
+        fontSize: 22,
         fontWeight: 'bold',
-        color: 'white',
+        color: '#052224',
     },
     headerButtons: {
         flexDirection: 'row',
@@ -337,27 +243,40 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
     },
+    whiteSheet: {
+        position: 'absolute',
+        top: height * 0.3,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: '#F1FFF3',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        paddingBottom: 16,
+    },
     messagesContainer: {
         flex: 1,
+        paddingHorizontal: 16,
     },
     messagesContentContainer: {
-        padding: 16,
+        paddingTop: 20,
+        paddingBottom: 80,
     },
     messageContainer: {
-        marginVertical: 4,
+        marginVertical: 6,
         padding: 12,
         borderRadius: 16,
         maxWidth: '80%',
     },
     userMessage: {
         alignSelf: 'flex-end',
-        backgroundColor: '#2196F3',
+        backgroundColor: '#00D09E',
     },
     botMessage: {
         alignSelf: 'flex-start',
         backgroundColor: 'white',
         borderWidth: 1,
-        borderColor: '#e0e0e0',
+        borderColor: '#ddd',
     },
     messageText: {
         fontSize: 16,
@@ -367,49 +286,54 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     botMessageText: {
-        color: '#333',
+        color: '#052224',
     },
     timestamp: {
         fontSize: 10,
-        color: '#666',
+        color: '#888',
         marginTop: 4,
-        opacity: 0.7,
     },
     loadingText: {
         fontSize: 16,
         color: '#666',
         fontStyle: 'italic',
     },
+    inputContainerWrapper: {
+        paddingHorizontal: 16,
+        paddingTop: 8,
+    },
     inputContainer: {
         flexDirection: 'row',
-        padding: 16,
+        alignItems: 'center',
         backgroundColor: 'white',
-        alignItems: 'flex-end',
+        borderRadius: 24,
+        borderWidth: 1,
+        borderColor: '#00D09E',
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+        marginBottom: 80,
     },
     textInput: {
         flex: 1,
-        borderWidth: 1,
-        borderColor: '#e0e0e0',
-        borderRadius: 20,
-        paddingHorizontal: 16,
-        paddingVertical: 12,
         fontSize: 16,
-        maxHeight: 100,
-        marginRight: 8,
+        color: '#052224',
     },
     sendButton: {
-        backgroundColor: '#2196F3',
-        paddingHorizontal: 20,
-        paddingVertical: 12,
+        marginLeft: 12,
+        paddingHorizontal: 16,
+        paddingVertical: 8,
         borderRadius: 20,
-    },
-    sendButtonDisabled: {
         backgroundColor: '#ccc',
     },
+    sendButtonActive: {
+        backgroundColor: '#00D09E',
+    },
     sendButtonText: {
-        color: 'white',
+        color: '#888',
         fontWeight: 'bold',
-        fontSize: 16,
+    },
+    sendButtonTextActive: {
+        color: 'white',
     },
 });
 
