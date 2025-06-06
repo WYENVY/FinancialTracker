@@ -54,6 +54,6 @@ const styles = StyleSheet.create({
         height: 50,
     },
     selectedIcon: {
-        backgroundColor: '#76c75f',
+        backgroundColor: '#00D09E',
     }
 });
