@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Used Hamzas Income page and tweaked it to work properly and add income to the analysis page.">
+    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Made tweaks to AddExpense, AddIncome, Analysis, Food, Home, and Income so that everything is displaying properly.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Analysis.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Analysis.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Home.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddExpense.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddExpense.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddIncome.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddIncome.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Food.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Food.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Income.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Income.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Goals.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Goals.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -396,7 +391,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749208446854</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Made tweaks to AddExpense, AddIncome, Analysis, Food, Home, and Income so that everything is displaying properly.">
+      <option name="closed" value="true" />
+      <created>1749212847481</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1749212847481</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -434,6 +437,7 @@
     <MESSAGE value="Added a few minor changes to the Goals page so that it was more user friendly." />
     <MESSAGE value="Updated the custome categories on the expenses page so that it created individual screens for each custom category." />
     <MESSAGE value="Used Hamzas Income page and tweaked it to work properly and add income to the analysis page." />
-    <option name="LAST_COMMIT_MESSAGE" value="Used Hamzas Income page and tweaked it to work properly and add income to the analysis page." />
+    <MESSAGE value="Made tweaks to AddExpense, AddIncome, Analysis, Food, Home, and Income so that everything is displaying properly." />
+    <option name="LAST_COMMIT_MESSAGE" value="Made tweaks to AddExpense, AddIncome, Analysis, Food, Home, and Income so that everything is displaying properly." />
   </component>
 </project>

@@ -149,27 +149,41 @@ const GoalList = ({ userId }: GoalListProps) => {
     }, {});
 
     return (
-        <View style={styles.listContainer}>
-            <Text style={styles.listTitle}>Your Financial Goals</Text>
-            {Object.entries(groupedGoals).map(([category, goals]) => (
-                <View key={category} style={styles.categorySection}>
-                    <Text style={styles.categoryTitle}>{category}</Text>
-                    {goals.map((goal) => (
-                        <View key={goal.id}>
-                            <GoalProgress
-                                goal={goal}
-                                onEdit={() => {
-                                    setEditingGoal(goal);
-                                    setEditedTitle(goal.title);
-                                    setEditedTargetAmount(goal.targetAmount.toString());
-                                    setAddedAmount('');
-                                }}
-                            />
-                        </View>
-                    ))}
-                </View>
-            ))}
+        <ScrollView
+            contentContainerStyle={[
+                styles.scrollContent,
+                goals.length === 0
+                    ? { paddingTop: 30 }
+                    : { paddingTop: 10 }
+            ]}
+            style={{ flex: 1 }}
+        >
+        <Text style={styles.listTitle}>Your Financial Goals</Text>
 
+            {goals.length === 0 ? (
+                <Text style={styles.emptyText}>No goals added yet.</Text>
+            ) : (
+                Object.entries(groupedGoals).map(([category, goals]) => (
+                    <View key={category} style={styles.categorySection}>
+                        <Text style={styles.categoryTitle}>{category}</Text>
+                        {goals.map((goal) => (
+                            <View key={goal.id}>
+                                <GoalProgress
+                                    goal={goal}
+                                    onEdit={() => {
+                                        setEditingGoal(goal);
+                                        setEditedTitle(goal.title);
+                                        setEditedTargetAmount(goal.targetAmount.toString());
+                                        setAddedAmount('');
+                                    }}
+                                />
+                            </View>
+                        ))}
+                    </View>
+                ))
+            )}
+
+            {/* Modal stays the same */}
             <Modal visible={!!editingGoal} animationType="slide" transparent>
                 <View style={{
                     flex: 1,
@@ -178,8 +192,8 @@ const GoalList = ({ userId }: GoalListProps) => {
                     alignItems: 'center',
                     padding: 20
                 }}>
-                    <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10, width: '100%' }}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 18, marginBottom: 10 }}>Edit Goal</Text>
+                    <View style={{backgroundColor: 'white', padding: 20, borderRadius: 10, width: '100%'}}>
+                        <Text style={{fontWeight: 'bold', fontSize: 18, marginBottom: 10}}>Edit Goal</Text>
                         <TextInput
                             style={styles.input}
                             placeholder="Title"
@@ -203,13 +217,13 @@ const GoalList = ({ userId }: GoalListProps) => {
                         <TouchableOpacity style={styles.button} onPress={handleUpdateGoal}>
                             <Text style={styles.buttonText}>Save Changes</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setEditingGoal(null)} style={{ marginTop: 10 }}>
-                            <Text style={{ color: 'red', textAlign: 'center' }}>Cancel</Text>
+                        <TouchableOpacity onPress={() => setEditingGoal(null)} style={{marginTop: 10}}>
+                            <Text style={{color: 'red', textAlign: 'center'}}>Cancel</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
-        </View>
+        </ScrollView>
     );
 };
 
@@ -246,12 +260,13 @@ export default function GoalsPage() {
     }
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.pageContainer}>
             <GoalForm userId={userId} />
             <GoalList userId={userId} />
-        </ScrollView>
+        </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     container: { backgroundColor: '#F0FAF8', padding: 16, paddingBottom: 60, },
@@ -310,4 +325,7 @@ const styles = StyleSheet.create({
     backButton: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
     backText: { marginLeft: 8, fontSize: 16, color: '#052224' },
 
+    scrollContent: { padding: 20, paddingBottom: 80, },
+    emptyText: { textAlign: 'center', marginTop: 10, color: '#888', },
+    pageContainer: { flex: 1, backgroundColor: '#F0FAF8', },
 });
