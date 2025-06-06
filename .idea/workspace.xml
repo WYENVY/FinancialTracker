@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Added the Budgets page and chatbot from budgets branch to see if it would work outside the budgets branch.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Transactions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Transactions.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Imported Jash's goals page and Steve's transactions page" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -351,7 +348,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749083032688</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Imported Jash's goals page and Steve's transactions page">
+      <option name="closed" value="true" />
+      <created>1749176287007</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1749176287008</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -384,6 +389,7 @@
     <MESSAGE value="Fixed two errors in ExternalLink.tsx and IconSymbol.tsx" />
     <MESSAGE value="Created routes for all of the preset categories (Food, Transport, Entertainment, Groceries, Rent, Gifts, Income, Goals)." />
     <MESSAGE value="Added the Budgets page and chatbot from budgets branch to see if it would work outside the budgets branch." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added the Budgets page and chatbot from budgets branch to see if it would work outside the budgets branch." />
+    <MESSAGE value="Imported Jash's goals page and Steve's transactions page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Imported Jash's goals page and Steve's transactions page" />
   </component>
 </project>
