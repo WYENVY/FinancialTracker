@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, Dimensions } from 'react-native';
 import { getFirestore, collection, query, where, onSnapshot } from 'firebase/firestore';
 import { auth } from '../fireconfig';
 import { useNavigation } from '@react-navigation/native';
+import { Feather } from '@expo/vector-icons';
 import DropdownMenu from '@/components/DropdownMenu';
 
 
@@ -126,21 +127,26 @@ export default function HomeScreen() {
                 <Text style={styles.welcomeText}>Hi, Welcome Back</Text>
                 <Text style={styles.welcomeText}>Good {greeting}</Text>
             </View>
+            <View style={styles.balanceContainer}>
+                <View style={styles.balanceBox}>
+                    <Feather name="arrow-up-right" size={18} color="#fff" />
+                    <Text style={styles.label}>Total Balance</Text>
+                    <Text style={styles.balanceAmount}>${fixedAccountBalance.toFixed(2)}</Text>
+                </View>
+
+                <View style={styles.separator} />
+
+                <View style={styles.balanceBox}>
+                    <Feather name="arrow-down-left" size={18} color="#304FFE" />
+                    <Text style={styles.label}>Total Expense</Text>
+                    <Text style={styles.expenseAmount}>-${monthlyExpenseTotal.toFixed(2)}</Text>
+                </View>
+            </View>
 
             {/* White background container */}
             <View style={styles.whiteSheet}>
                 {/* Content starts a bit lower */}
                 <View style={styles.contentPadding}>
-                    <View style={styles.summaryWidget}>
-                        <View style={styles.summaryItem}>
-                            <Text style={styles.summaryLabel}>Account Balance</Text>
-                            <Text style={styles.summaryValue}>${fixedAccountBalance.toFixed(2)}</Text>
-                        </View>
-                        <View style={styles.summaryItem}>
-                            <Text style={styles.summaryLabel}>Monthly Expenses</Text>
-                            <Text style={styles.summaryValue}>${monthlyExpenseTotal.toFixed(2)}</Text>
-                        </View>
-                    </View>
                     <Text style={styles.sectionTitle}>Recent Transactions</Text>
                     {recentTransactions.length === 0 ? (
                         <Text style={styles.emptyText}>No recent transactions</Text>
@@ -269,6 +275,54 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#052224',
+    },
+    balanceContainer: {
+        flexDirection: 'row',
+        backgroundColor: '#00D09E',
+        borderRadius: 16,
+        paddingVertical: 20,
+        paddingHorizontal: 10,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        marginHorizontal: 20,
+        marginTop: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 6,
+        elevation: 4,
+    },
+
+    balanceBox: {
+        alignItems: 'center',
+        flex: 1,
+    },
+
+    label: {
+        fontSize: 14,
+        color: '#052224',
+        marginTop: 4,
+    },
+
+    balanceAmount: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: '#fff',
+        marginTop: 4,
+    },
+
+    expenseAmount: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: '#304FFE',
+        marginTop: 4,
+    },
+
+    separator: {
+        width: 1,
+        height: '80%',
+        backgroundColor: 'white',
+        marginHorizontal: 10,
     },
 
 });

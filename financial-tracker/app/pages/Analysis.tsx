@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, Dimensions, ActivityIndicator } from 'react-nat
 import WebView from 'react-native-webview';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import { getAuth } from 'firebase/auth';
+import { Feather } from '@expo/vector-icons';
 import { getFirestore, collectionGroup, onSnapshot } from 'firebase/firestore';
 
 type Expense = {
@@ -137,8 +138,11 @@ const AnalysisScreen = () => {
 
         const chartConfigs: ChartData[] = [
             {
-                // Daily - last 7 days
-                labels: ['6 days ago', '5 days ago', '4 days ago', '3 days ago', '2 days ago', 'Yesterday', 'Today'],
+                labels: Array.from({ length: 7 }, (_, i) => {
+                    const date = new Date();
+                    date.setDate(date.getDate() - (6 - i));
+                    return date.toLocaleDateString('en-US', { weekday: 'short' }); // 'Mon', 'Tue', etc.
+                }),
                 expenses: grouped.daily,
             },
             {
@@ -180,7 +184,7 @@ const AnalysisScreen = () => {
               margin: 0; 
               padding: 0; 
               height: 100%; 
-              background: white; 
+              background: #DFF7E2; 
               font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             }
             .chart-container { 
@@ -192,6 +196,7 @@ const AnalysisScreen = () => {
             canvas { 
               width: 100% !important; 
               height: 100% !important; 
+              background-color: #DFF7E2;
             }
           </style>
         </head>
@@ -209,20 +214,20 @@ const AnalysisScreen = () => {
                   {
                     label: 'Income',
                     data: ${JSON.stringify(currentData.expenses.map(exp => Math.round(exp * 1.2)))},
-                    backgroundColor: 'rgba(46, 204, 113, 0.8)',
-                    borderColor: '#2ecc71',
+                    backgroundColor: '#00D09E',
+                    borderColor: '#00B38C',
                     borderWidth: 1,
                     borderRadius: 4,
-                    barThickness: 20
+                    barThickness: 10
                   },
                   {
                     label: 'Expenses',
                     data: ${JSON.stringify(currentData.expenses)},
-                    backgroundColor: 'rgba(231, 76, 60, 0.8)',
-                    borderColor: '#e74c3c',
+                    backgroundColor: '#304FFE',
+                    borderColor: '#1A237E',
                     borderWidth: 1,
                     borderRadius: 4,
-                    barThickness: 20
+                    barThickness: 10
                   }
                 ]
               },
@@ -236,28 +241,38 @@ const AnalysisScreen = () => {
                 scales: {
                   y: {
                     beginAtZero: true,
-                    grid: { 
-                      color: 'rgba(0,0,0,0.1)',
+                    grid: {
+                      color: 'rgba(179, 199, 255, 0.5)',
                       drawBorder: false
                     },
-                    ticks: { 
+                    ticks: {
                       callback: function(value) {
-                        return '$' + value.toLocaleString();
+                        return value >= 1000 ? (value / 1000) + 'k' : value;
                       },
-                      color: '#666'
+                      color: '#B3C7FF',
+                      font: {
+                        size: 12
+                      }
                     }
                   },
-                  x: { 
+                  x: {
                     grid: { display: false },
-                    ticks: { color: '#666' }
+                    ticks: {
+                      color: '#0E3E3E',
+                      font: {
+                        size: 12
+                      },
+                      minRotation: 30,
+                      maxRotation: 30
+                    }
                   }
                 },
                 plugins: {
                   legend: {
                     position: 'top',
                     labels: { 
-                      boxWidth: 12, 
-                      padding: 20,
+                      boxWidth: 15, 
+                      padding: 10,
                       color: '#333',
                       usePointStyle: true
                     }
@@ -297,12 +312,18 @@ const AnalysisScreen = () => {
 
     return (
         <View style={styles.container}>
-            <SegmentedControl
-                values={periodLabels}
-                selectedIndex={timePeriod}
-                onChange={(event) => setTimePeriod(event.nativeEvent.selectedSegmentIndex)}
-                style={styles.segmentControl}
-            />
+            <Text style={styles.screenTitle}>Analysis</Text>
+            <View style={styles.segmentedControlWrapper}>
+                <SegmentedControl
+                    values={periodLabels}
+                    selectedIndex={timePeriod}
+                    onChange={(event) => setTimePeriod(event.nativeEvent.selectedSegmentIndex)}
+                    tintColor="#00D09E"
+                    backgroundColor="#DFF7E2"
+                    fontStyle={{ color: '#000', fontWeight: '600' }}
+                    activeFontStyle={{ color: '#000', fontWeight: '600' }}
+                />
+            </View>
 
             <View style={styles.chartContainer}>
                 {allExpenses.length > 0 ? (
@@ -324,25 +345,20 @@ const AnalysisScreen = () => {
 
             <View style={styles.whiteSheet} />
             <View style={styles.summaryContainer}>
-                <View style={[styles.card, styles.incomeCard]}>
+                <View style={[styles.summaryCard, styles.incomeCard]}>
+                    <Feather name="arrow-up-right" size={16} color="#00D09E" />
                     <Text style={styles.cardLabel}>Income</Text>
-                    <Text style={styles.cardValue}>${totalIncome.toLocaleString()}</Text>
-                    <Text style={styles.periodText}>
-                        <Text style={styles.periodText}>This {displayPeriod}</Text>
-                    </Text>
+                    <Text style={styles.incomeValue}>${totalIncome.toLocaleString()}</Text>
+                    <Text style={styles.periodText}>This {displayPeriod}</Text>
                 </View>
 
-                <View style={[styles.card, styles.expenseCard]}>
+                <View style={[styles.summaryCard, styles.expenseCard]}>
+                    <Feather name="arrow-down-left" size={16} color="#304FFE" />
                     <Text style={styles.cardLabel}>Expenses</Text>
-                    <Text style={styles.cardValue}>
-                        ${Math.round(totalExpenses).toLocaleString()}
-                    </Text>
-                    <Text style={styles.periodText}>
-                        <Text style={styles.periodText}>This {displayPeriod}</Text>
-                    </Text>
+                    <Text style={styles.expenseValue}>${Math.round(totalExpenses).toLocaleString()}</Text>
+                    <Text style={styles.periodText}>This {displayPeriod}</Text>
                 </View>
             </View>
-
             {/* Debug info - remove in production */}
             {__DEV__ && (
                 <View style={styles.debugContainer}>
@@ -375,21 +391,23 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         fontWeight: '500'
     },
-    segmentControl: {
+    segmentedControlWrapper: {
+        backgroundColor: '#DFF7E2', // light green background behind entire control
+        borderRadius: 20,
+        padding: 6,
         marginBottom: 16,
         marginHorizontal: 16,
-        backgroundColor: '#fff'
     },
     chartContainer: {
+        backgroundColor: '#DFF7E2',
+        borderRadius: 24,
+        padding: 16,
         height: 320,
-        backgroundColor: '#ffffff',
-        borderRadius: 12,
-        overflow: 'hidden',
         marginBottom: 16,
         elevation: 2,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
+        shadowOpacity: 0.08,
         shadowRadius: 4,
     },
     webview: {
@@ -416,7 +434,8 @@ const styles = StyleSheet.create({
     summaryContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 60,
+        paddingHorizontal: 16,
+        marginTop: 70,
     },
     card: {
         width: '48%',
@@ -430,17 +449,16 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
     },
     incomeCard: {
-        borderLeftWidth: 4,
-        borderLeftColor: '#43a047'
+        backgroundColor: '#E8FDF3',
     },
     expenseCard: {
-        borderLeftWidth: 4,
-        borderLeftColor: '#e53935'
+        backgroundColor: '#EAE8FF',
     },
     cardLabel: {
-        fontSize: 16,
-        color: '#546e7a',
-        marginBottom: 4
+        fontSize: 14,
+        fontWeight: '500',
+        color: '#6B6B6B',
+        marginTop: 4,
     },
     cardValue: {
         fontSize: 20,
@@ -449,12 +467,12 @@ const styles = StyleSheet.create({
     },
     periodText: {
         fontSize: 12,
-        color: '#90a4ae',
-        marginTop: 4
+        color: '#9E9E9E',
+        marginTop: 4,
     },
     whiteSheet: {
         position: 'absolute',
-        top: height * 0.50,
+        top: height * 0.60,
         bottom: 0,
         left: 0,
         right: 0,
@@ -475,6 +493,40 @@ const styles = StyleSheet.create({
         color: '#333',
         marginBottom: 2,
     },
+    summaryCard: {
+        flex: 1,
+        borderRadius: 16,
+        padding: 16,
+        marginHorizontal: 4,
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+    expenseValue: {
+        fontSize: 20,
+        fontWeight: '700',
+        color: '#304FFE',
+        marginTop: 4,
+    },
+    incomeValue: {
+        fontSize: 20,
+        fontWeight: '700',
+        color: '#00D09E',
+        marginTop: 4,
+    },
+    screenTitle: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: '#052224',
+        marginTop: 12,
+        marginBottom: 12,
+        marginLeft: 16,
+    },
+
 });
 
 export default AnalysisScreen
