@@ -1,3 +1,4 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { collection, getFirestore, onSnapshot, query } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
@@ -31,6 +32,85 @@ export default function HomeScreen() {
     const [budgetAlerts, setBudgetAlerts] = useState<BudgetAlert[]>([]);
     const [showAlerts, setShowAlerts] = useState<boolean>(false);
 
+    // Function to check budgets and show alerts
+    const checkBudgetsAndShowAlerts = (budgets: Budget[]) => {
+        const alerts: BudgetAlert[] = [];
+        
+        budgets.forEach((budget) => {
+            // Only check budgets with valid amounts
+            if (budget.amount > 0) {
+                const percentage = (budget.amountSpent / budget.amount) * 100;
+                
+                // Check if budget is exceeded (100% or more)
+                if (percentage >= 100) {
+                    alerts.push({
+                        id: budget.id,
+                        budgetName: budget.budgetName,
+                        percentage: percentage,
+                        type: 'exceeded'
+                    });
+                } 
+                // Check if budget is at warning level (90% or more)
+                else if (percentage >= 90) {
+                    alerts.push({
+                        id: budget.id,
+                        budgetName: budget.budgetName,
+                        percentage: percentage,
+                        type: 'warning'
+                    });
+                }
+            }
+        });
+        
+        setBudgetAlerts(alerts);
+        
+        // Show alerts if any exist
+        if (alerts.length > 0) {
+            setShowAlerts(true);
+            
+            // Hide alerts after 5 seconds
+            const timer = setTimeout(() => {
+                setShowAlerts(false);
+            }, 5000);
+            
+            return () => clearTimeout(timer);
+        }
+    };
+
+    // Check budget alerts every time the screen comes into focus
+    useFocusEffect(
+        React.useCallback(() => {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const db = getFirestore();
+            const budgetsRef = collection(db, 'usernames', user.uid, 'budgets');
+            const q = query(budgetsRef);
+
+            // Fetch current budget data and check for alerts
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                const budgets: Budget[] = [];
+                
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    budgets.push({
+                        id: doc.id,
+                        budgetName: data.budgetName,
+                        amount: data.amount,
+                        amountSpent: data.amountSpent || 0,
+                        frequency: data.frequency,
+                        category: data.category || ''
+                    });
+                });
+                
+                // Check budgets and show alerts when screen is focused
+                checkBudgetsAndShowAlerts(budgets);
+            });
+
+            return () => unsubscribe();
+        }, [])
+    );
+
     // Fetch recent transactions from Firestore
     useEffect(() => {
         const user = auth.currentUser;
@@ -51,7 +131,8 @@ export default function HomeScreen() {
                     date: new Date(data.date)
                 });
             });
-            // Sort by date (newest first) and take first 3
+            
+            // Sort by date (newest first) and take first 3 transactions
             const sortedTransactions = fetchedTransactions.sort((a, b) => b.date.getTime() - a.date.getTime());
             setRecentTransactions(sortedTransactions.slice(0, 3));
         });
@@ -59,7 +140,7 @@ export default function HomeScreen() {
         return () => unsubscribe();
     }, []);
 
-    // Fetch budgets and check for alerts
+    // Listen to budget changes for real-time updates (without auto-showing alerts)
     useEffect(() => {
         const user = auth.currentUser;
         if (!user) return;
@@ -82,7 +163,7 @@ export default function HomeScreen() {
                     category: data.category || ''
                 };
                 
-                // Check budget status
+                // Check budget status for real-time updates
                 if (budget.amount > 0) {
                     const percentage = (budget.amountSpent / budget.amount) * 100;
                     
@@ -104,17 +185,8 @@ export default function HomeScreen() {
                 }
             });
             
+            // Update budget alerts state (but don't auto-show alerts here)
             setBudgetAlerts(alerts);
-            if (alerts.length > 0) {
-                setShowAlerts(true);
-                
-                // Set a timer to hide alerts after 5 seconds
-                const timer = setTimeout(() => {
-                    setShowAlerts(false);
-                }, 5000);
-                
-                return () => clearTimeout(timer);
-            }
         });
 
         return () => unsubscribe();
@@ -135,15 +207,17 @@ export default function HomeScreen() {
         </View>
     );
 
-    // Render all alerts
+    // Render all budget alerts as popup notifications
     const renderAlerts = () => {
         if (!showAlerts || budgetAlerts.length === 0) return null;
         
         return (
             <View style={styles.alertsWrapper}>
                 {budgetAlerts.map((alert) => {
+                    // Choose alert style based on type
                     const alertStyle = alert.type === 'exceeded' ? styles.alertExceeded : styles.alertWarning;
                     
+                    // Generate appropriate warning message
                     let message = '';
                     if (alert.type === 'exceeded') {
                         message = `Warning: Your "${alert.budgetName}" budget has exceeded 100% of its limit`;
@@ -163,16 +237,19 @@ export default function HomeScreen() {
 
     return (
         <View style={styles.container}>
+            {/* Header section with app title */}
             <View style={styles.header}>
                 <Text style={styles.title}>Finova</Text>
             </View>
+            
+            {/* Main content area */}
             <View style={styles.content}>
                 <Text style={styles.welcomeText}>Welcome to your finance app!</Text>
 
-                {/* Budget Alerts Popups */}
+                {/* Budget alerts popup notifications */}
                 {renderAlerts()}
 
-                {/* Recent Transactions Section */}
+                {/* Recent transactions section */}
                 <Text style={styles.sectionTitle}>Recent Transactions</Text>
                 {recentTransactions.length === 0 ? (
                     <Text style={styles.emptyText}>No recent transactions</Text>
