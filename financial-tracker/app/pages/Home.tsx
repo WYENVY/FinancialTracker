@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Dimensions } from 'react-native';
-import { getFirestore, collection, query, where, onSnapshot } from 'firebase/firestore';
+import { getFirestore, collection, query, where, onSnapshot, collectionGroup } from 'firebase/firestore';
 import { auth } from '../fireconfig';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
@@ -12,6 +12,7 @@ type Transaction = {
     amount: number;
     description: string;
     date: Date;
+    type: 'income' | 'expense';
 };
 
 export default function HomeScreen() {
@@ -19,7 +20,9 @@ export default function HomeScreen() {
     const [greeting, setGreeting] = useState('');
     const navigation = useNavigation();
     const [monthlyExpenseTotal, setMonthlyExpenseTotal] = useState(0);
-    const fixedAccountBalance = 5000; // created placeholder for income for now until income user story is done
+    const [monthlyIncomeTotal, setMonthlyIncomeTotal] = useState(0);
+    const accountBalance = monthlyIncomeTotal - monthlyExpenseTotal;
+
 
     useEffect(() => {
         const hour = new Date().getHours();
@@ -46,71 +49,97 @@ export default function HomeScreen() {
         if (!user) return;
 
         const db = getFirestore();
-        const expensesRef = collection(db, 'usernames', user.uid, 'categories', 'Food', 'expenses');
+        const expensesRef = collectionGroup(db, 'expenses');
 
-        const unsubscribe = onSnapshot(expensesRef, (querySnapshot) => {
-            const now = new Date();
-            let total = 0;
+        const unsubscribe = onSnapshot(expensesRef, (snapshot) => {
+            const transactions: Transaction[] = [];
 
-            querySnapshot.forEach((doc) => {
+            snapshot.forEach((doc) => {
+                if (!doc.ref.path.includes(user.uid)) return;
+
                 const data = doc.data();
                 const amount = parseFloat(data.amount);
-                const expenseDate = new Date(data.date);
+                const date = new Date(data.date);
+                const description = data.title || data.description || 'Transaction';
+                const isIncome = doc.ref.path.includes('/Income/');
 
-                if (!isNaN(amount) && !isNaN(expenseDate.getTime())) {
-                    const sameMonth = now.getMonth() === expenseDate.getMonth();
-                    const sameYear = now.getFullYear() === expenseDate.getFullYear();
-                    if (sameMonth && sameYear) {
-                        total += amount;
-                    }
+                if (!isNaN(amount) && !isNaN(date.getTime())) {
+                    transactions.push({
+                        id: doc.id,
+                        amount,
+                        date,
+                        description,
+                        type: isIncome ? 'income' : 'expense',
+                    });
                 }
             });
 
-            setMonthlyExpenseTotal(total);
+            const sorted = transactions.sort((a, b) => b.date.getTime() - a.date.getTime());
+            setRecentTransactions(sorted.slice(0, 3));
         });
 
         return () => unsubscribe();
     }, []);
 
-
-    // Fetch recent transactions from Firestore
     useEffect(() => {
         const user = auth.currentUser;
         if (!user) return;
 
         const db = getFirestore();
-        const transactionsRef = collection(db, 'usernames', user.uid, 'transactions');
-        const q = query(transactionsRef);
+        const expensesRef = collectionGroup(db, 'expenses');
 
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const fetchedTransactions: Transaction[] = [];
-            querySnapshot.forEach((doc) => {
+        const unsubscribe = onSnapshot(expensesRef, (snapshot) => {
+            const now = new Date();
+            let totalIncome = 0;
+            let totalExpenses = 0;
+
+            snapshot.forEach((doc) => {
+                if (!doc.ref.path.includes(user.uid)) return;
+
                 const data = doc.data();
-                fetchedTransactions.push({
-                    id: doc.id,
-                    amount: data.amount,
-                    description: data.description,
-                    date: new Date(data.date)
-                });
+                const amount = parseFloat(data.amount);
+                const date = new Date(data.date);
+                const isIncome = doc.ref.path.includes('/Income/');
+
+                const sameMonth = date.getMonth() === now.getMonth();
+                const sameYear = date.getFullYear() === now.getFullYear();
+
+                if (!isNaN(amount) && sameMonth && sameYear) {
+                    if (isIncome) {
+                        totalIncome += amount;
+                    } else {
+                        totalExpenses += amount;
+                    }
+                }
             });
-            // Adds the first three transactions to the homepage
-            const sortedTransactions = fetchedTransactions.sort((a, b) => b.date.getTime() - a.date.getTime());
-            setRecentTransactions(sortedTransactions.slice(0, 3));
+
+            setMonthlyIncomeTotal(totalIncome);
+            setMonthlyExpenseTotal(totalExpenses);
         });
 
         return () => unsubscribe();
     }, []);
 
+
+
     const renderTransactionItem = ({ item }: { item: Transaction }) => (
         <View style={styles.transactionItem}>
             <View style={styles.transactionRow}>
-                <Text style={styles.transactionDescription}>{item.description}</Text>
-                <Text style={styles.transactionAmount}>
-                    ${item.amount.toFixed(2)}
+                <Text style={styles.transactionDescription}>
+                    {item.description}
+                </Text>
+                <Text
+                    style={[
+                        styles.transactionAmount,
+                        item.type === 'income' ? styles.incomeText : styles.expenseText,
+                    ]}
+                >
+                    {item.type === 'income' ? '+' : '-'}${item.amount.toFixed(2)}
                 </Text>
             </View>
             <Text style={styles.transactionDate}>
-                {item.date.toLocaleDateString()} • {item.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                {item.date.toLocaleDateString()} •{' '}
+                {item.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </Text>
         </View>
     );
@@ -131,7 +160,7 @@ export default function HomeScreen() {
                 <View style={styles.balanceBox}>
                     <Feather name="arrow-up-right" size={18} color="#fff" />
                     <Text style={styles.label}>Total Balance</Text>
-                    <Text style={styles.balanceAmount}>${fixedAccountBalance.toFixed(2)}</Text>
+                    <Text style={styles.balanceAmount}>${accountBalance.toFixed(2)}</Text>
                 </View>
 
                 <View style={styles.separator} />
@@ -323,6 +352,16 @@ const styles = StyleSheet.create({
         height: '80%',
         backgroundColor: 'white',
         marginHorizontal: 10,
+    },
+    incomeText: {
+        color: '#00D09E',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    expenseText: {
+        color: '#304FFE',
+        fontWeight: 'bold',
+        fontSize: 16,
     },
 
 });

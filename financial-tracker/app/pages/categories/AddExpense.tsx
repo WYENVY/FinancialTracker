@@ -67,11 +67,17 @@ export default function AddExpense({ categoryId }: { categoryId?: string }) {
         <View style={styles.container}>
             <Text style={styles.heading}>Add Expense</Text>
 
-            <TouchableOpacity onPress={() => setShowPicker(true)} style={styles.input}>
-                <Text style={{ color: date ? '#000' : '#888' }}>
-                    {formattedDate || 'Select Date'}
+            <View style={{ marginBottom: 8 }}>
+                <Text style={{ fontSize: 14, color: '#052224', marginBottom: 4 }}>
+                    Date <Text style={{ color: 'red' }}>*</Text>
                 </Text>
-            </TouchableOpacity>
+                <TouchableOpacity onPress={() => setShowPicker(true)} style={styles.input}>
+                    <Text style={{ color: date ? '#000' : '#888' }}>
+                        {date ? date.toLocaleDateString() + ' • ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Select Date'}
+                    </Text>
+                </TouchableOpacity>
+
+            </View>
 
             {showPicker && (
                 <DateTimePicker
@@ -85,19 +91,31 @@ export default function AddExpense({ categoryId }: { categoryId?: string }) {
                 />
             )}
 
-            <TextInput
-                placeholder="Amount"
-                keyboardType="numeric"
-                style={styles.input}
-                value={amount}
-                onChangeText={setAmount}
-            />
-            <TextInput
-                placeholder="Title"
-                style={styles.input}
-                value={title}
-                onChangeText={setTitle}
-            />
+            <View style={{ marginBottom: 12 }}>
+                <Text style={{ fontSize: 14, color: '#052224', marginBottom: 4 }}>
+                    Amount <Text style={{ color: 'red' }}>*</Text>
+                </Text>
+                <TextInput
+                    placeholder="Enter amount"
+                    keyboardType="numeric"
+                    style={styles.input}
+                    value={amount}
+                    onChangeText={setAmount}
+                />
+            </View>
+
+            <View style={{ marginBottom: 12 }}>
+                <Text style={{ fontSize: 14, color: '#052224', marginBottom: 4 }}>
+                    Title <Text style={{ color: 'red' }}>*</Text>
+                </Text>
+                <TextInput
+                    placeholder="Enter title"
+                    style={styles.input}
+                    value={title}
+                    onChangeText={setTitle}
+                />
+            </View>
+
             <TextInput
                 placeholder="Description"
                 style={styles.input}

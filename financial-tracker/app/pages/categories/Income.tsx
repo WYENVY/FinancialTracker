@@ -82,14 +82,19 @@ export default function IncomeScreen() {
                         <Text style={styles.sectionTitle}>Income</Text>
                     </>
                 }
-                renderItem={({ item }) => (
-                    <View style={styles.expenseItem}>
-                        <Text style={styles.expenseTitle}>{item.title}</Text>
-                        <Text style={styles.expenseAmount}>${item.amount.toFixed(2)}</Text>
-                        <Text style={styles.expenseDate}>{item.date}</Text>
-                    </View>
-                )}
-                ListEmptyComponent={<Text style={styles.emptyText}>No income expenses yet.</Text>}
+                renderItem={({ item }) => {
+                    const formattedDate = new Date(item.date).toLocaleDateString() + ' • ' +
+                        new Date(item.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                    return (
+                        <View style={styles.expenseItem}>
+                            <Text style={styles.expenseTitle}>{item.title}</Text>
+                            <Text style={styles.expenseAmount}>${item.amount.toFixed(2)}</Text>
+                            <Text style={styles.expenseDate}>{formattedDate}</Text>
+                        </View>
+                    );
+                }}
+                ListEmptyComponent={<Text style={styles.emptyText}>No income added yet.</Text>}
                 contentContainerStyle={styles.scrollContent}
             />
         </View>

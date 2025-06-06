@@ -40,10 +40,10 @@ const AnalysisScreen = () => {
     const periodLabels: string[] = [...periodLabelsConst];
 
     const periodTextMap: Record<PeriodKey, string> = {
-        Daily: 'day',
-        Weekly: 'week',
-        Monthly: 'month',
-        Yearly: 'year',
+        Daily: 'Today',
+        Weekly: 'This week',
+        Monthly: 'This month',
+        Yearly: 'This year',
     };
 
     const periodLabel = periodLabels[timePeriod] as PeriodKey;
@@ -410,14 +410,14 @@ const AnalysisScreen = () => {
                     <Feather name="arrow-up-right" size={16} color="#00D09E" />
                     <Text style={styles.cardLabel}>Income</Text>
                     <Text style={styles.incomeValue}>${totalIncome.toLocaleString()}</Text>
-                    <Text style={styles.periodText}>This {displayPeriod}</Text>
+                    <Text style={styles.periodText}>{displayPeriod}</Text>
                 </View>
 
                 <View style={[styles.summaryCard, styles.expenseCard]}>
                     <Feather name="arrow-down-left" size={16} color="#304FFE" />
                     <Text style={styles.cardLabel}>Expenses</Text>
                     <Text style={styles.expenseValue}>${Math.round(totalExpenses).toLocaleString()}</Text>
-                    <Text style={styles.periodText}>This {displayPeriod}</Text>
+                    <Text style={styles.periodText}>{displayPeriod}</Text>
                 </View>
             </View>
             {/* Debug info - remove in production */}
