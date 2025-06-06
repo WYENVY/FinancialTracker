@@ -5,7 +5,7 @@ import WebView from 'react-native-webview';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import { getAuth } from 'firebase/auth';
 import { Feather } from '@expo/vector-icons';
-import { getFirestore, collectionGroup, onSnapshot } from 'firebase/firestore';
+import { getFirestore, collectionGroup, collection, onSnapshot } from 'firebase/firestore';
 
 type Expense = {
     id: string;
@@ -14,6 +14,15 @@ type Expense = {
     date: string;
     category: string;
 };
+
+type Transaction = {
+    id: string;
+    title: string;
+    amount: number;
+    date: string;
+    category: string;
+};
+
 
 type ChartData = {
     labels: string[];
@@ -39,7 +48,7 @@ const AnalysisScreen = () => {
 
     const periodLabel = periodLabels[timePeriod] as PeriodKey;
     const displayPeriod = periodTextMap[periodLabel];
-
+    const [incomeEntries, setIncomeEntries] = useState<Transaction[]>([]);
 
     useEffect(() => {
         const auth = getAuth();
@@ -51,10 +60,11 @@ const AnalysisScreen = () => {
             return;
         }
 
+        // EXPENSES
         const expensesRef = collectionGroup(db, 'expenses');
-        const unsubscribe = onSnapshot(expensesRef, (snapshot) => {
+        const unsubscribeExpenses = onSnapshot(expensesRef, (snapshot) => {
             const expenses = snapshot.docs
-                .filter(doc => doc.ref.path.includes(user.uid))
+                .filter(doc => doc.ref.path.includes(user.uid) && !doc.ref.path.includes('Income'))
                 .map(doc => {
                     const data = doc.data();
                     return {
@@ -62,20 +72,38 @@ const AnalysisScreen = () => {
                         title: data.title || 'Untitled',
                         amount: Number(data.amount) || 0,
                         date: data.date || new Date().toISOString(),
-                        category: data.category || 'Uncategorized'
+                        category: data.category || 'Uncategorized',
                     };
                 })
-                .filter(expense => expense.amount > 0); // Filter out invalid expenses
+                .filter(expense => expense.amount > 0);
 
             setAllExpenses(expenses);
             setLoading(false);
-        }, (error) => {
-            console.error('Error fetching expenses:', error);
-            setLoading(false);
         });
 
-        return () => unsubscribe();
+        // INCOME
+        const incomeRef = collection(db, 'usernames', user.uid, 'categories', 'Income', 'expenses');
+        const unsubscribeIncome = onSnapshot(incomeRef, (snapshot) => {
+            const incomeList: Transaction[] = snapshot.docs.map((doc) => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    title: data.title || 'Untitled',
+                    amount: Number(data.amount) || 0,
+                    date: data.date || new Date().toISOString(),
+                    category: 'Income',
+                };
+            });
+
+            setIncomeEntries(incomeList);
+        });
+
+        return () => {
+            unsubscribeExpenses();
+            unsubscribeIncome();
+        };
     }, []);
+
 
     const groupExpensesByPeriod = () => {
         const now = new Date();
@@ -132,36 +160,69 @@ const AnalysisScreen = () => {
         return periods;
     };
 
-    const generateChartData = (): ChartData => {
-        const grouped = groupExpensesByPeriod();
+    const groupIncomeByPeriod = () => {
         const now = new Date();
 
-        const chartConfigs: ChartData[] = [
+        const periods = {
+            daily: Array(7).fill(0),
+            weekly: Array(4).fill(0),
+            monthly: Array(6).fill(0),
+            yearly: Array(4).fill(0),
+        };
+
+        incomeEntries.forEach(inc => {
+            const incomeDate = new Date(inc.date);
+            if (isNaN(incomeDate.getTime())) return;
+
+            const diffTime = now.getTime() - incomeDate.getTime();
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const diffWeeks = Math.floor(diffDays / 7);
+            const diffMonths = (now.getFullYear() - incomeDate.getFullYear()) * 12 +
+                (now.getMonth() - incomeDate.getMonth());
+            const diffYears = now.getFullYear() - incomeDate.getFullYear();
+
+            if (diffDays >= 0 && diffDays < 7) periods.daily[6 - diffDays] += inc.amount;
+            if (diffWeeks >= 0 && diffWeeks < 4) periods.weekly[3 - diffWeeks] += inc.amount;
+            if (diffMonths >= 0 && diffMonths < 6) periods.monthly[5 - diffMonths] += inc.amount;
+            if (diffYears >= 0 && diffYears < 4) periods.yearly[3 - diffYears] += inc.amount;
+        });
+
+        return periods;
+    };
+
+
+    const generateChartData = (): { labels: string[], expenses: number[], income: number[] } => {
+        const groupedExpenses = groupExpensesByPeriod();
+        const groupedIncome = groupIncomeByPeriod();
+        const now = new Date();
+
+        const chartConfigs = [
             {
                 labels: Array.from({ length: 7 }, (_, i) => {
                     const date = new Date();
                     date.setDate(date.getDate() - (6 - i));
-                    return date.toLocaleDateString('en-US', { weekday: 'short' }); // 'Mon', 'Tue', etc.
+                    return date.toLocaleDateString('en-US', { weekday: 'short' });
                 }),
-                expenses: grouped.daily,
+                expenses: groupedExpenses.daily,
+                income: groupedIncome.daily,
             },
             {
-                // Weekly - last 4 weeks
                 labels: ['4 weeks ago', '3 weeks ago', '2 weeks ago', 'This week'],
-                expenses: grouped.weekly,
+                expenses: groupedExpenses.weekly,
+                income: groupedIncome.weekly,
             },
             {
-                // Monthly - last 6 months
                 labels: Array.from({ length: 6 }, (_, i) => {
                     const date = new Date(now.getFullYear(), now.getMonth() - (5 - i), 1);
                     return date.toLocaleDateString('en-US', { month: 'short' });
                 }),
-                expenses: grouped.monthly,
+                expenses: groupedExpenses.monthly,
+                income: groupedIncome.monthly,
             },
             {
-                // Yearly - last 4 years
                 labels: Array.from({ length: 4 }, (_, i) => (now.getFullYear() - (3 - i)).toString()),
-                expenses: grouped.yearly,
+                expenses: groupedExpenses.yearly,
+                income: groupedIncome.yearly,
             }
         ];
 
@@ -170,7 +231,7 @@ const AnalysisScreen = () => {
 
     const currentData = generateChartData();
     const totalExpenses = currentData.expenses.at(-1) || 0;
-    const totalIncome = Math.round(totalExpenses * 1.2); // Placeholder: assume income is 20% more than expenses
+    const totalIncome = currentData.income.at(-1) || 0;
 
     const generateChartHTML = () => {
         return `
@@ -213,7 +274,7 @@ const AnalysisScreen = () => {
                 datasets: [
                   {
                     label: 'Income',
-                    data: ${JSON.stringify(currentData.expenses.map(exp => Math.round(exp * 1.2)))},
+                    data: ${JSON.stringify(currentData.income)},
                     backgroundColor: '#00D09E',
                     borderColor: '#00B38C',
                     borderWidth: 1,
