@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, InteractionManager } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, onSnapshot, doc } from 'firebase/firestore';
 import AddExpense from './AddExpense'; // Adjust if needed
+import ExpenseEntry from '@/components/ExpenseEntry';
 
-type Expense = {
+type Income = {
     id: string;
     title: string;
     amount: number;
@@ -15,7 +16,7 @@ type Expense = {
 
 export default function IncomeScreen() {
     const navigation = useNavigation();
-    const [expenses, setExpenses] = useState<Expense[]>([]);
+    const [income, setIncome] = useState<Income[]>([]);
     const [currentIncomeTotal, setCurrentIncomeTotal] = useState(0);
 
     useEffect(() => {
@@ -24,17 +25,17 @@ export default function IncomeScreen() {
         const user = auth.currentUser;
         if (!user) return;
 
-        // Listen to income expenses
+        // Listen to income entry
         const incomeRef = collection(db, 'usernames', user.uid, 'categories', 'Income', 'expenses');
-        const unsubscribeExpenses = onSnapshot(incomeRef, (snapshot) => {
-            const expenseList: Expense[] = snapshot.docs.map((doc) => ({
+        const unsubscribeEntries = onSnapshot(incomeRef, (snapshot) => {
+            const entryList: Income[] = snapshot.docs.map((doc) => ({
                 id: doc.id,
-                ...(doc.data() as Omit<Expense, 'id'>),
+                ...(doc.data() as Omit<Income, 'id'>),
             }));
-            setExpenses(expenseList);
+            setIncome(entryList);
         });
 
-        // Listen to the income total (which gets updated when income is added or food expenses are subtracted)
+        // Listen to the income total (which gets updated when income is added or expenses are subtracted)
         const incomeDocRef = doc(db, 'usernames', user.uid, 'categories', 'Income');
         const unsubscribeIncomeTotal = onSnapshot(incomeDocRef, (snapshot) => {
             if (snapshot.exists()) {
@@ -45,7 +46,7 @@ export default function IncomeScreen() {
         });
 
         return () => {
-            unsubscribeExpenses();
+            unsubscribeEntries();
             unsubscribeIncomeTotal();
         };
     }, []);
@@ -53,7 +54,7 @@ export default function IncomeScreen() {
     return (
         <View style={styles.container}>
             <FlatList
-                data={expenses}
+                data={income}
                 keyExtractor={(item) => item.id}
                 ListHeaderComponent={
                     <>
@@ -82,11 +83,11 @@ export default function IncomeScreen() {
                 renderItem={({ item }) => (
                     <View style={styles.expenseItem}>
                         <Text style={styles.expenseTitle}>{item.title}</Text>
-                        <Text style={styles.expenseAmount}>${item.amount.toFixed(2)}</Text>
+                        <Text style={styles.expenseAmount}>${Number(item.amount || 0).toFixed(2)}</Text>
                         <Text style={styles.expenseDate}>{item.date}</Text>
                     </View>
                 )}
-                ListEmptyComponent={<Text style={styles.emptyText}>No income expenses yet.</Text>}
+                ListEmptyComponent={<Text style={styles.emptyText}>No income entries yet.</Text>}
                 contentContainerStyle={styles.scrollContent}
             />
         </View>

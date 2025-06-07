@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { getAuth } from 'firebase/auth';
 import { doc, getDoc, getFirestore, collection, onSnapshot, addDoc, setDoc } from 'firebase/firestore';
+import  AddExpense  from './AddExpense';
 
 type Expense = {
     id: string;
@@ -12,113 +13,6 @@ type Expense = {
     date: string;
     description?: string;
 };
-
-// Custom AddExpense component for Food that handles income subtraction
-function AddFoodExpense() {
-    const [date, setDate] = useState('');
-    const [amount, setAmount] = useState('');
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-
-    const handleAddExpense = async () => {
-        const auth = getAuth();
-        const db = getFirestore();
-        const user = auth.currentUser;
-
-        if (!user) {
-            Alert.alert('Error', 'User not logged in.');
-            return;
-        }
-
-        if (!amount || !title || !date) {
-            Alert.alert('Validation', 'Please fill in all required fields.');
-            return;
-        }
-
-        const expenseAmount = parseFloat(amount);
-        if (isNaN(expenseAmount) || expenseAmount <= 0) {
-            Alert.alert('Validation', 'Please enter a valid amount.');
-            return;
-        }
-
-        try {
-            // Add the food expense
-            const expenseData = {
-                title,
-                description,
-                amount: expenseAmount,
-                date,
-                createdAt: new Date().toISOString()
-            };
-
-            await addDoc(
-                collection(db, 'usernames', user.uid, 'categories', 'Food', 'expenses'),
-                expenseData
-            );
-
-            // Get current income total and subtract the food expense
-            const incomeDocRef = doc(db, 'usernames', user.uid, 'categories', 'Income');
-            const incomeDoc = await getDoc(incomeDocRef);
-            
-            if (incomeDoc.exists()) {
-                const currentIncome = incomeDoc.data()?.income || 0;
-                const newIncome = currentIncome - expenseAmount;
-                
-                // Update the income total
-                await setDoc(incomeDocRef, { income: newIncome }, { merge: true });
-            } else {
-                // If no income document exists, create one with negative amount
-                await setDoc(incomeDocRef, { income: -expenseAmount }, { merge: true });
-            }
-
-            Alert.alert('Success', 'Food expense added and deducted from income!');
-            setDate('');
-            setAmount('');
-            setTitle('');
-            setDescription('');
-        } catch (error) {
-            console.error('Error adding food expense: ', error);
-            Alert.alert('Error', 'Failed to add food expense.');
-        }
-    };
-
-    return (
-        <View style={styles.addExpenseContainer}>
-            <Text style={styles.addExpenseHeading}>Add Food Expense</Text>
-
-            <TextInput
-                placeholder="Date (any format)"
-                style={styles.input}
-                value={date}
-                onChangeText={setDate}
-            />
-
-            <TextInput
-                placeholder="Amount"
-                keyboardType="numeric"
-                style={styles.input}
-                value={amount}
-                onChangeText={setAmount}
-            />
-            <TextInput
-                placeholder="Title"
-                style={styles.input}
-                value={title}
-                onChangeText={setTitle}
-            />
-            <TextInput
-                placeholder="Description"
-                style={styles.input}
-                value={description}
-                onChangeText={setDescription}
-            />
-
-            <TouchableOpacity style={styles.button} onPress={handleAddExpense}>
-                <Text style={styles.buttonText}>Save Food Expense</Text>
-            </TouchableOpacity>
-        </View>
-    );
-}
 
 export default function FoodScreen() {
     const navigation = useNavigation();
@@ -182,14 +76,14 @@ export default function FoodScreen() {
                             </Text>
                         </View>
 
-                        <AddFoodExpense />
+                        <AddExpense presetCategory="Food" />
                         <Text style={styles.sectionTitle}>Food Transactions</Text>
                     </>
                 }
                 renderItem={({ item }) => (
                     <View style={styles.expenseItem}>
                         <Text style={styles.expenseTitle}>{item.title}</Text>
-                        <Text style={styles.expenseAmount}>${item.amount.toFixed(2)}</Text>
+                        <Text style={styles.expenseAmount}>${Number(item.amount || 0).toFixed(2)}</Text>
                         <Text style={styles.expenseDate}>{item.date}</Text>
                         {item.description && <Text style={styles.expenseDescription}>{item.description}</Text>}
                     </View>
