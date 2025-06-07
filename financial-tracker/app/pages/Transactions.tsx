@@ -1,4 +1,4 @@
-import { collection, getFirestore, onSnapshot, query } from 'firebase/firestore';
+import { collection, collectionGroup, getFirestore, onSnapshot, query } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { auth } from '../fireconfig';
@@ -34,42 +34,60 @@ export default function TransactionHistoryScreen() {
         if (!user) return;
 
         const db = getFirestore();
+        const expensesRef = collectionGroup(db, 'expenses');
 
-        // Fetch transactions
-        const transactionsRef = collection(db, 'usernames', user.uid, 'transactions');
-        const transactionsQuery = query(transactionsRef);
-
-        const unsubscribeTransactions = onSnapshot(transactionsQuery, (querySnapshot) => {
+        const unsubscribe = onSnapshot(expensesRef, (snapshot) => {
+            const now = new Date();
             const fetchedTransactions: Transaction[] = [];
-            querySnapshot.forEach((doc) => {
+
+            let income = 0;
+            let expense = 0;
+
+            snapshot.forEach((doc) => {
+                if (!doc.ref.path.includes(user.uid)) return;
+
                 const data = doc.data();
-                fetchedTransactions.push({
-                    id: doc.id,
-                    amount: data.amount,
-                    description: data.description,
-                    date: new Date(data.date),
-                    category: data.category
-                });
+                const amount = parseFloat(data.amount);
+                const date = new Date(data.date);
+                const description = data.title || data.description || 'Transaction';
+                const isIncome = doc.ref.path.includes('/Income/');
+
+                if (!isNaN(amount) && !isNaN(date.getTime())) {
+                    const finalAmount = isIncome ? amount : -amount;
+
+                    const transaction: Transaction = {
+                        id: doc.id,
+                        amount: finalAmount,
+                        date,
+                        description,
+                        category: data.category,
+                    };
+
+                    fetchedTransactions.push(transaction);
+
+                    if (isIncome) {
+                        income += finalAmount;
+                    } else {
+                        expense += Math.abs(finalAmount); // still positive for totals
+                    }
+                }
             });
-            // Sort by date (newest first)
+
             fetchedTransactions.sort((a, b) => b.date.getTime() - a.date.getTime());
+
             setTransactions(fetchedTransactions);
+            setTotalIncome(income);
+            setTotalExpense(expense);
+            setTotalBalance(income - expense);
 
-            // calculate totals
-            calculateTotals(fetchedTransactions);
-
-            //transactions filter
             const filtered = filterTransactions(fetchedTransactions, selectedTimeRange, selectedType);
             setFilteredTransactions(filtered);
-
-            // monthly transactions
             groupTransactionsByMonth(filtered);
         });
 
-        return () => {
-            unsubscribeTransactions();
-        };
+        return () => unsubscribe();
     }, []);
+
 
     //calculate total income, expense and balance
     const calculateTotals = (transactionList: Transaction[]) => {

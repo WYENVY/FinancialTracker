@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Made tweaks to AddExpense, AddIncome, Analysis, Food, Home, and Income so that everything is displaying properly.">
+    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Used the Food page as a template for the Transport expenses page. Also made a chagne on AddCategory so the Ionicon background matched the style of the app.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Goals.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/Goals.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Transactions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Transactions.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -399,7 +399,23 @@
       <option name="project" value="LOCAL" />
       <updated>1749212847481</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Fixed some layout and background issues.">
+      <option name="closed" value="true" />
+      <created>1749214203285</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1749214203286</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Used the Food page as a template for the Transport expenses page. Also made a chagne on AddCategory so the Ionicon background matched the style of the app.">
+      <option name="closed" value="true" />
+      <created>1749217373716</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1749217373716</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -438,6 +454,8 @@
     <MESSAGE value="Updated the custome categories on the expenses page so that it created individual screens for each custom category." />
     <MESSAGE value="Used Hamzas Income page and tweaked it to work properly and add income to the analysis page." />
     <MESSAGE value="Made tweaks to AddExpense, AddIncome, Analysis, Food, Home, and Income so that everything is displaying properly." />
-    <option name="LAST_COMMIT_MESSAGE" value="Made tweaks to AddExpense, AddIncome, Analysis, Food, Home, and Income so that everything is displaying properly." />
+    <MESSAGE value="Fixed some layout and background issues." />
+    <MESSAGE value="Used the Food page as a template for the Transport expenses page. Also made a chagne on AddCategory so the Ionicon background matched the style of the app." />
+    <option name="LAST_COMMIT_MESSAGE" value="Used the Food page as a template for the Transport expenses page. Also made a chagne on AddCategory so the Ionicon background matched the style of the app." />
   </component>
 </project>
