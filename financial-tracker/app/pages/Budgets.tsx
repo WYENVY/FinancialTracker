@@ -13,7 +13,7 @@ const Budgets: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5', // Match your app background
+        backgroundColor: '#f5f5f5',
     },
 });
 

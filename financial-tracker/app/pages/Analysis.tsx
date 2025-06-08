@@ -1,4 +1,3 @@
-// might have to install npx expo install @react-native-community/datetimepicker
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
 import WebView from 'react-native-webview';

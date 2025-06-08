@@ -1,6 +1,6 @@
 import { collection, collectionGroup, getFirestore, onSnapshot, query } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import { auth } from '../fireconfig';
 
 type Transaction = {
@@ -11,10 +11,8 @@ type Transaction = {
     category?: string;
 };
 
-//define time range filter
 type TimeRange = 'day' | 'week' | 'month' | 'year' | 'all';
 
-// define transaction type filter
 type TransactionType = 'income' | 'expense' | 'all';
 
 export default function TransactionHistoryScreen() {
@@ -26,7 +24,6 @@ export default function TransactionHistoryScreen() {
     const [totalIncome, setTotalIncome] = useState<number>(0);
     const [totalExpense, setTotalExpense] = useState<number>(0);
 
-    //monthly transactions
     const [transactionsByMonth, setTransactionsByMonth] = useState<{[key: string]: Transaction[]}>({});
 
     useEffect(() => {
@@ -68,7 +65,7 @@ export default function TransactionHistoryScreen() {
                     if (isIncome) {
                         income += finalAmount;
                     } else {
-                        expense += Math.abs(finalAmount); // still positive for totals
+                        expense += Math.abs(finalAmount);
                     }
                 }
             });
@@ -88,8 +85,6 @@ export default function TransactionHistoryScreen() {
         return () => unsubscribe();
     }, []);
 
-
-    //calculate total income, expense and balance
     const calculateTotals = (transactionList: Transaction[]) => {
         let income = 0;
         let expense = 0;
@@ -107,13 +102,11 @@ export default function TransactionHistoryScreen() {
         setTotalBalance(income - expense);
     };
 
-    // filter transactions based on time range and type
     const filterTransactions = (
         allTransactions: Transaction[] = transactions,
         timeRange: TimeRange = selectedTimeRange,
         type: TransactionType = selectedType
     ) => {
-        // time range filtering
         const now = new Date();
         const timeFiltered = allTransactions.filter(transaction => {
             const transactionDate = transaction.date;
@@ -133,7 +126,6 @@ export default function TransactionHistoryScreen() {
             }
         });
 
-        // category filtering
         return timeFiltered.filter(transaction => {
             switch (type) {
                 case 'income':
@@ -147,7 +139,6 @@ export default function TransactionHistoryScreen() {
         });
     };
 
-    // time range change handler
     const handleTimeRangeChange = (range: TimeRange) => {
         setSelectedTimeRange(range);
         const filtered = filterTransactions(transactions, range, selectedType);
@@ -155,7 +146,6 @@ export default function TransactionHistoryScreen() {
         groupTransactionsByMonth(filtered);
     };
 
-    // transaction type change handler
     const handleTypeChange = (type: TransactionType) => {
         setSelectedType(type);
         const filtered = filterTransactions(transactions, selectedTimeRange, type);
@@ -163,7 +153,6 @@ export default function TransactionHistoryScreen() {
         groupTransactionsByMonth(filtered);
     };
 
-    // monthly transactions grouping
     const groupTransactionsByMonth = (filteredList: Transaction[]) => {
         const grouped: {[key: string]: Transaction[]} = {};
 
@@ -181,12 +170,10 @@ export default function TransactionHistoryScreen() {
         setTransactionsByMonth(grouped);
     };
 
-    // format currency function
     const formatCurrency = (amount: number) => {
         return `$${Math.abs(amount).toFixed(2)}`;
     };
 
-    // display transaction item
     const renderTransactionItem = ({ item }: { item: Transaction }) => {
         const isIncome = item.amount > 0;
         const time = item.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
@@ -200,11 +187,11 @@ export default function TransactionHistoryScreen() {
                     <Text style={styles.transactionTime}>
                         {time} - {month} {day}
                     </Text>
-                </View>
-                <View style={styles.transactionRightContent}>
                     {item.category && (
                         <Text style={styles.transactionCategory}>{item.category}</Text>
                     )}
+                </View>
+                <View style={styles.transactionRightContent}>
                     <Text style={[
                         styles.transactionAmount,
                         isIncome ? styles.incomeText : styles.expenseText
@@ -216,7 +203,6 @@ export default function TransactionHistoryScreen() {
         );
     };
 
-    // display month header
     const renderMonthHeader = (monthName: string) => (
         <View style={styles.monthHeader}>
             <Text style={styles.monthTitle}>{monthName}</Text>
@@ -224,17 +210,15 @@ export default function TransactionHistoryScreen() {
     );
 
     return (
-        <ScrollView style={styles.scrollView}>
-            <View style={styles.container}>
+        <View style={styles.container}>
+            <View style={styles.header}>
                 <Text style={styles.title}>History</Text>
 
-                {/* total balance display */}
-                <View style={styles.balanceCard}>
+                <View style={styles.balanceContainer}>
                     <Text style={styles.balanceLabel}>Total Balance</Text>
                     <Text style={styles.balanceAmount}>${totalBalance.toFixed(2)}</Text>
                 </View>
 
-                {/* clcik card for income and expense */}
                 <View style={styles.statsContainer}>
                     <TouchableOpacity
                         style={[
@@ -258,135 +242,157 @@ export default function TransactionHistoryScreen() {
                         <Text style={styles.expenseAmount}>${totalExpense.toFixed(2)}</Text>
                     </TouchableOpacity>
                 </View>
-
-                {/* time range filiters */}
-                <View style={styles.timeRangeSelector}>
-                    <TouchableOpacity
-                        style={[
-                            styles.timeRangeButton,
-                            selectedTimeRange === 'day' && styles.selectedTimeRange
-                        ]}
-                        onPress={() => handleTimeRangeChange('day')}
-                    >
-                        <Text style={[
-                            styles.timeRangeText,
-                            selectedTimeRange === 'day' && styles.selectedTimeRangeText
-                        ]}>
-                            Day
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[
-                            styles.timeRangeButton,
-                            selectedTimeRange === 'week' && styles.selectedTimeRange
-                        ]}
-                        onPress={() => handleTimeRangeChange('week')}
-                    >
-                        <Text style={[
-                            styles.timeRangeText,
-                            selectedTimeRange === 'week' && styles.selectedTimeRangeText
-                        ]}>
-                            Week
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[
-                            styles.timeRangeButton,
-                            selectedTimeRange === 'month' && styles.selectedTimeRange
-                        ]}
-                        onPress={() => handleTimeRangeChange('month')}
-                    >
-                        <Text style={[
-                            styles.timeRangeText,
-                            selectedTimeRange === 'month' && styles.selectedTimeRangeText
-                        ]}>
-                            Month
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[
-                            styles.timeRangeButton,
-                            selectedTimeRange === 'year' && styles.selectedTimeRange
-                        ]}
-                        onPress={() => handleTimeRangeChange('year')}
-                    >
-                        <Text style={[
-                            styles.timeRangeText,
-                            selectedTimeRange === 'year' && styles.selectedTimeRangeText
-                        ]}>
-                            Year
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[
-                            styles.timeRangeButton,
-                            selectedTimeRange === 'all' && styles.selectedTimeRange
-                        ]}
-                        onPress={() => handleTimeRangeChange('all')}
-                    >
-                        <Text style={[
-                            styles.timeRangeText,
-                            selectedTimeRange === 'all' && styles.selectedTimeRangeText
-                        ]}>
-                            All
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-
-                {/* display transactions monthly */}
-                {Object.keys(transactionsByMonth).length === 0 ? (
-                    <Text style={styles.emptyText}>No transactions in this time period</Text>
-                ) : (
-                    Object.entries(transactionsByMonth).map(([month, monthTransactions]) => (
-                        <View key={month} style={styles.monthGroup}>
-                            {renderMonthHeader(month)}
-                            <FlatList
-                                data={monthTransactions}
-                                renderItem={renderTransactionItem}
-                                keyExtractor={item => item.id}
-                                scrollEnabled={false}
-                            />
-                        </View>
-                    ))
-                )}
             </View>
-        </ScrollView>
+
+            <View style={styles.whiteSheet}>
+                <View style={styles.contentPadding}>
+                    <View style={styles.timeRangeSelector}>
+                        <TouchableOpacity
+                            style={[
+                                styles.timeRangeButton,
+                                selectedTimeRange === 'day' && styles.selectedTimeRange
+                            ]}
+                            onPress={() => handleTimeRangeChange('day')}
+                        >
+                            <Text style={[
+                                styles.timeRangeText,
+                                selectedTimeRange === 'day' && styles.selectedTimeRangeText
+                            ]}>
+                                Day
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[
+                                styles.timeRangeButton,
+                                selectedTimeRange === 'week' && styles.selectedTimeRange
+                            ]}
+                            onPress={() => handleTimeRangeChange('week')}
+                        >
+                            <Text style={[
+                                styles.timeRangeText,
+                                selectedTimeRange === 'week' && styles.selectedTimeRangeText
+                            ]}>
+                                Week
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[
+                                styles.timeRangeButton,
+                                selectedTimeRange === 'month' && styles.selectedTimeRange
+                            ]}
+                            onPress={() => handleTimeRangeChange('month')}
+                        >
+                            <Text style={[
+                                styles.timeRangeText,
+                                selectedTimeRange === 'month' && styles.selectedTimeRangeText
+                            ]}>
+                                Month
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[
+                                styles.timeRangeButton,
+                                selectedTimeRange === 'year' && styles.selectedTimeRange
+                            ]}
+                            onPress={() => handleTimeRangeChange('year')}
+                        >
+                            <Text style={[
+                                styles.timeRangeText,
+                                selectedTimeRange === 'year' && styles.selectedTimeRangeText
+                            ]}>
+                                Year
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[
+                                styles.timeRangeButton,
+                                selectedTimeRange === 'all' && styles.selectedTimeRange
+                            ]}
+                            onPress={() => handleTimeRangeChange('all')}
+                        >
+                            <Text style={[
+                                styles.timeRangeText,
+                                selectedTimeRange === 'all' && styles.selectedTimeRangeText
+                            ]}>
+                                All
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+                        {Object.keys(transactionsByMonth).length === 0 ? (
+                            <Text style={styles.emptyText}>No transactions in this time period</Text>
+                        ) : (
+                            Object.entries(transactionsByMonth).map(([month, monthTransactions]) => (
+                                <View key={month} style={styles.monthGroup}>
+                                    {renderMonthHeader(month)}
+                                    <FlatList
+                                        data={monthTransactions}
+                                        renderItem={renderTransactionItem}
+                                        keyExtractor={item => item.id}
+                                        scrollEnabled={false}
+                                    />
+                                </View>
+                            ))
+                        )}
+                    </ScrollView>
+                </View>
+            </View>
+        </View>
     );
 }
 
+const { height } = Dimensions.get('window');
 const styles = StyleSheet.create({
-    scrollView: {
-        flex: 1,
-        backgroundColor: '#121212',
-    },
     container: {
         flex: 1,
+        backgroundColor: '#00D09E',
+    },
+    header: {
         padding: 20,
-        minHeight: 600,
-        backgroundColor: '#121212',
+        paddingTop: 40,
+    },
+    whiteSheet: {
+        position: 'absolute',
+        top: height * 0.45,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: '#F1FFF3',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+    },
+    contentPadding: {
+        padding: 20,
+        flex: 1,
     },
     title: {
-        fontSize: 28,
+        fontSize: 32,
         fontWeight: 'bold',
+        color: '#052224',
         marginBottom: 20,
-        textAlign: 'center',
-        color: '#1DB954',
     },
-    balanceCard: {
-        backgroundColor: '#1DB954',
-        borderRadius: 12,
-        padding: 20,
+    balanceContainer: {
+        backgroundColor: '#00D09E',
+        borderRadius: 16,
+        paddingVertical: 20,
+        paddingHorizontal: 20,
         alignItems: 'center',
         marginBottom: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 6,
+        elevation: 4,
     },
     balanceLabel: {
-        color: '#000000',
+        color: '#052224',
         fontSize: 16,
         fontWeight: '500',
         marginBottom: 8,
     },
     balanceAmount: {
-        color: '#000000',
+        color: '#fff',
         fontSize: 24,
         fontWeight: 'bold',
     },
@@ -396,29 +402,30 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     statsCard: {
-        backgroundColor: '#1a1a1a',
+        backgroundColor: '#DFF7E2',
         borderRadius: 12,
         padding: 16,
         width: '48%',
         alignItems: 'center',
-        borderWidth: 1,
-        borderColor: '#1a1a1a',
+        borderWidth: 2,
+        borderColor: '#DFF7E2',
     },
     selectedCard: {
-        borderColor: '#1DB954',
+        borderColor: '#052224',
     },
     statsLabel: {
-        color: '#1DB954',
+        color: '#052224',
         fontSize: 16,
         marginBottom: 8,
+        fontWeight: '500',
     },
     incomeAmount: {
-        color: '#1DB954',
+        color: '#00D09E',
         fontSize: 20,
         fontWeight: 'bold',
     },
     expenseAmount: {
-        color: '#007AFF', // blue color for expense
+        color: '#304FFE',
         fontSize: 20,
         fontWeight: 'bold',
     },
@@ -426,69 +433,79 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 20,
-        backgroundColor: '#1a1a1a',
-        borderRadius: 8,
-        padding: 5,
+        backgroundColor: '#DFF7E2',
+        borderRadius: 20,
+        padding: 6,
     },
     timeRangeButton: {
         flex: 1,
         padding: 8,
         alignItems: 'center',
-        borderRadius: 4,
+        borderRadius: 16,
     },
     selectedTimeRange: {
-        backgroundColor: '#1DB954',
+        backgroundColor: '#00D09E',
     },
     timeRangeText: {
-        color: '#ffffff',
+        color: '#052224',
         fontSize: 14,
+        fontWeight: '500',
     },
     selectedTimeRangeText: {
-        color: '#000000',
+        color: '#ffffff',
         fontWeight: 'bold',
+    },
+    scrollContent: {
+        flex: 1,
     },
     monthGroup: {
         marginBottom: 16,
     },
     monthHeader: {
-        backgroundColor: '#1a1a1a',
-        paddingVertical: 10,
+        backgroundColor: '#DFF7E2',
+        paddingVertical: 12,
         paddingHorizontal: 16,
-        borderRadius: 8,
+        borderRadius: 12,
         marginBottom: 8,
     },
     monthTitle: {
-        color: '#1DB954',
+        color: '#052224',
         fontSize: 18,
         fontWeight: 'bold',
     },
     transactionItem: {
-        backgroundColor: '#1a1a1a',
-        borderRadius: 8,
+        backgroundColor: '#F1FFF3',
+        borderRadius: 12,
         padding: 16,
         marginBottom: 8,
         flexDirection: 'row',
         justifyContent: 'space-between',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 2,
+        elevation: 1,
     },
     transactionLeftContent: {
         flex: 1,
     },
     transactionRightContent: {
         alignItems: 'flex-end',
+        justifyContent: 'center',
     },
     transactionDescription: {
-        color: '#ffffff',
+        color: '#052224',
         fontSize: 16,
-        fontWeight: '500',
+        fontWeight: 'bold',
         marginBottom: 4,
     },
     transactionCategory: {
-        color: '#666666',
+        color: '#6B6B6B',
         fontSize: 14,
-        marginBottom: 4,
+        marginTop: 2,
     },
     transactionTime: {
-        color: '#777777',
+        color: '#9E9E9E',
         fontSize: 12,
     },
     transactionAmount: {
@@ -496,15 +513,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     incomeText: {
-        color: '#1DB954',
+        color: '#00D09E',
     },
     expenseText: {
-        color: '#007AFF',
+        color: '#304FFE',
     },
     emptyText: {
-        color: '#777777',
+        color: '#6B6B6B',
         textAlign: 'center',
-        marginTop: 20,
-        marginBottom: 20,
+        marginTop: 40,
+        fontSize: 16,
     },
 });
