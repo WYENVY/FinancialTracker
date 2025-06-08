@@ -11,13 +11,26 @@ export default function AddIncome() {
     const [amount, setAmount] = useState('');
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [amountError, setAmountError] = useState('');
+
+    // validate amount
+    const validateForm = () => {
+        const amountRegex = /^\d+(\.\d{0,2})?$/;
+        if (!amountRegex.test(amount)) {
+            setAmountError('Amount must be a valid number with up to 2 decimal places');
+            return false;
+        } else {
+            setAmountError('');
+            return true;
+        }
+    };
 
     const handleAddIncome = async () => {
         const auth = getAuth();
         const db = getFirestore();
         const user = auth.currentUser;
 
-        if (!user || !amount || !title || !date) {
+        if (!user || !amount || !title || !date || !validateForm()) {
             Alert.alert('Error', 'Please fill in all required fields.');
             return;
         }
@@ -81,10 +94,11 @@ export default function AddIncome() {
                 <TextInput
                     placeholder="Enter amount"
                     keyboardType="numeric"
-                    style={styles.input}
+                    style={[styles.input, amountError ? { borderColor: 'red' } : null]}
                     value={amount}
                     onChangeText={setAmount}
                 />
+                {amountError ? <Text style={{ color: 'red', fontSize: 12 }}>{amountError}</Text> : null}
             </View>
 
             <View style={{ marginBottom: 12 }}>

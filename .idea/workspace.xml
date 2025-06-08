@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Used the Food page as a template for the Transport expenses page. Also made a chagne on AddCategory so the Ionicon background matched the style of the app.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/Transactions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/Transactions.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddExpense.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddExpense.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddIncome.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddIncome.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,36 +53,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Jest.HomeScreen - Account Balance Calculation.should calculate correct total balance from mixed transactions.executor&quot;: &quot;Run&quot;,
-    &quot;Jest.HomeScreen - Test Case 1 &amp; 2: Basic Financial Summary Display.executor&quot;: &quot;Run&quot;,
-    &quot;Jest.HomeScreen - Test Case 1 &amp; 2: Basic Financial Summary Display.should display Account Balance section.executor&quot;: &quot;Run&quot;,
-    &quot;Jest.HomeScreen - Test Case 1: Basic Financial Summary Display.executor&quot;: &quot;Run&quot;,
-    &quot;Jest.HomeScreen - Test Case 1: Basic Financial Summary Display.should display Account Balance section.executor&quot;: &quot;Run&quot;,
-    &quot;Jest.HomeScreen - Test Case 3: Monthly Expenses Calculation.should calculate current month expenses only.executor&quot;: &quot;Run&quot;,
-    &quot;Jest.HomeScreen Financial Summary.Account Balance Calculation.should calculate and display correct total balance from transactions.executor&quot;: &quot;Run&quot;,
-    &quot;Jest.HomeScreen Financial Summary.Account Balance Calculation.should display zero balance when no transactions exist.executor&quot;: &quot;Run&quot;,
-    &quot;Jest.HomeScreen Financial Summary.Financial Summary Display.should display total account balance section.executor&quot;: &quot;Run&quot;,
-    &quot;Jest.HomeScreen Financial Summary.Monthly Expenses Calculation.should calculate current month expenses correctly.executor&quot;: &quot;Run&quot;,
-    &quot;Jest.displays total account balance (1).executor&quot;: &quot;Run&quot;,
-    &quot;Jest.displays total account balance.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;homepage-widget&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/ethan/WebstormProjects/FinancialTracker-Ethan&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs.jest.jest_package&quot;: &quot;/Users/ethan/WebstormProjects/FinancialTracker-Ethan/financial-tracker/node_modules/jest&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/ethan/WebstormProjects/FinancialTracker-Ethan/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Jest.HomeScreen - Account Balance Calculation.should calculate correct total balance from mixed transactions.executor": "Run",
+    "Jest.HomeScreen - Test Case 1 & 2: Basic Financial Summary Display.executor": "Run",
+    "Jest.HomeScreen - Test Case 1 & 2: Basic Financial Summary Display.should display Account Balance section.executor": "Run",
+    "Jest.HomeScreen - Test Case 1: Basic Financial Summary Display.executor": "Run",
+    "Jest.HomeScreen - Test Case 1: Basic Financial Summary Display.should display Account Balance section.executor": "Run",
+    "Jest.HomeScreen - Test Case 3: Monthly Expenses Calculation.should calculate current month expenses only.executor": "Run",
+    "Jest.HomeScreen Financial Summary.Account Balance Calculation.should calculate and display correct total balance from transactions.executor": "Run",
+    "Jest.HomeScreen Financial Summary.Account Balance Calculation.should display zero balance when no transactions exist.executor": "Run",
+    "Jest.HomeScreen Financial Summary.Financial Summary Display.should display total account balance section.executor": "Run",
+    "Jest.HomeScreen Financial Summary.Monthly Expenses Calculation.should calculate current month expenses correctly.executor": "Run",
+    "Jest.displays total account balance (1).executor": "Run",
+    "Jest.displays total account balance.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/ethan/WebstormProjects/FinancialTracker-Ethan",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs.jest.jest_package": "/Users/ethan/WebstormProjects/FinancialTracker-Ethan/financial-tracker/node_modules/jest",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.general",
+    "ts.external.directory.path": "/Users/ethan/WebstormProjects/FinancialTracker-Ethan/financial-tracker/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>

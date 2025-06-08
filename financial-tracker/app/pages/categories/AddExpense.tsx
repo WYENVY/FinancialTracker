@@ -12,6 +12,7 @@ export default function AddExpense({ categoryId }: { categoryId?: string }) {
     const [amount, setAmount] = useState('');
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [amountError, setAmountError] = useState('');
 
     useEffect(() => {
         if (categoryId) setCategory(categoryId);
@@ -23,6 +24,18 @@ export default function AddExpense({ categoryId }: { categoryId?: string }) {
             .padStart(2, '0')}/${date.getFullYear()}`
         : '';
 
+    // validate amount
+    const validateForm = () => {
+        const amountRegex = /^\d+(\.\d{0,2})?$/;
+        if (!amountRegex.test(amount)) {
+            setAmountError('Amount must be a valid number with up to 2 decimal places');
+            return false;
+        } else {
+            setAmountError('');
+            return true;
+        }
+    };
+
     const handleAddExpense = async () => {
         const auth = getAuth();
         const db = getFirestore();
@@ -33,10 +46,11 @@ export default function AddExpense({ categoryId }: { categoryId?: string }) {
             return;
         }
 
-        if (!categoryId || !amount || !title || !date) {
-            Alert.alert('Validation', 'Please fill in all required fields.');
+        if (!categoryId || !title || !date || !validateForm()) {
+            Alert.alert('Validation', 'Please fill in all required fields correctly.');
             return;
         }
+
 
         try {
             const expenseData = {
@@ -98,11 +112,13 @@ export default function AddExpense({ categoryId }: { categoryId?: string }) {
                 <TextInput
                     placeholder="Enter amount"
                     keyboardType="numeric"
-                    style={styles.input}
+                    style={[styles.input, amountError ? { borderColor: 'red' } : null]}
                     value={amount}
                     onChangeText={setAmount}
                 />
+                {amountError ? <Text style={{ color: 'red', fontSize: 12 }}>{amountError}</Text> : null}
             </View>
+
 
             <View style={{ marginBottom: 12 }}>
                 <Text style={{ fontSize: 14, color: '#052224', marginBottom: 4 }}>
