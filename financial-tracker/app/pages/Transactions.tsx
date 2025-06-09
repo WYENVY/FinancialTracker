@@ -99,7 +99,6 @@ export default function TransactionHistoryScreen() {
 
         setTotalIncome(income);
         setTotalExpense(expense);
-        setTotalBalance(income - expense);
     };
 
     const filterTransactions = (
@@ -143,6 +142,7 @@ export default function TransactionHistoryScreen() {
         setSelectedTimeRange(range);
         const filtered = filterTransactions(transactions, range, selectedType);
         setFilteredTransactions(filtered);
+        calculateTotals(filtered);
         groupTransactionsByMonth(filtered);
     };
 
@@ -150,6 +150,7 @@ export default function TransactionHistoryScreen() {
         setSelectedType(type);
         const filtered = filterTransactions(transactions, selectedTimeRange, type);
         setFilteredTransactions(filtered);
+        calculateTotals(filtered);
         groupTransactionsByMonth(filtered);
     };
 

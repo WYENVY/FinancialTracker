@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Used the Food page as a template for the Transport expenses page. Also made a chagne on AddCategory so the Ionicon background matched the style of the app.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddExpense.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddExpense.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddIncome.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/financial-tracker/app/pages/categories/AddIncome.tsx" afterDir="false" />
-    </list>
+    <list default="true" id="326a800d-bc59-4517-a725-8c93cac96d50" name="Changes" comment="Added comments for better code readability." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,7 +20,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="income-expenses" />
+        <entry key="$PROJECT_DIR$" value="homepage-widget" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -53,36 +49,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Jest.HomeScreen - Account Balance Calculation.should calculate correct total balance from mixed transactions.executor": "Run",
-    "Jest.HomeScreen - Test Case 1 & 2: Basic Financial Summary Display.executor": "Run",
-    "Jest.HomeScreen - Test Case 1 & 2: Basic Financial Summary Display.should display Account Balance section.executor": "Run",
-    "Jest.HomeScreen - Test Case 1: Basic Financial Summary Display.executor": "Run",
-    "Jest.HomeScreen - Test Case 1: Basic Financial Summary Display.should display Account Balance section.executor": "Run",
-    "Jest.HomeScreen - Test Case 3: Monthly Expenses Calculation.should calculate current month expenses only.executor": "Run",
-    "Jest.HomeScreen Financial Summary.Account Balance Calculation.should calculate and display correct total balance from transactions.executor": "Run",
-    "Jest.HomeScreen Financial Summary.Account Balance Calculation.should display zero balance when no transactions exist.executor": "Run",
-    "Jest.HomeScreen Financial Summary.Financial Summary Display.should display total account balance section.executor": "Run",
-    "Jest.HomeScreen Financial Summary.Monthly Expenses Calculation.should calculate current month expenses correctly.executor": "Run",
-    "Jest.displays total account balance (1).executor": "Run",
-    "Jest.displays total account balance.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/ethan/WebstormProjects/FinancialTracker-Ethan",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs.jest.jest_package": "/Users/ethan/WebstormProjects/FinancialTracker-Ethan/financial-tracker/node_modules/jest",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.general",
-    "ts.external.directory.path": "/Users/ethan/WebstormProjects/FinancialTracker-Ethan/financial-tracker/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Jest.HomeScreen - Account Balance Calculation.should calculate correct total balance from mixed transactions.executor&quot;: &quot;Run&quot;,
+    &quot;Jest.HomeScreen - Test Case 1 &amp; 2: Basic Financial Summary Display.executor&quot;: &quot;Run&quot;,
+    &quot;Jest.HomeScreen - Test Case 1 &amp; 2: Basic Financial Summary Display.should display Account Balance section.executor&quot;: &quot;Run&quot;,
+    &quot;Jest.HomeScreen - Test Case 1: Basic Financial Summary Display.executor&quot;: &quot;Run&quot;,
+    &quot;Jest.HomeScreen - Test Case 1: Basic Financial Summary Display.should display Account Balance section.executor&quot;: &quot;Run&quot;,
+    &quot;Jest.HomeScreen - Test Case 3: Monthly Expenses Calculation.should calculate current month expenses only.executor&quot;: &quot;Run&quot;,
+    &quot;Jest.HomeScreen Financial Summary.Account Balance Calculation.should calculate and display correct total balance from transactions.executor&quot;: &quot;Run&quot;,
+    &quot;Jest.HomeScreen Financial Summary.Account Balance Calculation.should display zero balance when no transactions exist.executor&quot;: &quot;Run&quot;,
+    &quot;Jest.HomeScreen Financial Summary.Financial Summary Display.should display total account balance section.executor&quot;: &quot;Run&quot;,
+    &quot;Jest.HomeScreen Financial Summary.Monthly Expenses Calculation.should calculate current month expenses correctly.executor&quot;: &quot;Run&quot;,
+    &quot;Jest.displays total account balance (1).executor&quot;: &quot;Run&quot;,
+    &quot;Jest.displays total account balance.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/ethan/WebstormProjects/FinancialTracker-Ethan&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs.jest.jest_package&quot;: &quot;/Users/ethan/WebstormProjects/FinancialTracker-Ethan/financial-tracker/node_modules/jest&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/ethan/WebstormProjects/FinancialTracker-Ethan/financial-tracker/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -99,7 +95,7 @@
       <recent name="$PROJECT_DIR$/financial-tracker/hooks" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Jest.HomeScreen - Account Balance Calculation.should calculate correct total balance from mixed transactions">
     <configuration name="HomeScreen - Account Balance Calculation.should calculate correct total balance from mixed transactions" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <jest-package value="$PROJECT_DIR$/financial-tracker/node_modules/jest" />
@@ -416,7 +412,23 @@
       <option name="project" value="LOCAL" />
       <updated>1749217373716</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Added Steves updated Transactions page. (Fixed the UI to match the app)">
+      <option name="closed" value="true" />
+      <created>1749445918084</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1749445918085</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Added comments for better code readability.">
+      <option name="closed" value="true" />
+      <created>1749445945667</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1749445945667</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -457,6 +469,8 @@
     <MESSAGE value="Made tweaks to AddExpense, AddIncome, Analysis, Food, Home, and Income so that everything is displaying properly." />
     <MESSAGE value="Fixed some layout and background issues." />
     <MESSAGE value="Used the Food page as a template for the Transport expenses page. Also made a chagne on AddCategory so the Ionicon background matched the style of the app." />
-    <option name="LAST_COMMIT_MESSAGE" value="Used the Food page as a template for the Transport expenses page. Also made a chagne on AddCategory so the Ionicon background matched the style of the app." />
+    <MESSAGE value="Added Steves updated Transactions page. (Fixed the UI to match the app)" />
+    <MESSAGE value="Added comments for better code readability." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added comments for better code readability." />
   </component>
 </project>
