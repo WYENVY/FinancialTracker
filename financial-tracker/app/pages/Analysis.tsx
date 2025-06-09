@@ -120,7 +120,6 @@ const AnalysisScreen = () => {
             try {
                 const expenseDate = new Date(exp.date);
 
-                // Skip invalid dates
                 if (isNaN(expenseDate.getTime())) {
                     console.warn('Invalid date for expense:', exp);
                     return;
@@ -190,7 +189,7 @@ const AnalysisScreen = () => {
         return periods;
     };
 
-
+    // Takes the data from Firebase to generate the chart
     const generateChartData = (): { labels: string[], expenses: number[], income: number[] } => {
         const groupedExpenses = groupExpensesByPeriod();
         const groupedIncome = groupIncomeByPeriod();
@@ -420,17 +419,17 @@ const AnalysisScreen = () => {
                     <Text style={styles.periodText}>{displayPeriod}</Text>
                 </View>
             </View>
-            {/* Debug info - remove in production */}
-            {__DEV__ && (
-                <View style={styles.debugContainer}>
-                    <Text style={styles.debugText}>
-                        Total Expenses Found: {allExpenses.length}
-                    </Text>
-                    <Text style={styles.debugText}>
-                        Period Total: ${Math.round(totalExpenses)}
-                    </Text>
-                </View>
-            )}
+            {/*/!* Debug info *!/*/}
+            {/*{__DEV__ && (*/}
+            {/*    <View style={styles.debugContainer}>*/}
+            {/*        <Text style={styles.debugText}>*/}
+            {/*            Total Expenses Found: {allExpenses.length}*/}
+            {/*        </Text>*/}
+            {/*        <Text style={styles.debugText}>*/}
+            {/*            Period Total: ${Math.round(totalExpenses)}*/}
+            {/*        </Text>*/}
+            {/*    </View>*/}
+            {/*)}*/}
         </View>
     );
 };

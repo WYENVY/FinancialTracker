@@ -14,6 +14,7 @@ type GoalFormProps = {
     onGoalAdded?: () => void;
 };
 
+// Generates the goal form
 const GoalForm = ({ userId, onGoalAdded }: GoalFormProps) => {
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
@@ -92,6 +93,7 @@ type Goal = {
     userId: string;
 };
 
+// Edit button so the user can update the goal
 const GoalList = ({ userId }: GoalListProps) => {
     const [goals, setGoals] = useState<Goal[]>([]);
     const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
@@ -183,7 +185,6 @@ const GoalList = ({ userId }: GoalListProps) => {
                 ))
             )}
 
-            {/* Modal stays the same */}
             <Modal visible={!!editingGoal} animationType="slide" transparent>
                 <View style={{
                     flex: 1,
@@ -226,7 +227,7 @@ const GoalList = ({ userId }: GoalListProps) => {
         </ScrollView>
     );
 };
-
+// progress bar on the goal
 const GoalProgress = ({ goal, onEdit }: { goal: Goal; onEdit: () => void }) => {
     const progressPercentage = goal.targetAmount
         ? (goal.currentAmount / goal.targetAmount) * 100

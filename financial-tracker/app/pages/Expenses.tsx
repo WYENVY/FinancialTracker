@@ -168,6 +168,7 @@ export default function CategoriesScreen() {
                                         navigation.navigate('Income');
                                     } else if (item.isPreset && item.name === 'Goals') {
                                         navigation.navigate('Goals');
+                                        // Navigates to the custom category that the user makes
                                     } else { navigation.navigate('CustomCategory', {
                                             categoryId: item.id,
                                             categoryName: item.name,

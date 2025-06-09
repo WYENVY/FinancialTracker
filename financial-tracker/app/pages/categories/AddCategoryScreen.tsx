@@ -47,7 +47,7 @@ export default function AddCategoryScreen() {
                 return;
             }
 
-            // Step 1: Create the new category
+            // Create the new category
             const categoryRef = await addDoc(
                 collection(db, 'usernames', user.uid, 'categories'),
                 {
@@ -55,11 +55,11 @@ export default function AddCategoryScreen() {
                     icon,
                     color: '#76c75f',
                     isPreset: false,
-                    expenses: [], // Not required but for consistency
+                    expenses: [],
                 }
             );
 
-            // Step 2: Add the first expense under the new category
+            // Add the first expense under the new category
             await addDoc(
                 collection(db, 'usernames', user.uid, 'categories', categoryRef.id, 'expenses'),
                 {

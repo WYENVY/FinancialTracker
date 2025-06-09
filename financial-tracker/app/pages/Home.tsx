@@ -27,19 +27,20 @@ export default function HomeScreen() {
     useEffect(() => {
         const hour = new Date().getHours();
 
+        // Greeting display
         if (hour >= 5 && hour < 12) setGreeting('Morning');
         else if (hour >= 12 && hour < 17) setGreeting('Afternoon');
         else if (hour >= 17 && hour < 21) setGreeting('Evening');
         else setGreeting('Night');
 
-        // Optional: Update greeting every hour
+        // Update greeting every hour
         const interval = setInterval(() => {
             const updatedHour = new Date().getHours();
             if (updatedHour >= 5 && updatedHour < 12) setGreeting('Morning');
             else if (updatedHour >= 12 && updatedHour < 17) setGreeting('Afternoon');
             else if (updatedHour >= 17 && updatedHour < 21) setGreeting('Evening');
             else setGreeting('Night');
-        }, 3600000); // Update every hour
+        }, 3600000);
 
         return () => clearInterval(interval);
     }, []);
@@ -81,6 +82,7 @@ export default function HomeScreen() {
         return () => unsubscribe();
     }, []);
 
+    // Display income and expense widget
     useEffect(() => {
         const user = auth.currentUser;
         if (!user) return;
@@ -147,7 +149,6 @@ export default function HomeScreen() {
 
     return (
         <View style={styles.container}>
-            {/* Header stays on green background */}
             <View style={styles.header}>
                 <View style={styles.headerTitleContainer}>
                     <Text style={styles.title}>Finova</Text>
@@ -172,9 +173,7 @@ export default function HomeScreen() {
                 </View>
             </View>
 
-            {/* White background container */}
             <View style={styles.whiteSheet}>
-                {/* Content starts a bit lower */}
                 <View style={styles.contentPadding}>
                     <Text style={styles.sectionTitle}>Recent Transactions</Text>
                     {recentTransactions.length === 0 ? (
@@ -205,8 +204,8 @@ const styles = StyleSheet.create({
     },
     whiteSheet: {
         position: 'absolute',
-        top: height * 0.40, // Starts 30% down the screen
-        bottom: 0,         // Goes to bottom
+        top: height * 0.40,
+        bottom: 0,
         left: 0,
         right: 0,
         backgroundColor: '#F1FFF3',
