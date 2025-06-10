@@ -51,7 +51,7 @@ If you wish, you can emulate the app using Android Studio.
 
 ### Goals/Budgets
 - Add a goal by going to the categories' page and pressing goals. Then you can add a goal and edit it to add tord your goal.
-- You can test out the budgets page but there is not OpenAPI key in the .env file so the chat bot will not work.
+- You can test out the budgets page, but there is not OpenAPI key in the .env file so the chat bot will not work.
 
 ### Firebase
 - If you log out and log back in, you will notice that your information was saved successfully in the app.

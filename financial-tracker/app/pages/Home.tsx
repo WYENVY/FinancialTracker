@@ -160,7 +160,7 @@ export default function HomeScreen() {
             <View style={styles.balanceContainer}>
                 <View style={styles.balanceBox}>
                     <Feather name="arrow-up-right" size={18} color="#fff" />
-                    <Text style={styles.label}>Total Balance</Text>
+                    <Text style={styles.label}>Monthly Balance</Text>
                     <Text style={styles.balanceAmount}>${accountBalance.toFixed(2)}</Text>
                 </View>
 
@@ -168,8 +168,8 @@ export default function HomeScreen() {
 
                 <View style={styles.balanceBox}>
                     <Feather name="arrow-down-left" size={18} color="#304FFE" />
-                    <Text style={styles.label}>Total Expense</Text>
-                    <Text style={styles.expenseAmount}>-${monthlyExpenseTotal.toFixed(2)}</Text>
+                    <Text style={styles.label}>Monthly Expenses</Text>
+                    <Text style={styles.expenseAmount}>${monthlyExpenseTotal.toFixed(2)}</Text>
                 </View>
             </View>
 
