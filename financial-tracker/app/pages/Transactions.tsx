@@ -69,7 +69,7 @@ export default function TransactionHistoryScreen() {
                     }
                 }
             });
-
+            // Filters transactions based on selected time range and transaction type
             fetchedTransactions.sort((a, b) => b.date.getTime() - a.date.getTime());
 
             setTransactions(fetchedTransactions);

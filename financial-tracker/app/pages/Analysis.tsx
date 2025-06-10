@@ -127,7 +127,7 @@ const AnalysisScreen = () => {
                     console.warn('Invalid date for expense:', exp);
                     return;
                 }
-
+                // Daily Groupings
                 for (let i = 0; i < 7; i++) {
                     const pastDate = new Date(now);
                     pastDate.setDate(now.getDate() - i);
@@ -137,26 +137,26 @@ const AnalysisScreen = () => {
                         expenseDate.getFullYear() === pastDate.getFullYear()
                     ) {
                         periods.daily[6 - i] += exp.amount;
-                        break; // once matched, exit loop
+                        break;
                     }
                 }
                 const diffTime = now.getTime() - expenseDate.getTime();
                 const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-                // Weekly grouping (last 4 weeks)
+                // Weekly grouping
                 const diffWeeks = Math.floor(diffDays / 7);
                 if (diffWeeks >= 0 && diffWeeks < 4) {
                     periods.weekly[3 - diffWeeks] += exp.amount;
                 }
 
-                // Monthly grouping (last 6 months)
+                // Monthly grouping
                 const diffMonths = (now.getFullYear() - expenseDate.getFullYear()) * 12 +
                     (now.getMonth() - expenseDate.getMonth());
                 if (diffMonths >= 0 && diffMonths < 6) {
                     periods.monthly[5 - diffMonths] += exp.amount;
                 }
 
-                // Yearly grouping (last 4 years)
+                // Yearly grouping
                 const diffYears = now.getFullYear() - expenseDate.getFullYear();
                 if (diffYears >= 0 && diffYears < 4) {
                     periods.yearly[3 - diffYears] += exp.amount;
@@ -220,6 +220,7 @@ const AnalysisScreen = () => {
         const now = new Date();
 
         const chartConfigs = [
+            // Daily Groupings
             {
                 labels: Array.from({ length: 7 }, (_, i) => {
                     const date = new Date();
@@ -229,11 +230,13 @@ const AnalysisScreen = () => {
                 expenses: groupedExpenses.daily,
                 income: groupedIncome.daily,
             },
+            // Weekly Groupings
             {
                 labels: ['4 weeks ago', '3 weeks ago', '2 weeks ago', 'This week'],
                 expenses: groupedExpenses.weekly,
                 income: groupedIncome.weekly,
             },
+            // Monthly Groupings
             {
                 labels: Array.from({ length: 6 }, (_, i) => {
                     const date = new Date(now.getFullYear(), now.getMonth() - (5 - i), 1);
@@ -242,6 +245,7 @@ const AnalysisScreen = () => {
                 expenses: groupedExpenses.monthly,
                 income: groupedIncome.monthly,
             },
+            // Yearly Groupings
             {
                 labels: Array.from({ length: 4 }, (_, i) => (now.getFullYear() - (3 - i)).toString()),
                 expenses: groupedExpenses.yearly,
