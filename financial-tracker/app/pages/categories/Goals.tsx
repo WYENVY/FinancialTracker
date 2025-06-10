@@ -20,12 +20,26 @@ const GoalForm = ({ userId, onGoalAdded }: GoalFormProps) => {
     const [category, setCategory] = useState('');
     const [targetAmount, setTargetAmount] = useState('');
     const navigation = useNavigation();
+    const [amountError, setAmountError] = useState('');
 
-    const handleSubmit = async () => {
+    const validateForm = () => {
+        const amountRegex = /^\d+(\.\d{0,2})?$/;
         if (!title.trim() || !category.trim() || !targetAmount) {
             Alert.alert('Error', 'Please fill in all fields');
-            return;
+            return false;
         }
+        if (!amountRegex.test(targetAmount)) {
+            setAmountError('Amount must be a valid number with up to 2 decimal places');
+            return false;
+        } else {
+            setAmountError('');
+            return true;
+        }
+    };
+
+    const handleSubmit = async () => {
+        if (!validateForm()) return;
+
         try {
             await addDoc(collection(db, 'financialGoals'), {
                 userId,
@@ -45,6 +59,7 @@ const GoalForm = ({ userId, onGoalAdded }: GoalFormProps) => {
             Alert.alert('Error', 'Failed to add goal');
         }
     };
+
 
     return (
         <View style={styles.formContainer}>
@@ -72,6 +87,8 @@ const GoalForm = ({ userId, onGoalAdded }: GoalFormProps) => {
                 onChangeText={setTargetAmount}
                 keyboardType="numeric"
             />
+            {amountError ? <Text style={{ color: 'red', marginBottom: 8 }}>{amountError}</Text> : null}
+
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Add Goal</Text>
             </TouchableOpacity>

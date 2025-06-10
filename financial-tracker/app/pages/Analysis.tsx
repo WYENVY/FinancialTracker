@@ -104,6 +104,9 @@ const AnalysisScreen = () => {
         };
     }, []);
 
+    const getDateKey = (date: Date) =>
+        `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+
 
     const groupExpensesByPeriod = () => {
         const now = new Date();
@@ -125,13 +128,20 @@ const AnalysisScreen = () => {
                     return;
                 }
 
+                for (let i = 0; i < 7; i++) {
+                    const pastDate = new Date(now);
+                    pastDate.setDate(now.getDate() - i);
+                    if (
+                        expenseDate.getDate() === pastDate.getDate() &&
+                        expenseDate.getMonth() === pastDate.getMonth() &&
+                        expenseDate.getFullYear() === pastDate.getFullYear()
+                    ) {
+                        periods.daily[6 - i] += exp.amount;
+                        break; // once matched, exit loop
+                    }
+                }
                 const diffTime = now.getTime() - expenseDate.getTime();
                 const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-                // Daily grouping (last 7 days)
-                if (diffDays >= 0 && diffDays < 7) {
-                    periods.daily[6 - diffDays] += exp.amount;
-                }
 
                 // Weekly grouping (last 4 weeks)
                 const diffWeeks = Math.floor(diffDays / 7);
@@ -173,6 +183,7 @@ const AnalysisScreen = () => {
             const incomeDate = new Date(inc.date);
             if (isNaN(incomeDate.getTime())) return;
 
+
             const diffTime = now.getTime() - incomeDate.getTime();
             const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
             const diffWeeks = Math.floor(diffDays / 7);
@@ -180,7 +191,20 @@ const AnalysisScreen = () => {
                 (now.getMonth() - incomeDate.getMonth());
             const diffYears = now.getFullYear() - incomeDate.getFullYear();
 
-            if (diffDays >= 0 && diffDays < 7) periods.daily[6 - diffDays] += inc.amount;
+            for (let i = 0; i < 7; i++) {
+                const pastDate = new Date(now);
+                pastDate.setDate(now.getDate() - i);
+                if (
+                    incomeDate.getDate() === pastDate.getDate() &&
+                    incomeDate.getMonth() === pastDate.getMonth() &&
+                    incomeDate.getFullYear() === pastDate.getFullYear()
+                ) {
+                    periods.daily[6 - i] += inc.amount;
+                    break;
+                }
+            }
+
+
             if (diffWeeks >= 0 && diffWeeks < 4) periods.weekly[3 - diffWeeks] += inc.amount;
             if (diffMonths >= 0 && diffMonths < 6) periods.monthly[5 - diffMonths] += inc.amount;
             if (diffYears >= 0 && diffYears < 4) periods.yearly[3 - diffYears] += inc.amount;

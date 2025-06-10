@@ -112,7 +112,11 @@ export default function TransactionHistoryScreen() {
 
             switch (timeRange) {
                 case 'day':
-                    return (now.getTime() - transactionDate.getTime()) <= 24 * 60 * 60 * 1000;
+                    return (
+                        transactionDate.getDate() === now.getDate() &&
+                        transactionDate.getMonth() === now.getMonth() &&
+                        transactionDate.getFullYear() === now.getFullYear()
+                    );
                 case 'week':
                     return (now.getTime() - transactionDate.getTime()) <= 7 * 24 * 60 * 60 * 1000;
                 case 'month':
@@ -458,6 +462,7 @@ const styles = StyleSheet.create({
     },
     scrollContent: {
         flex: 1,
+        marginBottom: 60,
     },
     monthGroup: {
         marginBottom: 16,
