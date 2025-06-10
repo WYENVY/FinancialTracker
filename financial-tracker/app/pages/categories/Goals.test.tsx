@@ -1,75 +1,114 @@
-import { createGoal, groupGoalsByCategory, addProgress, Goal } from './goalsManager';
+import React from 'react';
+// Import testing utilities from React Native Testing Library
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
+// Import components to be tested
+import { GoalForm, GoalProgress, GoalList } from './Goals';
+// Import Alert for mocking alert dialogs
+import { Alert } from 'react-native';
+// ...rest of your code...
 
-describe('createGoal', () => {
-  test('should create a goal with valid fields', () => {
-    const goal = createGoal({ title: 'Emergency Fund', targetAmount: 5000, category: 'Emergency' });
-    expect(goal).toHaveProperty('title', 'Emergency Fund');
-    expect(goal).toHaveProperty('targetAmount', 5000);
-    expect(goal).toHaveProperty('category', 'Emergency');
-    expect(goal).toHaveProperty('currentAmount', 0);
-    expect(goal).toHaveProperty('percentageComplete', 0);
-    expect(goal.createdAt).toBeInstanceOf(Date);
-  });
+// Define props interface for GoalForm (not used in tests, but kept for reference)
+interface GoalFormProps {
+  userId: string;
+}
 
-  test('should throw error on missing title', () => {
-    expect(() => createGoal({ title: '', targetAmount: 5000, category: 'Emergency' })).toThrow(/Title is required/i);
-  });
+// Mock Firebase authentication to provide a test user
+jest.mock('../../fireconfig', () => ({
+  auth: {
+    currentUser: { uid: 'test-user-id' }
+  }
+}));
 
-  test('should throw error on invalid targetAmount', () => {
-    expect(() => createGoal({ title: 'Emergency Fund', targetAmount: 0, category: 'Emergency' })).toThrow(/Target amount is required/i);
-  });
-
-  test('should throw error on missing category', () => {
-    expect(() => createGoal({ title: 'Emergency Fund', targetAmount: 5000, category: '' })).toThrow(/Category is required/i);
-  });
+// Mock Ionicons to avoid Expo font loading errors in tests
+jest.mock('@expo/vector-icons', () => {
+  const React = require('react');
+  return {
+    Ionicons: (props: any) => React.createElement('Icon', props),
+  };
 });
 
-describe('groupGoalsByCategory', () => {
-  test('should group goals correctly by category', () => {
-    const goals = [
-      createGoal({ title: 'Emergency Fund', targetAmount: 5000, category: 'Emergency' }),
-      createGoal({ title: 'Trip to Japan', targetAmount: 3000, category: 'Travel' }),
-      createGoal({ title: 'Car Repair', targetAmount: 1500, category: 'Emergency' }),
-    ];
+// Mock React Navigation's useNavigation hook
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: () => ({
+    goBack: jest.fn()
+  })
+}));
 
-    const grouped = groupGoalsByCategory(goals);
+// Mock Firestore functions used in the components
+jest.mock('firebase/firestore', () => ({
+  getFirestore: jest.fn(),
+  collection: jest.fn(),
+  addDoc: jest.fn(),
+  query: jest.fn(),
+  where: jest.fn(),
+  serverTimestamp: jest.fn(),
+  onSnapshot: jest.fn(() => jest.fn()),
+}));
 
-    expect(Object.keys(grouped)).toHaveLength(2);
-    expect(grouped['Emergency']).toHaveLength(2);
-    expect(grouped['Travel']).toHaveLength(1);
-    expect(grouped['Emergency'][0].title).toBe('Emergency Fund');
-    expect(grouped['Emergency'][1].title).toBe('Car Repair');
-  });
-});
-
-describe('addProgress', () => {
-  let goal: Goal;
-
+// Test suite for GoalForm component
+describe('GoalForm', () => {
   beforeEach(() => {
-    goal = createGoal({ title: 'Emergency Fund', targetAmount: 5000, category: 'Emergency' });
+    jest.clearAllMocks(); // Clear mocks before each test
   });
 
-  test('adds progress correctly when amount is valid', () => {
-    const updatedGoal = addProgress(goal, 1000);
-    expect(updatedGoal.currentAmount).toBe(1000);
-    expect(updatedGoal.percentageComplete).toBeCloseTo(20); // 1000 / 5000 * 100
+  test('renders form fields correctly', () => {
+    // Render GoalForm and check for input placeholders
+    const { getByPlaceholderText } = render(
+      <GoalForm userId="test-user-id" />
+    );
+
+    expect(getByPlaceholderText('Title')).toBeTruthy();
+    expect(getByPlaceholderText('Category')).toBeTruthy();
+    expect(getByPlaceholderText('Target Amount')).toBeTruthy();
   });
 
-  test('does not exceed targetAmount when adding progress', () => {
-    const updatedGoal = addProgress(goal, 6000);
-    expect(updatedGoal.currentAmount).toBe(5000); // capped at targetAmount
-    expect(updatedGoal.percentageComplete).toBe(100);
+  test('validates required fields', async () => {
+    // Should alert if required fields are missing
+    const mockAlert = jest.spyOn(Alert, 'alert');
+    const { getByText } = render(
+      <GoalForm userId="test-user-id" />
+    );
+
+    fireEvent.press(getByText('Add Goal'));
+
+    await waitFor(() => {
+      expect(mockAlert).toHaveBeenCalledWith('Error', 'Please fill in all fields');
+    });
   });
 
-  test('correctly accumulates progress over multiple additions', () => {
-    let updatedGoal = addProgress(goal, 1000);
-    updatedGoal = addProgress(updatedGoal, 1500);
-    expect(updatedGoal.currentAmount).toBe(2500);
-    expect(updatedGoal.percentageComplete).toBeCloseTo(50);
-  });
 
-  test('throws error if amount is zero or negative', () => {
-    expect(() => addProgress(goal, 0)).toThrow(/must be positive/i);
-    expect(() => addProgress(goal, -100)).toThrow(/must be positive/i);
+
+});
+// Test suite for GoalProgress component
+describe('GoalProgress', () => {
+  // Mock goal object for testing
+  const mockGoal = {
+    id: '1',
+    title: 'Test Goal',
+    category: 'Test',
+    targetAmount: 1000,
+    currentAmount: 500,
+    userId: 'test-user-id'
+  };
+
+  test('calculates progress percentage correctly', () => {
+    // Should display correct progress percentage
+    const { getByText } = render(
+      <GoalProgress goal={mockGoal} onEdit={() => {}} />
+    );
+
+    expect(getByText('$500 of $1000 saved (50.0%)')).toBeTruthy();
+  });
+});
+
+// Test suite for GoalList component
+describe('GoalList', () => {
+  test('shows empty state when no goals exist', () => {
+    // Should show empty state message if no goals
+    const { getByText } = render(
+      <GoalList userId="test-user-id" />
+    );
+
+    expect(getByText('No goals added yet.')).toBeTruthy();
   });
 });
