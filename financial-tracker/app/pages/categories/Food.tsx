@@ -56,7 +56,7 @@ export default function FoodScreen() {
                 renderItem={({ item }) => {
                     const formattedDate = new Date(item.date).toLocaleDateString() + ' • ' +
                         new Date(item.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
+                    
                     return (
                         <View style={styles.expenseItem}>
                             <Text style={styles.expenseTitle}>{item.title}</Text>

@@ -71,14 +71,14 @@ export default function AddExpense({ categoryId }: { categoryId?: string }) {
                 <Text style={{ fontSize: 14, color: '#052224', marginBottom: 4 }}>
                     Date <Text style={{ color: 'red' }}>*</Text>
                 </Text>
-                <TouchableOpacity onPress={() => setShowPicker(true)} style={styles.input}>
+                <TouchableOpacity /*This is the passing Code ->*/onPress={() => setShowPicker(true)} style={styles.input}>
                     <Text style={{ color: date ? '#000' : '#888' }}>
                         {date ? date.toLocaleDateString() + ' • ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Select Date'}
                     </Text>
                 </TouchableOpacity>
 
             </View>
-
+           
             {showPicker && (
                 <DateTimePicker
                     value={date || new Date()}
